@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extensions>
+  <!--
+        To use Polyglot for Maven, you need to edit ${maven.multiModuleProjectDirectory}/.mvn/extensions.xml and add the appropriate language extension.
+        Run the following Maven command can help you convert any existing pom.xml files:
+          mvn io.takari.polyglot:polyglot-translate-plugin:translate -Dinput=pom.xml -Doutput=pom.{format}
+        The supported {format}s are rb, groovy, scala, yaml, atom, java and of course xml.
+        Also see: https://github.com/takari/polyglot-maven
+  -->
+  <extension>
+    <groupId>io.takari.polyglot</groupId>
+    <artifactId>polyglot-atom</artifactId>
+    <version>0.4.0</version>
+  </extension>
+  <extension>
+    <groupId>io.takari.polyglot</groupId>
+    <artifactId>polyglot-groovy</artifactId>
+    <version>0.4.0</version>
+  </extension>
+  <extension>
+    <groupId>io.takari.polyglot</groupId>
+    <artifactId>polyglot-clojure</artifactId>
+    <version>0.4.0</version>
+  </extension>
+  <extension>
+    <groupId>io.takari.polyglot</groupId>
+    <artifactId>polyglot-ruby</artifactId>
+    <version>0.4.0</version>
+  </extension>
+  <extension>
+    <groupId>io.takari.polyglot</groupId>
+    <artifactId>polyglot-scala</artifactId>
+    <version>0.4.0</version>
+  </extension>
+  <extension>
+    <groupId>io.takari.polyglot</groupId>
+    <artifactId>polyglot-yaml</artifactId>
+    <version>0.4.0</version>
+  </extension>
+  <extension>
+    <groupId>io.takari.polyglot</groupId>
+    <artifactId>polyglot-java</artifactId>
+    <version>0.4.0</version>
+  </extension>
+  <extension>
+    <groupId>io.takari.polyglot</groupId>
+    <artifactId>polyglot-xml</artifactId>
+    <version>0.4.0</version>
+  </extension>
+</extensions>

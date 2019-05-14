@@ -1,0 +1,11 @@
+[ ] privacy
+[ ] springfield-extensions-validation {resources for messages)
+[ ] springfield-security-commons (resources for messages)
+[ ] adoc-style documents
+[ ] boot
+[ ] sample
+[ ] test case
+[ ] springfield-data-mybatis part2 (proxy & generator)
+[ ] springfield-web (tools for web)
+[ ] travis migration
+[ ] kotlin migration

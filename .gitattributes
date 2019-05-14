@@ -1,0 +1,2 @@
+# Set the default behavior (auto detect text files and perform LF normalization), in case people don't have core.autocrlf set.
+* text = auto
