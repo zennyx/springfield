@@ -17,7 +17,7 @@ public interface ResponseStrategy {
   void response(HttpServletRequest request, HttpServletResponse response, @Nullable ResponseContent content,
       @Nullable Callback fullback) throws IOException, ServletException;
 
-  public static final class ResponseContent {
+  static final class ResponseContent {
 
     @Nullable
     private final Object payload;
@@ -62,7 +62,7 @@ public interface ResponseStrategy {
   }
 
   @FunctionalInterface
-  public interface Callback {
+  interface Callback {
 
     void call() throws IOException, ServletException;
   }
