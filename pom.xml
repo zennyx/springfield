@@ -16,7 +16,7 @@
   <packaging>pom</packaging>
 
   <name>Springfield</name>
-  <description>A Spring Framework based Java/Kotlin application reference architecture.</description>
+  <description>A Spring Framework based Java application reference architecture.</description>
   <inceptionYear>2018</inceptionYear>
   <url>https://github.com/zennyx/springfield</url>
 

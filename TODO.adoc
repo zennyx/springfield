@@ -9,6 +9,10 @@
 - [ ] test case
 - [ ] springfield-data-mybatis part2 (proxy & generator)
 - [ ] springfield-web (tools for web)
-- [ ] travis integration
-- [ ] kotlin integration
+- [ ] travis-integration
+- [ ] kotlin-integration
+- [ ] try to replace or remove all depandencies of Google
 
+= Memo
+
+- kotlin-integration canceled
