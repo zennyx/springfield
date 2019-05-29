@@ -33,8 +33,7 @@ public class MapBasedKeyValueLoader<K, V> implements KeyValueLoader<K, V> {
     return (Map<K, V>) this.source;
   }
 
-  public static class MapBasedKeyValueLoaderBuilder<K, V>
-      implements KeyValueLoader.Builder<MapBasedKeyValueLoaderBuilder<K, V>, K, V> {
+  public static class MapBasedKeyValueLoaderBuilder<K, V> implements KeyValueLoader.Builder<K, V> {
 
     private Map<K, V> source = new HashMap<>();
 

@@ -64,8 +64,7 @@ public class ResourceBasedKeyValueLoader<K, V> implements KeyValueLoader<K, V> {
     }
   }
 
-  public static class ResourceBasedKeyValueLoaderBuilder<K, V>
-      implements KeyValueLoader.Builder<ResourceBasedKeyValueLoaderBuilder<K, V>, K, V> {
+  public static class ResourceBasedKeyValueLoaderBuilder<K, V> implements KeyValueLoader.Builder<K, V> {
 
     @Nullable
     private String[] baseNames = null;
