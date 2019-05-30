@@ -6,41 +6,51 @@ import java.util.Set;
 
 import org.springframework.lang.Nullable;
 
-public class BijectedHashMap<K, V> extends HashMap<K, V> implements Map<K, V> {
+public class BijectionHashMap<K, V> extends HashMap<K, V> implements Map<K, V> {
 
   private static final long serialVersionUID = -1657284938629009738L;
 
-  private final Map<V, K> reverse;
+  private final Map<V, K> mirror;
 
-  public BijectedHashMap(int initialCapacity, float loadFactor) {
+  public BijectionHashMap(int initialCapacity, float loadFactor) {
     super(initialCapacity, loadFactor);
-    this.reverse = new HashMap<>(initialCapacity, loadFactor);
+    this.mirror = new HashMap<>(initialCapacity, loadFactor);
   }
 
-  public BijectedHashMap(int initialCapacity) {
+  public BijectionHashMap(int initialCapacity) {
     super(initialCapacity);
-    this.reverse = new HashMap<>(initialCapacity);
+    this.mirror = new HashMap<>(initialCapacity);
   }
 
-  public BijectedHashMap() {
+  public BijectionHashMap() {
     super();
-    this.reverse = new HashMap<>();
+    this.mirror = new HashMap<>();
   }
 
-  public BijectedHashMap(@Nullable Map<? extends K, ? extends V> m) {
+  public BijectionHashMap(@Nullable Map<? extends K, ? extends V> m) {
     this();
     this.putAll(m);
   }
 
   @Override
   public V put(@Nullable K key, @Nullable V value) {
-    return super.put(this.reverse.put(value, key), value);
+    if (super.containsKey(key) && this.mirror.containsKey(value)) {
+      return value;
+    }
+
+    if (super.containsKey(key)) {
+      this.mirror.remove(super.get(key));
+    } else if (this.mirror.containsKey(value)) {
+      super.remove(key);
+    }
+
+    return super.put(this.mirror.put(value, key), value);
   }
 
   @Override
   public V remove(@Nullable Object key) {
     V value = super.remove(key);
-    this.reverse.remove(value);
+    this.mirror.remove(value);
 
     return value;
   }
@@ -58,17 +68,17 @@ public class BijectedHashMap<K, V> extends HashMap<K, V> implements Map<K, V> {
 
   @Override
   public void clear() {
-    this.reverse.clear();
+    this.mirror.clear();
     super.clear();
   }
 
   @Override
   public Set<V> values() {
-    return this.reverse.keySet();
+    return this.mirror.keySet();
   }
 
   public K removeValue(@Nullable Object value) {
-    K key = this.reverse.get(value);
+    K key = this.mirror.get(value);
     this.remove(key);
 
     return key;
