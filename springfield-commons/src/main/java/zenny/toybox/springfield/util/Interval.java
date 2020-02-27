@@ -94,8 +94,12 @@ public final class Interval<E extends Comparable<E>> {
   public Interval<E> intersect(Interval<E> other) {
     Assert.notNull(other, "The given interval must not be null");
 
-    if (this.empty || other.empty) {
+    if (this.empty) {
       return this;
+    }
+
+    if (other.empty) {
+      return other;
     }
 
     if (!this.hasIntersectionWith(other)) {
