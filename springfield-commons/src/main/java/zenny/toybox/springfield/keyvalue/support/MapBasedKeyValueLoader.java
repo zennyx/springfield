@@ -65,12 +65,6 @@ public class MapBasedKeyValueLoader<K, V> implements KeyValueLoader<K, V> {
       return this.self();
     }
 
-    public MapBasedKeyValueLoaderBuilder<K, V> clear() {
-      this.source.clear();
-
-      return this.self();
-    }
-
     @Override
     public MapBasedKeyValueLoaderBuilder<K, V> self() {
       return this;
