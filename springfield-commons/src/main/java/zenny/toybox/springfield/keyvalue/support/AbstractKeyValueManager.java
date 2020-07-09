@@ -33,8 +33,8 @@ public abstract class AbstractKeyValueManager implements KeyValueManager {
           "KeyValueLoaders must contain entries");
     } else {
 
-      // Handle the scenario where users use no loader but put all key-values to the
-      // holder, in other words, lite mode
+      // Handle the scenario where users use no loader but put all key-values into the
+      // holder
       Assert.isTrue(holder.size() > 0, "KeyValueHolder must contain entries");
     }
 

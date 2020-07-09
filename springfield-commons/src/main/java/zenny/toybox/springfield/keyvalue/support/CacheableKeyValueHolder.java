@@ -10,18 +10,20 @@ public class CacheableKeyValueHolder extends InMemoryKeyValueHolder {
 
   public static final String CACHE_NAME = "key-values";
 
+  public static final String CACHE_KEY = "#name";
+
   @Override
   public void put(String name, @Nullable Map<?, ?> keyValues) {
     super.put(name, keyValues);
     this.putForCache(name, super.resolveInput(keyValues));
   }
 
-  @CachePut(cacheNames = CacheableKeyValueHolder.CACHE_NAME, key = "#name")
+  @CachePut(cacheNames = CACHE_NAME, key = CACHE_KEY)
   protected void putForCache(String name, @Nullable Map<?, ?> keyValues) {
     // Do nothing
   }
 
-  @Cacheable(cacheNames = CacheableKeyValueHolder.CACHE_NAME, key = "#name")
+  @Cacheable(cacheNames = CACHE_NAME, key = CACHE_KEY)
   @Nullable
   @Override
   protected Map<?, ?> getRawKeyValues(String name) {

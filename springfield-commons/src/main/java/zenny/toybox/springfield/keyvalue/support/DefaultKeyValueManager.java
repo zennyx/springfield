@@ -1,7 +1,6 @@
 package zenny.toybox.springfield.keyvalue.support;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -116,10 +115,8 @@ public class DefaultKeyValueManager extends AbstractKeyValueManager {
     }
 
     private Optional<Map<K, V>> get() {
-
       if (this.keyvalues == null) {
-        Map<K, V> loaded = this.loader.load();
-        this.keyvalues = loaded == null ? Optional.empty() : Optional.of(Collections.unmodifiableMap(loaded));
+        this.keyvalues = Optional.ofNullable(this.loader.load());
       }
 
       return this.keyvalues;
