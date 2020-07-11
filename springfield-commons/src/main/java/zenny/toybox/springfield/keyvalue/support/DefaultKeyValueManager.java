@@ -9,6 +9,7 @@ import org.springframework.lang.Nullable;
 
 import zenny.toybox.springfield.keyvalue.KeyValueHolder;
 import zenny.toybox.springfield.keyvalue.KeyValueLoader;
+import zenny.toybox.springfield.keyvalue.NoKeyValueLoaderFoundException;
 
 public class DefaultKeyValueManager extends AbstractKeyValueManager {
 
@@ -26,7 +27,7 @@ public class DefaultKeyValueManager extends AbstractKeyValueManager {
   protected void tryRefreshing(String name, Map<String, KeyValueLoader<?, ?>> loaders, KeyValueHolder holder) {
     KeyValueLoader<?, ?> loader = loaders.get(name);
     if (loader == null) {
-      throw new NoSuchLoaderException("No loader found with name: [" + name + "]");
+      throw new NoKeyValueLoaderFoundException("No loader found with name: [" + name + "]");
     }
 
     holder.put(name, new KeyValueWrapper<>(loader));

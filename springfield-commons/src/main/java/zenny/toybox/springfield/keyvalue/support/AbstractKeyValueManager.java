@@ -9,6 +9,7 @@ import org.springframework.lang.Nullable;
 import zenny.toybox.springfield.keyvalue.KeyValueHolder;
 import zenny.toybox.springfield.keyvalue.KeyValueLoader;
 import zenny.toybox.springfield.keyvalue.KeyValueManager;
+import zenny.toybox.springfield.keyvalue.NoKeyValueLoaderFoundException;
 import zenny.toybox.springfield.util.Assert;
 import zenny.toybox.springfield.util.CollectionUtils;
 
@@ -58,7 +59,7 @@ public abstract class AbstractKeyValueManager implements KeyValueManager {
 
     KeyValueLoader<?, ?> loader = this.loaders.get(name);
     if (loader == null) {
-      throw new NoSuchLoaderException("No loader found with name: [" + name + "]");
+      throw new NoKeyValueLoaderFoundException("No loader found with name: [" + name + "]");
     }
 
     return loader;
