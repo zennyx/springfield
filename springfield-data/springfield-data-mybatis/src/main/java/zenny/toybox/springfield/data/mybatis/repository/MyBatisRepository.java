@@ -8,6 +8,14 @@ import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.QueryByExampleExecutor;
 
+/**
+ * MyBatis specific extension of
+ * {@link org.springframework.data.repository.Repository}.
+ *
+ * @param <T> the domain type the repository manages
+ * @param <ID> the type of the id of the entity the repository manages
+ * @author Zenny Xu
+ */
 @NoRepositoryBean
 public interface MyBatisRepository<T, ID> extends PagingAndSortingRepository<T, ID>, QueryByExampleExecutor<T> {
 
@@ -42,6 +50,14 @@ public interface MyBatisRepository<T, ID> extends PagingAndSortingRepository<T, 
    */
   @Override
   <S extends T> List<S> saveAll(Iterable<S> entities);
+
+  /**
+   * Returns a reference to the entity with the given identifier.
+   *
+   * @param id must not be {@literal null}.
+   * @return a reference to the entity with the given identifier.
+   */
+  T getOne(ID id);
 
   /*
    * (non-Javadoc)

@@ -2,9 +2,16 @@ package zenny.toybox.springfield.data.mybatis.repository.config;
 
 import java.lang.annotation.Annotation;
 
+import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.data.repository.config.RepositoryBeanDefinitionRegistrarSupport;
 import org.springframework.data.repository.config.RepositoryConfigurationExtension;
 
+/**
+ * {@link ImportBeanDefinitionRegistrar} to enable
+ * {@link EnableMyBatisRepositories} annotation.
+ *
+ * @author Zenny Xu
+ */
 class MyBatisRepositoriesRegistrar extends RepositoryBeanDefinitionRegistrarSupport {
 
   /*
@@ -14,7 +21,6 @@ class MyBatisRepositoriesRegistrar extends RepositoryBeanDefinitionRegistrarSupp
    */
   @Override
   protected Class<? extends Annotation> getAnnotation() {
-    // TODO Auto-generated method stub
     return EnableMyBatisRepositories.class;
   }
 
@@ -25,7 +31,6 @@ class MyBatisRepositoriesRegistrar extends RepositoryBeanDefinitionRegistrarSupp
    */
   @Override
   protected RepositoryConfigurationExtension getExtension() {
-    // TODO Auto-generated method stub
     return new MyBatisRepositoryConfigExtension();
   }
 }
