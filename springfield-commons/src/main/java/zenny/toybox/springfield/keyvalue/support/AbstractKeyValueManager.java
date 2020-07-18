@@ -9,7 +9,6 @@ import org.springframework.lang.Nullable;
 import zenny.toybox.springfield.keyvalue.KeyValueHolder;
 import zenny.toybox.springfield.keyvalue.KeyValueLoader;
 import zenny.toybox.springfield.keyvalue.KeyValueManager;
-import zenny.toybox.springfield.keyvalue.NoKeyValueLoaderFoundException;
 import zenny.toybox.springfield.util.Assert;
 import zenny.toybox.springfield.util.CollectionUtils;
 
@@ -46,23 +45,6 @@ public abstract class AbstractKeyValueManager implements KeyValueManager {
     if (this.loaders != null) {
       this.storeKeyValues(loaders, holder);
     }
-  }
-
-  @Nullable
-  @Override
-  public KeyValueLoader<?, ?> getLoader(String name) {
-    Assert.hasText(name, "Name must not be empty");
-
-    if (this.loaders == null) {
-      return null;
-    }
-
-    KeyValueLoader<?, ?> loader = this.loaders.get(name);
-    if (loader == null) {
-      throw new NoKeyValueLoaderFoundException("No loader found with name: [" + name + "]");
-    }
-
-    return loader;
   }
 
   @Override
@@ -104,7 +86,7 @@ public abstract class AbstractKeyValueManager implements KeyValueManager {
     }
 
     @Override
-    public void put(String name, Map<?, ?> keyValues) {
+    public void put(String name, Map<?, ?> source) {
       // Do nothing
     }
 
