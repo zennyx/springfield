@@ -7,7 +7,7 @@ import org.springframework.lang.Nullable;
 public interface KeyValueHolder {
 
   @Nullable
-  <K, V> Map<K, V> get(String name, Class<K> keyType, Class<V> valueType);
+  Map<?, ?> get(String name);
 
   void put(String name, @Nullable Map<?, ?> keyValues);
 

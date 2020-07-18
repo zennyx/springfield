@@ -111,7 +111,7 @@ public final class KeyValues {
 
   @Nullable
   public <K, V> Map<K, V> get(String name, Class<K> keyType, Class<V> valueType) {
-    return this.manager.getHolder().get(name, keyType, valueType);
+    return this.manager.getValue(name, keyType, valueType);
   }
 
   public void refresh(String name) {

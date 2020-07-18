@@ -9,6 +9,7 @@ import org.springframework.lang.Nullable;
 import zenny.toybox.springfield.keyvalue.KeyValueHolder;
 import zenny.toybox.springfield.keyvalue.KeyValueLoader;
 import zenny.toybox.springfield.keyvalue.KeyValueManager;
+import zenny.toybox.springfield.keyvalue.NoKeyValueLoaderFoundException;
 import zenny.toybox.springfield.util.Assert;
 import zenny.toybox.springfield.util.CollectionUtils;
 
@@ -39,7 +40,7 @@ public abstract class AbstractKeyValueManager implements KeyValueManager {
     }
 
     this.loaders = loaders;
-    this.holder = holder;
+    this.holder = this.resolveHolder(holder);
     this.proxy = new KeyValueHolderProxy(this.holder);
 
     if (this.loaders != null) {
@@ -47,9 +48,36 @@ public abstract class AbstractKeyValueManager implements KeyValueManager {
     }
   }
 
+  @Nullable
+  @Override
+  public KeyValueLoader<?, ?> getLoader(String name) {
+    Assert.hasText(name, "Name must not be empty");
+
+    if (this.loaders == null) {
+      return null;
+    }
+
+    KeyValueLoader<?, ?> loader = this.loaders.get(name);
+    if (loader == null) {
+      throw new NoKeyValueLoaderFoundException("No loader found with name: [" + name + "]");
+    }
+
+    return loader;
+  }
+
   @Override
   public KeyValueHolder getHolder() {
     return this.proxy;
+  }
+
+  @Override
+  @Nullable
+  public <K, V> Map<K, V> getValue(String name, Class<K> keyType, Class<V> valueType) {
+    Assert.hasText(name, "Name must not be empty");
+    Assert.notNull(keyType, "");
+    Assert.notNull(valueType, "");
+
+    return this.resolveRawValue(this.holder.get(name), keyType, valueType);
   }
 
   @Override
@@ -68,6 +96,19 @@ public abstract class AbstractKeyValueManager implements KeyValueManager {
 
   }
 
+  protected KeyValueHolder resolveHolder(KeyValueHolder holder) {
+    if (holder instanceof KeyValueSourceHolder) {
+      return holder;
+    }
+
+    return new KeyValueSourceHolder(holder);
+  }
+
+  @SuppressWarnings("unchecked")
+  protected <K, V> Map<K, V> resolveRawValue(Map<?, ?> raw, Class<K> keyType, Class<V> valueType) {
+    return (Map<K, V>) raw;
+  }
+
   protected abstract void storeKeyValues(@Nullable Map<String, KeyValueLoader<?, ?>> loaders, KeyValueHolder holder);
 
   protected abstract void tryRefreshing(String name, Map<String, KeyValueLoader<?, ?>> loaders, KeyValueHolder holder);
@@ -81,8 +122,8 @@ public abstract class AbstractKeyValueManager implements KeyValueManager {
     }
 
     @Override
-    public <K, V> Map<K, V> get(String name, Class<K> keyType, Class<V> valueType) {
-      return this.holder.get(name, keyType, valueType);
+    public Map<?, ?> get(String name) {
+      return this.holder.get(name);
     }
 
     @Override

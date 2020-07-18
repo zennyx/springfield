@@ -1,5 +1,6 @@
 package zenny.toybox.springfield.keyvalue.support;
 
+import java.util.Collections;
 import java.util.Map;
 
 import org.springframework.lang.Nullable;
@@ -9,24 +10,17 @@ import zenny.toybox.springfield.util.Assert;
 
 public abstract class AbstractKeyValueHolder implements KeyValueHolder {
 
-  @Nullable
   @Override
-  public <K, V> Map<K, V> get(String name, Class<K> keyType, Class<V> valueType) {
+  public void put(String name, @Nullable Map<?, ?> keyValues) {
     Assert.hasText(name, "Name must not be empty");
 
-    Map<?, ?> raw = this.getRawKeyValues(name);
-    if (raw == null) {
-      return null;
+    if (keyValues == null || keyValues instanceof KeyValueSourceHolder) {
+      this.doPut(name, keyValues);
+      return;
     }
 
-    return this.resolveRawKeyValues(raw, keyType, valueType);
+    this.doPut(name, Collections.unmodifiableMap(keyValues));
   }
 
-  @Nullable
-  protected abstract Map<?, ?> getRawKeyValues(String name);
-
-  @SuppressWarnings("unchecked")
-  protected <K, V> Map<K, V> resolveRawKeyValues(Map<?, ?> raw, Class<K> keyType, Class<V> valueType) {
-    return (Map<K, V>) raw;
-  }
+  protected abstract void doPut(String name, @Nullable Map<?, ?> keyValues);
 }
