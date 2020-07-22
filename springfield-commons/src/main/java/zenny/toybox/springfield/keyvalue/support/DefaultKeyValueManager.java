@@ -16,9 +16,14 @@ public class DefaultKeyValueManager extends AbstractKeyValueManager {
 
   @Override
   protected void storeKeyValues(@Nullable Map<String, KeyValueLoader<?, ?>> loaders, KeyValueHolder holder) {
-    KeyValueSourceHolder kvsHolder = holder instanceof KeyValueSourceHolder ? (KeyValueSourceHolder) holder
-        : new KeyValueSourceHolder(holder);
-    loaders.forEach((name, loader) -> kvsHolder.put(name, loader));
+    if (holder instanceof KeyValueHolderSupport) {
+      KeyValueHolderSupport kvsHolder = (KeyValueHolderSupport) holder;
+      loaders.forEach((name, loader) -> kvsHolder.put(name, loader));
+
+      return;
+    }
+
+    loaders.forEach((name, loader) -> holder.put(name, loader.load()));
   }
 
   @Override
@@ -28,8 +33,12 @@ public class DefaultKeyValueManager extends AbstractKeyValueManager {
       throw new NoKeyValueLoaderFoundException("No loader found with name: [" + name + "]");
     }
 
-    KeyValueSourceHolder kvsHolder = holder instanceof KeyValueSourceHolder ? (KeyValueSourceHolder) holder
-        : new KeyValueSourceHolder(holder);
-    kvsHolder.put(name, loader);
+    if (holder instanceof KeyValueHolderSupport) {
+      ((KeyValueHolderSupport) holder).put(name, loader);
+
+      return;
+    }
+
+    holder.put(name, loader.load());
   }
 }

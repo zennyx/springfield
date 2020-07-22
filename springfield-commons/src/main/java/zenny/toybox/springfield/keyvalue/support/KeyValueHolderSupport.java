@@ -9,35 +9,40 @@ import org.springframework.lang.Nullable;
 
 import zenny.toybox.springfield.keyvalue.KeyValueHolder;
 import zenny.toybox.springfield.keyvalue.KeyValueLoader;
+import zenny.toybox.springfield.util.Assert;
 
-class KeyValueSourceHolder implements KeyValueHolder {
+abstract class KeyValueHolderSupport implements KeyValueHolder {
 
-  private final KeyValueHolder holder;
+  private boolean lazy = true;
 
-  public KeyValueSourceHolder(KeyValueHolder holder) {
-    this.holder = holder;
-  }
-
+  @Nullable
   @Override
   public Map<?, ?> get(String name) {
-    return this.holder.get(name);
+    Assert.hasText(name, "Name must not be empty");
+
+    Map<?, ?> keyValues = this.doGet(name);
+
+    if (keyValues != null && keyValues instanceof KeyValueSource) {
+      keyValues = ((KeyValueSource<?, ?>) keyValues).get().orElse(null);
+    }
+    return keyValues;
   }
 
-  @Override
-  public void put(String name, @Nullable Map<?, ?> keyValues) {
-    this.holder.put(name, keyValues);
+  public void put(String name, @Nullable KeyValueLoader<?, ?> loader) {
+    Assert.hasText(name, "Name must not be empty");
+
+    this.put(name, Optional.ofNullable(loader).map((l) -> {
+      return this.lazy ? new KeyValueSource<>(l) : l.load();
+    }).orElse(null));
   }
 
-  @Override
-  public int size() {
-    return this.holder.size();
+  public void setLazy(boolean lazy) {
+    this.lazy = lazy;
   }
 
-  void put(String name, @Nullable KeyValueLoader<?, ?> loaders) {
-    this.put(name, Optional.ofNullable(loaders).map(l -> new KeyValueSource<>(l)).orElse(null));
-  }
+  protected abstract Map<?, ?> doGet(String name);
 
-  public static class KeyValueSource<K, V> implements Map<K, V> {
+  static class KeyValueSource<K, V> implements Map<K, V> {
 
     private final KeyValueLoader<K, V> loader;
 

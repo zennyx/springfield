@@ -8,13 +8,13 @@ import org.springframework.lang.Nullable;
 import zenny.toybox.springfield.keyvalue.KeyValueHolder;
 import zenny.toybox.springfield.util.Assert;
 
-public abstract class AbstractKeyValueHolder implements KeyValueHolder {
+public abstract class AbstractKeyValueHolder extends KeyValueHolderSupport implements KeyValueHolder {
 
   @Override
   public void put(String name, @Nullable Map<?, ?> keyValues) {
     Assert.hasText(name, "Name must not be empty");
 
-    if (keyValues == null || keyValues instanceof KeyValueSourceHolder) {
+    if (keyValues == null || keyValues instanceof KeyValueSource) {
       this.doPut(name, keyValues);
       return;
     }

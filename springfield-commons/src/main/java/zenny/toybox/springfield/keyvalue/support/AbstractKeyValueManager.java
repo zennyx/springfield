@@ -40,7 +40,7 @@ public abstract class AbstractKeyValueManager implements KeyValueManager {
     }
 
     this.loaders = loaders;
-    this.holder = this.resolveHolder(holder);
+    this.holder = holder;
     this.proxy = new KeyValueHolderProxy(this.holder);
 
     if (this.loaders != null) {
@@ -94,14 +94,6 @@ public abstract class AbstractKeyValueManager implements KeyValueManager {
 
     this.tryRefreshing(name, this.loaders, this.holder);
 
-  }
-
-  protected KeyValueHolder resolveHolder(KeyValueHolder holder) {
-    if (holder instanceof KeyValueSourceHolder) {
-      return holder;
-    }
-
-    return new KeyValueSourceHolder(holder);
   }
 
   @SuppressWarnings("unchecked")

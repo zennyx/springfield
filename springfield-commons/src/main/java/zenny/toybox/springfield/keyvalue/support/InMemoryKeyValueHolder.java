@@ -8,13 +8,13 @@ public class InMemoryKeyValueHolder extends AbstractKeyValueHolder {
   private final Map<String, Map<?, ?>> cache = new ConcurrentHashMap<>();
 
   @Override
-  public Map<?, ?> get(String name) {
-    return this.cache.get(name);
+  public int size() {
+    return this.cache.size();
   }
 
   @Override
-  public int size() {
-    return this.cache.size();
+  protected Map<?, ?> doGet(String name) {
+    return this.cache.get(name);
   }
 
   @Override
