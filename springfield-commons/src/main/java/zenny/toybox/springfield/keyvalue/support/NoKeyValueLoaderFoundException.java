@@ -1,4 +1,6 @@
-package zenny.toybox.springfield.keyvalue;
+package zenny.toybox.springfield.keyvalue.support;
+
+import zenny.toybox.springfield.keyvalue.KeyValueException;
 
 @SuppressWarnings("serial")
 public class NoKeyValueLoaderFoundException extends KeyValueException {

@@ -8,33 +8,23 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.Nullable;
 
+import zenny.toybox.springfield.keyvalue.KeyValueAssembler;
 import zenny.toybox.springfield.keyvalue.KeyValueHolder;
 import zenny.toybox.springfield.keyvalue.KeyValueLoader;
-import zenny.toybox.springfield.keyvalue.KeyValueManager;
+import zenny.toybox.springfield.keyvalue.KeyValueRefresher;
 import zenny.toybox.springfield.keyvalue.KeyValues;
-import zenny.toybox.springfield.keyvalue.support.DefaultKeyValueManager;
-import zenny.toybox.springfield.keyvalue.support.InMemoryKeyValueHolder;
+import zenny.toybox.springfield.keyvalue.KeyValuesFactory;
+import zenny.toybox.springfield.keyvalue.support.DefaultKeyValuesFactory;
 
 @Configuration
 public class KeyValueSupportConfiguration {
 
-  @Bean
-  @ConditionalOnMissingBean
-  public KeyValueHolder keyValueHolder() {
-    return new InMemoryKeyValueHolder();
-  }
-
   @Autowired
   @Bean
   @ConditionalOnMissingBean
-  public KeyValueManager keyValueManager(@Nullable Map<String, KeyValueLoader<?, ?>> loaders, KeyValueHolder holder) {
-    return new DefaultKeyValueManager(loaders, holder);
-  }
-
-  @Autowired
-  @Bean
-  @ConditionalOnMissingBean
-  public KeyValues keyValues(KeyValueManager keyValueManager) {
-    return new KeyValues(keyValueManager);
+  public KeyValues keyValues(@Nullable KeyValueAssembler assembler, @Nullable KeyValueRefresher refresher,
+      @Nullable Map<String, KeyValueLoader<?, ?>> loaders, KeyValueHolder holder) {
+    KeyValuesFactory factory = new DefaultKeyValuesFactory(assembler, refresher);
+    return factory.build(loaders, holder);
   }
 }

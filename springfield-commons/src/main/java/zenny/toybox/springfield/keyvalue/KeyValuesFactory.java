@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.springframework.lang.Nullable;
 
-// TODO Redesign KeyValueManager class:
+// Redesign KeyValueManager class:
 // - KeyValueManager(I)
 // - AbstractKeyValueManager(AC)
 // - DefaultKeyValueManager(C)
@@ -24,17 +24,13 @@ import org.springframework.lang.Nullable;
 // aware
 // + DefaultKeyValueRefresher(C): must be thread-safe, KeyValueHolderSupport
 // aware
-// KeyValueSupportConfiguration(C): now, KeyValueHolder is not a bean but a
+// * KeyValueSupportConfiguration(C): now, KeyValueHolder is not a bean but a
 // parameter for the factory methods, and cant't be auto-wired anymore.
-public interface KeyValueManager {
+public interface KeyValuesFactory {
 
-  @Nullable
-  KeyValueLoader<?, ?> getLoader(String name);
+  KeyValues build(Map<String, KeyValueLoader<?, ?>> loaders);
 
-  KeyValueHolder getHolder();
+  KeyValues build(KeyValueHolder holder);
 
-  @Nullable
-  <K, V> Map<K, V> getValue(String name, Class<K> keyType, Class<V> valueType);
-
-  void refresh(String name);
+  KeyValues build(@Nullable Map<String, KeyValueLoader<?, ?>> loaders, @Nullable KeyValueHolder holder);
 }

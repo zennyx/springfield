@@ -4,8 +4,6 @@ import java.util.Map;
 
 import org.springframework.lang.Nullable;
 
-import zenny.toybox.springfield.util.Assert;
-
 /**
  * Usages
  * <p>
@@ -94,27 +92,15 @@ import zenny.toybox.springfield.util.Assert;
  * }
  * </pre>
  */
-public final class KeyValues {
+public interface KeyValues {
 
-  private final KeyValueManager manager;
-
-  public KeyValues(KeyValueManager manager) {
-    Assert.notNull(manager, "KeyValueManager must not be null");
-
-    this.manager = manager;
-  }
+  void refresh(String name);
 
   @Nullable
-  public Map<String, String> get(String name) {
+  <K, V> Map<K, V> get(String name, Class<K> keyType, Class<V> valueType);
+
+  @Nullable
+  default Map<String, String> get(String name) {
     return this.get(name, String.class, String.class);
-  }
-
-  @Nullable
-  public <K, V> Map<K, V> get(String name, Class<K> keyType, Class<V> valueType) {
-    return this.manager.getValue(name, keyType, valueType);
-  }
-
-  public void refresh(String name) {
-    this.manager.refresh(name);
   }
 }
