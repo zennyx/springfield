@@ -9,6 +9,9 @@ import org.springframework.lang.Nullable;
 import zenny.toybox.springfield.keyvalue.KeyValueHolder;
 import zenny.toybox.springfield.util.Assert;
 
+// TODO
+// 如果要让缓存起效，就必须将这个holder作为bean注册到applicationContext中去，可能会被用户直接通过@Autowired使用，
+// 这和设计上不把holder注册进ApplicationContext以避免风险的思路相悖，需要设法改进。
 public class CacheableKeyValueHolder implements KeyValueHolder {
 
   public static final String CACHE_NAME = "key-values";
