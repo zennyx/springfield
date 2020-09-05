@@ -16,6 +16,7 @@ import org.springframework.util.PropertiesPersister;
 import zenny.toybox.springfield.keyvalue.KeyValueLoader;
 import zenny.toybox.springfield.util.Assert;
 import zenny.toybox.springfield.util.CollectionUtils;
+import zenny.toybox.springfield.util.HierarchicalBuilder;
 
 public class ResourceBasedKeyValueLoader<K, V> implements KeyValueLoader<K, V> {
 
@@ -64,7 +65,8 @@ public class ResourceBasedKeyValueLoader<K, V> implements KeyValueLoader<K, V> {
     }
   }
 
-  public static class ResourceBasedKeyValueLoaderBuilder<K, V> implements KeyValueLoader.Builder<K, V> {
+  public static class ResourceBasedKeyValueLoaderBuilder<K, V>
+      implements HierarchicalBuilder<KeyValueLoader<K, V>, ResourceBasedKeyValueLoaderBuilder<K, V>> {
 
     @Nullable
     private String[] baseNames = null;

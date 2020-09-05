@@ -8,6 +8,7 @@ import org.springframework.lang.Nullable;
 
 import zenny.toybox.springfield.keyvalue.KeyValueLoader;
 import zenny.toybox.springfield.util.Assert;
+import zenny.toybox.springfield.util.HierarchicalBuilder;
 
 public class MapBasedKeyValueLoader<K, V> implements KeyValueLoader<K, V> {
 
@@ -33,7 +34,8 @@ public class MapBasedKeyValueLoader<K, V> implements KeyValueLoader<K, V> {
     return (Map<K, V>) this.source;
   }
 
-  public static class MapBasedKeyValueLoaderBuilder<K, V> implements KeyValueLoader.Builder<K, V> {
+  public static class MapBasedKeyValueLoaderBuilder<K, V>
+      implements HierarchicalBuilder<KeyValueLoader<K, V>, MapBasedKeyValueLoaderBuilder<K, V>> {
 
     private Map<K, V> source = new HashMap<>();
 

@@ -3,13 +3,25 @@ package zenny.toybox.springfield.keyvalue.support;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import zenny.toybox.springfield.util.Assert;
+import zenny.toybox.springfield.util.CollectionUtils;
+
 public class InMemoryKeyValueHolder extends AbstractKeyValueHolder {
 
   private final Map<String, Map<?, ?>> cache = new ConcurrentHashMap<>();
 
+  public InMemoryKeyValueHolder(Map<String, Map<?, ?>> source) {
+    Assert.isTrue(source != null && !CollectionUtils.isEmpty(source), "Source must not be empty");
+
+    this.cache.putAll(source);
+  }
+
+  public InMemoryKeyValueHolder() {
+  }
+
   @Override
-  public int size() {
-    return this.cache.size();
+  public boolean isEmpty() {
+    return this.cache.isEmpty();
   }
 
   @Override

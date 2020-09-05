@@ -2,15 +2,15 @@ package zenny.toybox.springfield.keyvalue.support;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.lang.Nullable;
 
-import zenny.toybox.springfield.keyvalue.KeyValueAssembler;
 import zenny.toybox.springfield.keyvalue.KeyValueHolder;
 import zenny.toybox.springfield.keyvalue.KeyValueLoader;
-import zenny.toybox.springfield.keyvalue.KeyValueRefresher;
 import zenny.toybox.springfield.keyvalue.KeyValues;
 import zenny.toybox.springfield.keyvalue.KeyValuesFactory;
 import zenny.toybox.springfield.util.Assert;
@@ -18,58 +18,66 @@ import zenny.toybox.springfield.util.CollectionUtils;
 
 public class DefaultKeyValuesFactory implements KeyValuesFactory {
 
-  private KeyValueAssembler assembler;
-
-  private KeyValueRefresher refresher;
-
-  public DefaultKeyValuesFactory() {
-    this(null, null);
-  }
-
-  public DefaultKeyValuesFactory(@Nullable KeyValueAssembler assembler, @Nullable KeyValueRefresher refresher) {
-    this.assembler = Optional.of(assembler).orElse(new DefaultKeyValueAssembler());
-    this.refresher = Optional.of(refresher).orElse(new DefaultKeyValueRefresher());
+  @Override
+  public KeyValues getKeyValues(Map<String, KeyValueLoader<?, ?>> loaders) {
+    return this.getKeyValues(loaders, new InMemoryKeyValueHolder());
   }
 
   @Override
-  public KeyValues build(Map<String, KeyValueLoader<?, ?>> loaders) {
-    return this.build(loaders, new InMemoryKeyValueHolder());
+  public KeyValues getKeyValues(KeyValueHolder holder) {
+    return this.getKeyValues(null, holder);
   }
 
   @Override
-  public KeyValues build(KeyValueHolder holder) {
-    return this.build(null, holder);
+  public KeyValues getKeyValues(@Nullable Map<String, KeyValueLoader<?, ?>> loaders, @Nullable KeyValueHolder holder) {
+    return this.getKeyValues(loaders, holder, null);
   }
 
-  @Override
-  public KeyValues build(@Nullable Map<String, KeyValueLoader<?, ?>> loaders, KeyValueHolder holder) {
+  public KeyValues getKeyValues(@Nullable Map<String, KeyValueLoader<?, ?>> loaders, @Nullable KeyValueHolder holder,
+      @Nullable Function<String, BiConsumer<Map<String, KeyValueLoader<?, ?>>, KeyValueHolder>> refresher) {
+
+    this.check(loaders, holder);
+    this.assamble(loaders, holder);
+    refresher = Optional.of(refresher).orElse(this.getDefaultRefresher());
+
+    return new DefaultKeyValues(loaders, holder, refresher);
+  }
+
+  protected void check(Map<String, KeyValueLoader<?, ?>> loaders, KeyValueHolder holder) {
     Assert.notNull(holder, "KeyValueHolder must not be null");
+
     if (loaders != null) {
       Assert.isTrue(!CollectionUtils.isEmpty(loaders) && !CollectionUtils.hasNullElements(loaders),
           "KeyValueLoaders must contain entries");
-    } else {
+      Assert.isTrue(holder instanceof AbstractKeyValueHolder, "KeyValueHolder must be mutable");
 
-      // Handle the scenario where users use no loader but put all key-values into the
-      // holder
-      Assert.isTrue(holder.size() > 0, "KeyValueHolder must contain entries");
+      return;
     }
 
-    if (loaders != null) {
-      this.assembler.assamble(loaders, holder);
-    }
-    return new DefaultKeyValues(loaders, holder, this.refresher);
+    // Handle the scenario where users use no loader but put all key-values into the
+    // holder
+    Assert.isTrue(!holder.isEmpty(), "KeyValueHolder must contain entries");
   }
 
-  public void setAssembler(KeyValueAssembler assembler) {
-    Assert.notNull(assembler, "KeyValueAssembler must not be null");
-
-    this.assembler = assembler;
+  protected void assamble(Map<String, KeyValueLoader<?, ?>> loaders, KeyValueHolder holder) {
+    AbstractKeyValueHolder kvsHolder = (AbstractKeyValueHolder) holder;
+    loaders.forEach((name, loader) -> kvsHolder.put(name, loader));
   }
 
-  public void setRefresher(KeyValueRefresher refresher) {
-    Assert.notNull(refresher, "KeyValueRefresher must not be null");
+  protected Function<String, BiConsumer<Map<String, KeyValueLoader<?, ?>>, KeyValueHolder>> getDefaultRefresher() {
 
-    this.refresher = refresher;
+    return n -> {
+      return (l, h) -> {
+        KeyValueLoader<?, ?> loader = l.get(n);
+        if (loader == null) {
+          throw new NoKeyValueLoaderFoundException("No loader found for name: [" + n + "]");
+        }
+
+        if (h instanceof AbstractKeyValueHolder) {
+          ((AbstractKeyValueHolder) h).put(n, loader);
+        }
+      };
+    };
   }
 
   protected static class DefaultKeyValues implements KeyValues {
@@ -83,10 +91,10 @@ public class DefaultKeyValuesFactory implements KeyValuesFactory {
 
     private final KeyValueHolder holder;
 
-    private final KeyValueRefresher refresher;
+    private final Function<String, BiConsumer<Map<String, KeyValueLoader<?, ?>>, KeyValueHolder>> refresher;
 
     protected DefaultKeyValues(Map<String, KeyValueLoader<?, ?>> loaders, KeyValueHolder holder,
-        KeyValueRefresher refresher) {
+        Function<String, BiConsumer<Map<String, KeyValueLoader<?, ?>>, KeyValueHolder>> refresher) {
       this.loaders = loaders;
       this.holder = holder;
       this.refresher = refresher;
@@ -104,7 +112,7 @@ public class DefaultKeyValuesFactory implements KeyValuesFactory {
         return;
       }
 
-      this.refresher.refresh(name, this.loaders, this.holder);
+      this.refresher.apply(name).accept(this.loaders, this.holder);
     }
 
     @Override

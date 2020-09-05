@@ -1,17 +1,17 @@
 package zenny.toybox.springfield.keyvalue.support;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.lang.Nullable;
 
-import zenny.toybox.springfield.keyvalue.KeyValueHolder;
 import zenny.toybox.springfield.keyvalue.KeyValueLoader;
 import zenny.toybox.springfield.util.Assert;
 
-abstract class KeyValueHolderSupport implements KeyValueHolder {
+abstract class KeyValueHolderSupport extends MutableKeyValueHolder {
 
   private boolean lazy = true;
 
@@ -28,9 +28,19 @@ abstract class KeyValueHolderSupport implements KeyValueHolder {
     return keyValues;
   }
 
-  public void put(String name, @Nullable KeyValueLoader<?, ?> loader) {
+  @Override
+  void put(String name, @Nullable Map<?, ?> keyValues) {
     Assert.hasText(name, "Name must not be empty");
 
+    if (keyValues == null || keyValues instanceof KeyValueSource) {
+      this.doPut(name, keyValues);
+      return;
+    }
+
+    this.doPut(name, Collections.unmodifiableMap(keyValues));
+  }
+
+  void put(String name, @Nullable KeyValueLoader<?, ?> loader) {
     this.put(name, Optional.ofNullable(loader).map((l) -> {
       return this.lazy ? new KeyValueSource<>(l) : l.load();
     }).orElse(null));
@@ -41,6 +51,8 @@ abstract class KeyValueHolderSupport implements KeyValueHolder {
   }
 
   protected abstract Map<?, ?> doGet(String name);
+
+  protected abstract void doPut(String name, @Nullable Map<?, ?> keyValues);
 
   static class KeyValueSource<K, V> implements Map<K, V> {
 

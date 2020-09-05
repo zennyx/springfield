@@ -8,10 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.Nullable;
 
-import zenny.toybox.springfield.keyvalue.KeyValueAssembler;
 import zenny.toybox.springfield.keyvalue.KeyValueHolder;
 import zenny.toybox.springfield.keyvalue.KeyValueLoader;
-import zenny.toybox.springfield.keyvalue.KeyValueRefresher;
 import zenny.toybox.springfield.keyvalue.KeyValues;
 import zenny.toybox.springfield.keyvalue.KeyValuesFactory;
 import zenny.toybox.springfield.keyvalue.support.DefaultKeyValuesFactory;
@@ -22,9 +20,8 @@ public class KeyValueSupportConfiguration {
   @Autowired
   @Bean
   @ConditionalOnMissingBean
-  public KeyValues keyValues(@Nullable KeyValueAssembler assembler, @Nullable KeyValueRefresher refresher,
-      @Nullable Map<String, KeyValueLoader<?, ?>> loaders, KeyValueHolder holder) {
-    KeyValuesFactory factory = new DefaultKeyValuesFactory(assembler, refresher);
-    return factory.build(loaders, holder);
+  public KeyValues keyValues(@Nullable Map<String, KeyValueLoader<?, ?>> loaders, KeyValueHolder holder) {
+    KeyValuesFactory factory = new DefaultKeyValuesFactory();
+    return factory.getKeyValues(loaders, holder);
   }
 }

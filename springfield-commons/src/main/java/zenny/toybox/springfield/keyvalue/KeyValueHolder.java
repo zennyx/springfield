@@ -9,7 +9,5 @@ public interface KeyValueHolder {
   @Nullable
   Map<?, ?> get(String name);
 
-  void put(String name, @Nullable Map<?, ?> keyValues);
-
-  int size();
+  boolean isEmpty();
 }
