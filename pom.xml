@@ -59,6 +59,8 @@
     <url>https://travis-ci.org/zennyx/springfield</url>
   </ciManagement>
 
+  <distributionManagement />
+
   <profiles>
     <profile>
       <id>full</id>
@@ -165,8 +167,10 @@
     <!-- Bug-fix for https://bugs.eclipse.org/bugs/show_bug.cgi?id=547340 -->
     <!-- Also see the link below for more information: -->
     <!-- https://stackoverflow.com/questions/56142369/why-am-i-getting-unknown-error-in-line-1-of-pom-xml -->
-    <!-- If you eclipse/sts is up-to-date, please delete this property -->
+    <!-- If your eclipse/sts is up-to-date, please delete this property -->
     <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
+    <!-- http://maven.apache.org/maven-ci-friendly.html -->
+    <flatten-maven-plugin.versoin>1.2.5</flatten-maven-plugin.versoin>
   </properties>
 
   <dependencyManagement>
@@ -283,6 +287,31 @@
               <version>${kotlinx-serialization.version}</version>
             </dependency>
           </dependencies>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>flatten-maven-plugin</artifactId>
+          <version>${flatten-maven-plugin.versoin}</version>
+          <configuration>
+            <updatePomFile>true</updatePomFile>
+            <flattenMode>resolveCiFriendliesOnly</flattenMode>
+          </configuration>
+          <executions>
+            <execution>
+              <id>flatten</id>
+              <phase>process-resources</phase>
+              <goals>
+                <goal>flatten</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>flatten.clean</id>
+              <phase>clean</phase>
+              <goals>
+                <goal>clean</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
