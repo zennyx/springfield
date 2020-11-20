@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.3.4.RELEASE</version>
+    <version>2.4.0</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>zenny.toybox</groupId>
@@ -148,28 +148,34 @@
   </profiles>
 
   <properties>
-    <revision>0.0.1-SNAPSHOT</revision>
+    <revision>1.0.0</revision>
     <java.version>1.8</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <spring-cloud.version>Hoxton.SR8</spring-cloud.version>
-    <mybatis.version>3.5.5</mybatis.version>
-    <mybatis-spring.version>2.0.5</mybatis-spring.version>
-    <mybatis-spring-boot.version>2.1.3</mybatis-spring-boot.version>
-    <kotlinx-serialization.version>0.10.0</kotlinx-serialization.version>
-    <checker.version>2.8.0</checker.version>
+    <spring-cloud.version>2020.0.0-M5</spring-cloud.version>
+    <mybatis.version>3.5.6</mybatis.version>
+    <mybatis-spring.version>2.0.6</mybatis-spring.version>
+    <mybatis-spring-boot.version>2.1.4</mybatis-spring-boot.version>
+
+    <!--
+     | Hot-fix for https://bugs.eclipse.org/bugs/show_bug.cgi?id=547340
+     |
+     | Please visit the link shown below for more information:
+     | https://stackoverflow.com/questions/56142369/why-am-i-getting-unknown-error-in-line-1-of-pom-xml
+     |
+     | Note: if your Eclipse/STS is up-to-date, this property shall be deleted
+     |-->
+    <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version> <!-- 3.2.0 -->
+    <kotlinx-serialization.version>1.0-M1-1.4.0-rc</kotlinx-serialization.version>
+    <checker.version>3.7.1</checker.version>
     <findbugs.version>3.0.2</findbugs.version>
-    <errorprone.version>2.3.3</errorprone.version>
-
-    <maven-plexu-plugin.version>2.8.5</maven-plexu-plugin.version>
-
-    <!-- Bug-fix for https://bugs.eclipse.org/bugs/show_bug.cgi?id=547340 -->
-    <!-- Also see the link below for more information: -->
-    <!-- https://stackoverflow.com/questions/56142369/why-am-i-getting-unknown-error-in-line-1-of-pom-xml -->
-    <!-- If your eclipse/sts is up-to-date, please delete this property -->
-    <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
-    <!-- http://maven.apache.org/maven-ci-friendly.html -->
+    <errorprone.version>2.4.0</errorprone.version>
+    <plexu-maven-plugin.version>2.8.8</plexu-maven-plugin.version>
+    <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
+    <!--
+     | http://maven.apache.org/maven-ci-friendly.html
+     |-->
     <flatten-maven-plugin.versoin>1.2.5</flatten-maven-plugin.versoin>
   </properties>
 
@@ -243,6 +249,20 @@
         <enabled>false</enabled>
       </snapshots>
     </repository>
+    <repository>
+      <id>spring-releases</id>
+      <url>https://repo.spring.io/release</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>spring-milestones</id>
+      <url>https://repo.spring.io/milestone</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
   </repositories>
 
   <pluginRepositories>
@@ -267,6 +287,20 @@
         <enabled>false</enabled>
       </snapshots>
     </pluginRepository>
+    <pluginRepository>
+      <id>spring-releases</id>
+      <url>https://repo.spring.io/release</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>spring-milestones</id>
+      <url>https://repo.spring.io/milestone</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
   </pluginRepositories>
 
   <build>
@@ -287,6 +321,11 @@
               <version>${kotlinx-serialization.version}</version>
             </dependency>
           </dependencies>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>${exec-maven-plugin.version}</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
@@ -327,7 +366,7 @@
             <dependency>
               <groupId>org.codehaus.plexus</groupId>
               <artifactId>plexus-compiler-javac-errorprone</artifactId>
-              <version>${maven-plexu-plugin.version}</version>
+              <version>${plexu-maven-plugin.version}</version>
             </dependency>
             <!-- override plexus-compiler-javac-errorprone's dependency on Error Prone with the latest version -->
             <dependency>

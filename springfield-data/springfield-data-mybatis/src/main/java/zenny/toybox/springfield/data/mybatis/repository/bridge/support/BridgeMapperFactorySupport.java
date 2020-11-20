@@ -138,7 +138,7 @@ public abstract class BridgeMapperFactorySupport implements BridgeMapperFactory 
 
   private String getMapperName(RepositoryInformation information) {
     String mapperPostfix = this.getMapperPostfix();
-    mapperPostfix = StringUtils.isEmpty(mapperPostfix) ? DEFAULT_BRIDGE_MAPPER_POSTFIX : mapperPostfix;
+    mapperPostfix = StringUtils.hasLength(mapperPostfix) ? mapperPostfix : DEFAULT_BRIDGE_MAPPER_POSTFIX;
 
     String mapperName = String.format("%s%s", information.getRepositoryInterface().getCanonicalName(), "Bridge");
     if (ClassUtils.isPresent(mapperName, information.getRepositoryInterface().getClassLoader())) {
