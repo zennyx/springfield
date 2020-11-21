@@ -14,4 +14,9 @@
 
   <name>Springfield Boot</name>
   <description>Springfield Boot</description>
+
+  <modules>
+    <module>springfield-boot-dependencies</module>
+    <module>springfield-boot-parent</module>
+  </modules>
 </project>

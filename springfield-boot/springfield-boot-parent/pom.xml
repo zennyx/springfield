@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <!--
+   | Declares to which version of project descriptor this POM conforms.
+   |-->
+  <modelVersion>4.0.0</modelVersion>
+
+  <!--
+   | Describes the informations of a module.
+   |-->
+  <parent>
+    <groupId>zenny.toybox</groupId>
+    <artifactId>springfield-boot-dependencies</artifactId>
+    <version>${revision}</version>
+    <relativePath>../springfield-boot-dependencies</relativePath>
+  </parent>
+  <artifactId>springfield-boot-parent</artifactId>
+  <packaging>pom</packaging>
+
+  <!--
+   | Describes the informations of a project.
+   |-->
+  <name>Springfield Boot Parent</name>
+  <description>Springfield Boot Parent</description>
+</project>

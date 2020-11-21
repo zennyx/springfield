@@ -306,6 +306,34 @@
   <build>
     <pluginManagement>
       <plugins>
+        <!--
+         | This plugin's configuration is used to store Eclipse m2e settings only.
+         | It has no influence on the Maven build itself.
+         |-->
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>flatten-maven-plugin</artifactId>
+                    <versionRange>[1.2.5,)</versionRange>
+                    <goals>
+                      <goal>flatten</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore></ignore>
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
         <plugin>
           <groupId>org.jetbrains.kotlin</groupId>
           <artifactId>kotlin-maven-plugin</artifactId>
@@ -331,26 +359,6 @@
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>flatten-maven-plugin</artifactId>
           <version>${flatten-maven-plugin.versoin}</version>
-          <configuration>
-            <updatePomFile>true</updatePomFile>
-            <flattenMode>resolveCiFriendliesOnly</flattenMode>
-          </configuration>
-          <executions>
-            <execution>
-              <id>flatten</id>
-              <phase>process-resources</phase>
-              <goals>
-                <goal>flatten</goal>
-              </goals>
-            </execution>
-            <execution>
-              <id>flatten.clean</id>
-              <phase>clean</phase>
-              <goals>
-                <goal>clean</goal>
-              </goals>
-            </execution>
-          </executions>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -368,7 +376,10 @@
               <artifactId>plexus-compiler-javac-errorprone</artifactId>
               <version>${plexu-maven-plugin.version}</version>
             </dependency>
-            <!-- override plexus-compiler-javac-errorprone's dependency on Error Prone with the latest version -->
+            <!--
+             | Override plexus-compiler-javac-errorprone's dependency on Error Prone
+             | with the latest version.
+             |-->
             <dependency>
               <groupId>com.google.errorprone</groupId>
               <artifactId>error_prone_core</artifactId>
@@ -412,6 +423,30 @@
               <id>maven-version</id>
               <goals>
                 <goal>maven-version</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>flatten-maven-plugin</artifactId>
+          <configuration>
+            <updatePomFile>true</updatePomFile>
+            <flattenMode>resolveCiFriendliesOnly</flattenMode>
+          </configuration>
+          <executions>
+            <execution>
+              <id>flatten</id>
+              <phase>process-resources</phase>
+              <goals>
+                <goal>flatten</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>flatten.clean</id>
+              <phase>clean</phase>
+              <goals>
+                <goal>clean</goal>
               </goals>
             </execution>
           </executions>
