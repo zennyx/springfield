@@ -1,4 +1,4 @@
-package zenny.toybox.springfield.data.mybatis.config.annotation;
+package zenny.toybox.springfield.data.mybatis.config;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;

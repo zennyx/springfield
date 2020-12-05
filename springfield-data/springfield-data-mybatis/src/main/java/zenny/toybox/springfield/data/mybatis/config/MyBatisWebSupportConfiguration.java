@@ -1,4 +1,4 @@
-package zenny.toybox.springfield.data.mybatis.config.annotation;
+package zenny.toybox.springfield.data.mybatis.config;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -9,10 +9,6 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.Nullable;
-
-import zenny.toybox.springfield.data.mybatis.config.PageAwareInterceptor;
-import zenny.toybox.springfield.data.mybatis.config.PageAwareObjectFactory;
-import zenny.toybox.springfield.data.mybatis.config.PageAwareObjectWrapperFactory;
 
 @Configuration
 public class MyBatisWebSupportConfiguration {
