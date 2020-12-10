@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.springframework.lang.Nullable;
 
+@Deprecated
 public class BijectionHashMap<K, V> extends HashMap<K, V> implements Map<K, V> {
 
   private static final long serialVersionUID = -1657284938629009738L;

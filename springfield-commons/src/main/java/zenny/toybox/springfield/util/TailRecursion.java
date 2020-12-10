@@ -40,8 +40,9 @@ import org.springframework.lang.Nullable;
  * </pre>
  *
  * @author Zenny Xu
- * @param <O> type of the output
+ * @param <O> the type of the output
  */
+@FunctionalInterface
 public interface TailRecursion<O> {
 
   /**
@@ -82,7 +83,7 @@ public interface TailRecursion<O> {
 
   /**
    * @author Zenny Xu
-   * @param <O> type of the output
+   * @param <O> the type of the output
    */
   static final class LastStackFrame<O> implements TailRecursion<O> {
 

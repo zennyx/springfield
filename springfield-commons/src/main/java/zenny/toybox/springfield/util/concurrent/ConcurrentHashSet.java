@@ -1,4 +1,4 @@
-package zenny.toybox.springfield.util;
+package zenny.toybox.springfield.util.concurrent;
 
 import java.util.AbstractSet;
 import java.util.Collection;
@@ -17,7 +17,7 @@ import org.springframework.lang.Nullable;
  * @author Zenny Xu
  * @param <E> the type of elements maintained by this set
  */
-public class ConcurrentHashSet<E> extends AbstractSet<E> implements Set<E> {
+public class ConcurrentHashSet<E> extends AbstractSet<E> {
 
   /**
    * The backing {@link ConcurrentHashMap}
@@ -170,7 +170,7 @@ public class ConcurrentHashSet<E> extends AbstractSet<E> implements Set<E> {
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @throws ArrayStoreException {@inheritDoc}
    * @throws NullPointerException {@inheritDoc}
    */
