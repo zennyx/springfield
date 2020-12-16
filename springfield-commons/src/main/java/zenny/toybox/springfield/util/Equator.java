@@ -24,14 +24,14 @@ public interface Equator<T> extends Hasher<T> {
   boolean equate(@Nullable T object1, @Nullable T object2);
 
   /**
-   * Identifies whether two arguments are equal, that is, evauates the two
-   * arguments and their hash for equality.
+   * Returns {@code true} if the arguments are equal to each other (i.e., both
+   * arguments and their hash codes are equal) and {@code false} otherwise.
    *
    * @param object1 object1 the first object to be equated
    * @param object2 object2 the second object to be equated
    * @return whether the two objects are equal
    */
-  default boolean identify(@Nullable T object1, @Nullable T object2) {
+  default boolean equals(@Nullable T object1, @Nullable T object2) {
     return this.equate(object1, object2) && this.hash(object1) == this.hash(object2);
   }
 }

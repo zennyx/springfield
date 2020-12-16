@@ -16,6 +16,15 @@ public enum Hashing implements Hasher<Object> {
     }
   },
 
+  HASHMAP {
+
+    @Override
+    protected int smear(int hashCode) {
+      return hashCode >>> 16;
+    }
+
+  },
+
   MURMURHASH3 {
 
     private static final int C1 = 0xcc9e2d51;
