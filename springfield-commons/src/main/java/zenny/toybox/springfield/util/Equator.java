@@ -1,5 +1,7 @@
 package zenny.toybox.springfield.util;
 
+import java.util.Objects;
+
 import org.springframework.lang.Nullable;
 
 /**
@@ -12,6 +14,7 @@ import org.springframework.lang.Nullable;
  * @author Zenny Xu
  * @param <T> the types of object this {@link Equator} can evaluate
  */
+@FunctionalInterface
 public interface Equator<T> extends Hasher<T> {
 
   /**
@@ -23,12 +26,21 @@ public interface Equator<T> extends Hasher<T> {
    */
   boolean equate(@Nullable T object1, @Nullable T object2);
 
+  /*
+   * (non-Javadoc)
+   * @see zenny.toybox.springfield.util.Hasher#hash(java.lang.Object)
+   */
+  @Override
+  default int hash(@Nullable T object) {
+    return Objects.hashCode(object);
+  }
+
   /**
    * Returns {@code true} if the arguments are equal to each other (i.e., both
    * arguments and their hash codes are equal) and {@code false} otherwise.
    *
-   * @param object1 object1 the first object to be equated
-   * @param object2 object2 the second object to be equated
+   * @param object1 the first object to be equated
+   * @param object2 the second object to be equated
    * @return whether the two objects are equal
    */
   default boolean equals(@Nullable T object1, @Nullable T object2) {
