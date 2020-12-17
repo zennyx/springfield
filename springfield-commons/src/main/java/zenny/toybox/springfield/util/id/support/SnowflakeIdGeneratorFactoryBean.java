@@ -8,9 +8,9 @@ import zenny.toybox.springfield.util.id.support.SnowflakeIdGenerator.IdentifierL
 
 public class SnowflakeIdGeneratorFactoryBean extends AbstractIdGeneratorFactoryBean<Long> {
 
-  public static final String EPOCH_NAME = "springfield.id.snowflake.epoch";
-  public static final String IDENTIFIER_NAME = "springfield.id.snowflake.identifier";
-  public static final String SUB_IDENTIFIER_NAME = "springfield.id.snowflake.subIdentifier";
+  public static final String ATTR_NAME_EPOCH = "springfield.id.snowflake.epoch";
+  public static final String ATTR_NAME_IDENTIFIER = "springfield.id.snowflake.identifier";
+  public static final String ATTR_NAME_SUB_IDENTIFIER = "springfield.id.snowflake.subIdentifier";
 
   public SnowflakeIdGeneratorFactoryBean() {
     super();
@@ -30,13 +30,13 @@ public class SnowflakeIdGeneratorFactoryBean extends AbstractIdGeneratorFactoryB
 
     Configuration config = this.getConfig();
     Long epoch = this.resolveEpochAttribute(config);
-    IdentifierLookup idLookup = this.resolveIdentifierAttribute(config, IDENTIFIER_NAME);
-    IdentifierLookup subIdLookup = this.resolveIdentifierAttribute(config, SUB_IDENTIFIER_NAME);
+    IdentifierLookup lookuper = this.resolveIdentifierAttribute(config, ATTR_NAME_IDENTIFIER);
+    IdentifierLookup subLookuper = this.resolveIdentifierAttribute(config, ATTR_NAME_SUB_IDENTIFIER);
 
     if (epoch == null) {
       epoch = System.currentTimeMillis();
 
-      if (idLookup == null && subIdLookup == null) {
+      if (lookuper == null && subLookuper == null) {
         if (this.logger.isWarnEnabled()) {
           this.logger.warn("You are using the default configuration to generate the snowflake ID generator, "
               + "please make sure that this is for testing purposes only, otherwise it is not recommended");
@@ -44,13 +44,13 @@ public class SnowflakeIdGeneratorFactoryBean extends AbstractIdGeneratorFactoryB
       }
     }
 
-    return new SnowflakeIdGenerator(epoch, idLookup, subIdLookup);
+    return new SnowflakeIdGenerator(epoch, lookuper, subLookuper);
   }
 
   @Nullable
   private Long resolveEpochAttribute(@Nullable Configuration config) {
     if (config != null) {
-      Object epochObject = config.getAttribute(EPOCH_NAME);
+      Object epochObject = config.getAttribute(ATTR_NAME_EPOCH);
 
       if (epochObject != null) {
         if (epochObject instanceof Long) {
