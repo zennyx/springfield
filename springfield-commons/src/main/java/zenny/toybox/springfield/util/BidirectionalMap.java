@@ -1,7 +1,6 @@
 package zenny.toybox.springfield.util;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -21,27 +20,36 @@ import org.springframework.lang.Nullable;
  * @see https://github.com/apache/commons-collections/blob/master/src/main/java/org/apache/commons/collections4/BidiMap.java
  */
 public interface BidirectionalMap<K, V> extends Map<K, V> {
-  // TODO Serialize/Unmodifiable
+
+  /**
+   * Returns the key to which the specified value is mapped, or {@code null} if
+   * this map contains no mapping for the value.
+   *
+   * @param value the value whose associated key is to be returned
+   * @return the key to which the specified value is mapped, or {@code null} if
+   * this map contains no mapping for the value
+   */
   @Nullable
   K getKey(@Nullable Object value);
 
-  @Nullable
-  K removeByValue(@Nullable Object value);
-
+  /**
+   * {@inheritDoc}
+   * <p>
+   * Because a bidirectional map has unique values, this method returns a
+   * {@link Set}, instead of the {@linkjava.util.Collection} specified in the
+   * {@link Map} interface.
+   */
   @Override
   Set<V> values();
 
-  BidirectionalMap<V, K> inverse();
-
   /**
-   * @param value
-   * @param defaultKey
-   * @return
+   * Returns the inverse view of this map, which maps each of this map's values to
+   * its associated key. The two bidirectional maps are backed by the same data;
+   * any changes to one will appear in the other.
+   *
+   * @return the inverse view of this map
    */
-  default K getOrDefaultKey(Object value, K defaultKey) {
-    K k;
-    return (k = getKey(value)) != null || containsValue(value) ? k : defaultKey;
-  }
+  BidirectionalMap<V, K> inverse();
 
   /*
    * (non-Javadoc)
@@ -84,21 +92,6 @@ public interface BidirectionalMap<K, V> extends Map<K, V> {
     return false;
   }
 
-  /**
-   * @param value
-   * @param oldKey
-   * @param newKey
-   * @return
-   */
-  default boolean replaceByKey(V value, K oldKey, K newKey) {
-    Object curKey = getKey(value);
-    if (!Objects.equals(curKey, oldKey) || curKey == null && !containsValue(value)) {
-      return false;
-    }
-    put(newKey, value);// TODO need confirm
-    return true;
-  }
-
   /*
    * (non-Javadoc)
    * @see java.util.Map#replace(java.lang.Object, java.lang.Object)
@@ -120,16 +113,6 @@ public interface BidirectionalMap<K, V> extends Map<K, V> {
     return null;
   }
 
-  /**
-   * @param value
-   * @param mappingFunction
-   * @return
-   */
-  default K computeIfKeyAbsent(V value, Function<? super V, ? extends K> mappingFunction) {
-    // TODO
-    return null;
-  }
-
   /*
    * (non-Javadoc)
    * @see java.util.Map#computeIfPresent(java.lang.Object,
@@ -141,32 +124,12 @@ public interface BidirectionalMap<K, V> extends Map<K, V> {
     return null;
   }
 
-  /**
-   * @param value
-   * @param remappingFunction
-   * @return
-   */
-  default K computeIfKeyPresent(V value, BiFunction<? super V, ? super K, ? extends K> remappingFunction) {
-    // TODO
-    return null;
-  }
-
   /*
    * (non-Javadoc)
    * @see java.util.Map#compute(java.lang.Object, java.util.function.BiFunction)
    */
   @Override
   default V compute(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
-    // TODO
-    return null;
-  }
-
-  /**
-   * @param value
-   * @param remappingFunction
-   * @return
-   */
-  default K computeKey(V value, BiFunction<? super V, ? super K, ? extends K> remappingFunction) {
     // TODO
     return null;
   }
