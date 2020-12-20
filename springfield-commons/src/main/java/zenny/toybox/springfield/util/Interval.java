@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
 
+import org.springframework.core.NestedRuntimeException;
 import org.springframework.lang.Nullable;
 
 public final class Interval<E extends Comparable<E>> {
@@ -1006,6 +1007,14 @@ public final class Interval<E extends Comparable<E>> {
 
     public Intervals<E> union(Intervals<E> others) {
       return unionBetween(this, others);
+    }
+  }
+
+  @SuppressWarnings("serial")
+  public static class SetTheoryViolationException extends NestedRuntimeException {
+
+    public SetTheoryViolationException(String msg) {
+      super(msg);
     }
   }
 }

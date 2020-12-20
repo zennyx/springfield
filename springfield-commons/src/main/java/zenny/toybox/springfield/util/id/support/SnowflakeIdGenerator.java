@@ -1,13 +1,13 @@
 package zenny.toybox.springfield.util.id.support;
 
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.lang.Nullable;
 
 import zenny.toybox.springfield.util.Assert;
-import zenny.toybox.springfield.util.function.Promise;
 import zenny.toybox.springfield.util.id.IdGenerator;
 
 public class SnowflakeIdGenerator implements IdGenerator<Long> {
@@ -29,13 +29,15 @@ public class SnowflakeIdGenerator implements IdGenerator<Long> {
   private static final long SUB_IDENTIFIER_SHIFT = SEQUENCE_BITS;
   private static final long TIMESTAMP_LEFT_SHIFT = IDENTIFIER_SHIFT + IDENTIFIER_BITS;
 
+  private static final BiConsumer<Long, Log> NO_OP_ALERTER = (t, l) -> {};
+
   private final long epoch;
   private final long identifier;
   private final long subIdentifier;
 
   private long sequence = 0L;
   private long lastTimestamp = -1L;
-  private Optional<Promise> alerter;
+  private BiConsumer<Long, Log> alerter;
 
   public SnowflakeIdGenerator(long epoch) {
     this(epoch, null, null);
@@ -58,6 +60,7 @@ public class SnowflakeIdGenerator implements IdGenerator<Long> {
     this.epoch = epoch;
     this.identifier = identifier;
     this.subIdentifier = subIdentifier;
+    this.alerter = NO_OP_ALERTER;
 
     if (this.logger.isInfoEnabled()) {
       this.logger.info("SnowflakeIdGenerator has been created. The epoch is ["
@@ -109,7 +112,7 @@ public class SnowflakeIdGenerator implements IdGenerator<Long> {
     while (mill <= lastTimestamp) {
       if (alerted == false) {
         alerted = true;
-        this.alerter.ifPresent(a -> a.fulfill()); // Do something else and slow down the spin.
+        this.alerter.accept(lastTimestamp, this.logger); // Do something else and slow down the spin.
       }
       mill = this.getCurrentTimestamp();
     }
@@ -117,13 +120,10 @@ public class SnowflakeIdGenerator implements IdGenerator<Long> {
     return mill;
   }
 
-  @Nullable
-  public Promise getAlerter() {
-    return this.alerter.orElse(null);
-  }
-
-  public void setAlerter(@Nullable Promise alerter) {
-    this.alerter = Optional.ofNullable(alerter);
+  public void setAlerter(@Nullable BiConsumer<Long, Log> alerter) {
+    if (alerter != null) {
+      this.alerter = alerter;
+    }
   }
 
   @FunctionalInterface
