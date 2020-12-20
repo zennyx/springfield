@@ -46,7 +46,7 @@ public abstract class Locks {
 
   /**
    * A factory class for building {@code LockBuilder}s.
-   * Not a good idea, but there's no better way at this moment(, I think).
+   * Not a good idea, just make do with it before a better solution is found. :(
    * <p>
    * Example usage:
    * <p>
