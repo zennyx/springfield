@@ -236,7 +236,7 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
    */
   @Override
   public V get(Object key) {
-    return null; // TODO
+    return null; // TODO depend on hasher & getNode()
   }
 
   /**
