@@ -36,7 +36,7 @@ public interface BidirectionalMap<K, V> extends Map<K, V> {
    * {@inheritDoc}
    * <p>
    * Because a bidirectional map has unique values, this method returns a
-   * {@link Set}, instead of the {@linkjava.util.Collection} specified in the
+   * {@link Set}, instead of the {@link java.util.Collection} specified in the
    * {@link Map} interface.
    */
   @Override
