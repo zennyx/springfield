@@ -307,14 +307,17 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
   /**
    * Basic hash bin node, used for most entries. (See below for TreeNode subclass,
    * and in LinkedHashMap for its Entry subclass.)
+   * 
+   * @param <TK> the type of the key
+   * @param <TV> the type of the value
    */
-  static class Node<K, V> implements Map.Entry<K, V> {
+  static class Node<TK, TV> implements Map.Entry<TK, TV> {
     final int hash;
-    final K key;
-    V value;
-    Node<K, V> next;
+    final TK key;
+    TV value;
+    Node<TK, TV> next;
 
-    Node(int hash, K key, V value, Node<K, V> next) {
+    Node(int hash, TK key, TV value, Node<TK, TV> next) {
       this.hash = hash;
       this.key = key;
       this.value = value;
@@ -322,12 +325,12 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
     }
 
     @Override
-    public final K getKey() {
+    public final TK getKey() {
       return this.key;
     }
 
     @Override
-    public final V getValue() {
+    public final TV getValue() {
       return this.value;
     }
 
@@ -342,8 +345,8 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
     }
 
     @Override
-    public final V setValue(V newValue) {
-      V oldValue = this.value;
+    public final TV setValue(TV newValue) {
+      TV oldValue = this.value;
       this.value = newValue;
       return oldValue;
     }
