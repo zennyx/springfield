@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import org.springframework.lang.Nullable;
+
 import zenny.toybox.springfield.util.algorithm.Hashing;
 
 public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V> implements Cloneable, Serializable {
@@ -112,7 +114,7 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
    *
    * @serial
    */
-  int threshold;
+  int threshold; // TODO one more for mirror
 
   /**
    * The load factor for the hash table.
@@ -159,7 +161,7 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
    * @throws IllegalArgumentException if the initial capacity is negative or the
    * load factor is nonpositive
    */
-  public HashedBidirectionalMap(int initialCapacity, float loadFactor, Hasher<Object> hasher) {
+  public HashedBidirectionalMap(int initialCapacity, float loadFactor, @Nullable Hasher<Object> hasher) {
     Assert.isTrue(initialCapacity >= 0, "Illegal initial capacity: " + initialCapacity);
     Assert.isTrue(loadFactor > 0 && !Float.isNaN(loadFactor), "Illegal load factor: " + loadFactor);
 
@@ -169,7 +171,7 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
 
     this.loadFactor = loadFactor;
     this.threshold = tableSizeFor(initialCapacity);
-    this.haser = hasher;
+    this.haser = hasher != null ? hasher : Hashing.HASHMAP;
   }
 
   /**
@@ -185,6 +187,12 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
     this.loadFactor = DEFAULT_LOAD_FACTOR;
     this.haser = DEFAULT_HASHER;
     this.putMapEntries(m, false);
+  }
+
+  HashedBidirectionalMap(Node<K, V>[] table, Node<V, K>[] mirror, int size, int initialCapacity, float loadFactor,
+      @Nullable Hasher<Object> hasher) {
+    this(initialCapacity, loadFactor, hasher);
+    // TODO for inverse()
   }
 
   /**
@@ -307,17 +315,17 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
   /**
    * Basic hash bin node, used for most entries. (See below for TreeNode subclass,
    * and in LinkedHashMap for its Entry subclass.)
-   * 
-   * @param <TK> the type of the key
-   * @param <TV> the type of the value
+   *
+   * @param <K> the type of the key
+   * @param <V> the type of the value
    */
-  static class Node<TK, TV> implements Map.Entry<TK, TV> {
+  static class Node<K, V> implements Map.Entry<K, V> { // TODO Nodes<K, V> to maintain nodes
     final int hash;
-    final TK key;
-    TV value;
-    Node<TK, TV> next;
+    final K key;
+    V value;
+    Node<K, V> next;
 
-    Node(int hash, TK key, TV value, Node<TK, TV> next) {
+    Node(int hash, K key, V value, Node<K, V> next) {
       this.hash = hash;
       this.key = key;
       this.value = value;
@@ -325,12 +333,12 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
     }
 
     @Override
-    public final TK getKey() {
+    public final K getKey() {
       return this.key;
     }
 
     @Override
-    public final TV getValue() {
+    public final V getValue() {
       return this.value;
     }
 
@@ -345,8 +353,8 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
     }
 
     @Override
-    public final TV setValue(TV newValue) {
-      TV oldValue = this.value;
+    public final V setValue(V newValue) {
+      V oldValue = this.value;
       this.value = newValue;
       return oldValue;
     }

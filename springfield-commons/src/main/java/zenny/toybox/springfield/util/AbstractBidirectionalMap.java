@@ -74,7 +74,7 @@ public abstract class AbstractBidirectionalMap<K, V> implements BidirectionalMap
    */
   @Override
   public boolean containsKey(@Nullable Object key) {
-    return this.containsIt(key, this.entrySet().iterator());
+    return containsIt(key, this.entrySet().iterator());
   }
 
   /**
@@ -90,20 +90,20 @@ public abstract class AbstractBidirectionalMap<K, V> implements BidirectionalMap
    */
   @Override
   public boolean containsValue(@Nullable Object value) {
-    return this.containsIt(value, this.inversedEntrySet().iterator());
+    return containsIt(value, this.inversedEntrySet().iterator());
   }
 
-  <TK, TV> boolean containsIt(@Nullable Object key, Iterator<Entry<TK, TV>> iterator) {
+  static <K, V> boolean containsIt(@Nullable Object key, Iterator<Entry<K, V>> iterator) {
     if (key == null) {
       while (iterator.hasNext()) {
-        Entry<TK, TV> e = iterator.next();
+        Entry<K, V> e = iterator.next();
         if (e.getKey() == null) {
           return true;
         }
       }
     } else {
       while (iterator.hasNext()) {
-        Entry<TK, TV> e = iterator.next();
+        Entry<K, V> e = iterator.next();
         if (key.equals(e.getKey())) {
           return true;
         }
@@ -126,7 +126,7 @@ public abstract class AbstractBidirectionalMap<K, V> implements BidirectionalMap
   @Nullable
   @Override
   public V get(@Nullable Object key) {
-    return this.getIt(key, this.entrySet().iterator());
+    return getIt(key, this.entrySet().iterator());
   }
 
   /**
@@ -144,21 +144,21 @@ public abstract class AbstractBidirectionalMap<K, V> implements BidirectionalMap
   @Nullable
   @Override
   public K getKey(@Nullable Object value) {
-    return this.getIt(value, this.inversedEntrySet().iterator());
+    return getIt(value, this.inversedEntrySet().iterator());
   }
 
   @Nullable
-  <TK, TV> TV getIt(@Nullable Object key, Iterator<Entry<TK, TV>> iterator) {
+  static <K, V> V getIt(@Nullable Object key, Iterator<Entry<K, V>> iterator) {
     if (key == null) {
       while (iterator.hasNext()) {
-        Entry<TK, TV> e = iterator.next();
+        Entry<K, V> e = iterator.next();
         if (e.getKey() == null) {
           return e.getValue();
         }
       }
     } else {
       while (iterator.hasNext()) {
-        Entry<TK, TV> e = iterator.next();
+        Entry<K, V> e = iterator.next();
         if (key.equals(e.getKey())) {
           return e.getValue();
         }
@@ -206,34 +206,34 @@ public abstract class AbstractBidirectionalMap<K, V> implements BidirectionalMap
   @Nullable
   @Override
   public V remove(@Nullable Object key) {
-    Optional<V> value = this.removeIt(key, this.entrySet().iterator());
+    Optional<V> value = removeIt(key, this.entrySet().iterator());
     if (value != null) {
-      this.removeIt(value.orElse(null), this.inversedEntrySet().iterator());
+      removeIt(value.orElse(null), this.inversedEntrySet().iterator());
     }
 
     return value == null ? null : value.orElse(null);
   }
 
   @Nullable
-  <TK, TV> Optional<TV> removeIt(@Nullable Object key, Iterator<Entry<TK, TV>> iterator) {
-    Entry<TK, TV> correctEntry = null;
+  static <K, V> Optional<V> removeIt(@Nullable Object key, Iterator<Entry<K, V>> iterator) {
+    Entry<K, V> correctEntry = null;
     if (key == null) {
       while (correctEntry == null && iterator.hasNext()) {
-        Entry<TK, TV> e = iterator.next();
+        Entry<K, V> e = iterator.next();
         if (e.getKey() == null) {
           correctEntry = e;
         }
       }
     } else {
       while (correctEntry == null && iterator.hasNext()) {
-        Entry<TK, TV> e = iterator.next();
+        Entry<K, V> e = iterator.next();
         if (key.equals(e.getKey())) {
           correctEntry = e;
         }
       }
     }
 
-    Optional<TV> oldValue = null;
+    Optional<V> oldValue = null;
     if (correctEntry != null) {
       oldValue = Optional.ofNullable(correctEntry.getValue());
       iterator.remove();
