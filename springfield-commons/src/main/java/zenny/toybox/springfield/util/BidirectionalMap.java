@@ -2,8 +2,6 @@ package zenny.toybox.springfield.util;
 
 import java.util.Map;
 import java.util.Set;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
 import org.springframework.lang.Nullable;
 
@@ -50,98 +48,4 @@ public interface BidirectionalMap<K, V> extends Map<K, V> {
    * @return the inverse view of this map
    */
   BidirectionalMap<V, K> inverse();
-
-  /*
-   * (non-Javadoc)
-   * @see java.util.Map#replaceAll(java.util.function.BiFunction)
-   */
-  @Override
-  default void replaceAll(BiFunction<? super K, ? super V, ? extends V> function) {
-    // TODO should override since the behavior of a BidirectionalMap is different
-    // from a normal one
-  }
-
-  /*
-   * (non-Javadoc)
-   * @see java.util.Map#putIfAbsent(java.lang.Object, java.lang.Object)
-   */
-  @Override
-  default V putIfAbsent(K key, V value) {
-    // TODO
-    return null;
-  }
-
-  /*
-   * (non-Javadoc)
-   * @see java.util.Map#remove(java.lang.Object, java.lang.Object)
-   */
-  @Override
-  default boolean remove(Object key, Object value) {
-    // TODO
-    return false;
-  }
-
-  /*
-   * (non-Javadoc)
-   * @see java.util.Map#replace(java.lang.Object, java.lang.Object,
-   * java.lang.Object)
-   */
-  @Override
-  default boolean replace(K key, V oldValue, V newValue) {
-    // TODO
-    return false;
-  }
-
-  /*
-   * (non-Javadoc)
-   * @see java.util.Map#replace(java.lang.Object, java.lang.Object)
-   */
-  @Override
-  default V replace(K key, V value) {
-    // TODO
-    return null;
-  }
-
-  /*
-   * (non-Javadoc)
-   * @see java.util.Map#computeIfAbsent(java.lang.Object,
-   * java.util.function.Function)
-   */
-  @Override
-  default V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction) {
-    // TODO
-    return null;
-  }
-
-  /*
-   * (non-Javadoc)
-   * @see java.util.Map#computeIfPresent(java.lang.Object,
-   * java.util.function.BiFunction)
-   */
-  @Override
-  default V computeIfPresent(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
-    // TODO
-    return null;
-  }
-
-  /*
-   * (non-Javadoc)
-   * @see java.util.Map#compute(java.lang.Object, java.util.function.BiFunction)
-   */
-  @Override
-  default V compute(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
-    // TODO
-    return null;
-  }
-
-  /*
-   * (non-Javadoc)
-   * @see java.util.Map#merge(java.lang.Object, java.lang.Object,
-   * java.util.function.BiFunction)
-   */
-  @Override
-  default V merge(K key, V value, BiFunction<? super V, ? super V, ? extends V> remappingFunction) {
-    // TODO
-    return null;
-  }
 }

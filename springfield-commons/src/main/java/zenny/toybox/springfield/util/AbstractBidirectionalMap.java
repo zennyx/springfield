@@ -90,7 +90,7 @@ public abstract class AbstractBidirectionalMap<K, V> implements BidirectionalMap
    */
   @Override
   public boolean containsValue(@Nullable Object value) {
-    return containsIt(value, this.inversedEntrySet().iterator());
+    return containsIt(value, this.inverseEntrySet().iterator());
   }
 
   static <K, V> boolean containsIt(@Nullable Object key, Iterator<Entry<K, V>> iterator) {
@@ -144,7 +144,7 @@ public abstract class AbstractBidirectionalMap<K, V> implements BidirectionalMap
   @Nullable
   @Override
   public K getKey(@Nullable Object value) {
-    return getIt(value, this.inversedEntrySet().iterator());
+    return getIt(value, this.inverseEntrySet().iterator());
   }
 
   @Nullable
@@ -208,7 +208,7 @@ public abstract class AbstractBidirectionalMap<K, V> implements BidirectionalMap
   public V remove(@Nullable Object key) {
     Optional<V> value = removeIt(key, this.entrySet().iterator());
     if (value != null) {
-      removeIt(value.orElse(null), this.inversedEntrySet().iterator());
+      removeIt(value.orElse(null), this.inverseEntrySet().iterator());
     }
 
     return value == null ? null : value.orElse(null);
@@ -277,7 +277,7 @@ public abstract class AbstractBidirectionalMap<K, V> implements BidirectionalMap
   @Override
   public void clear() {
     this.entrySet().clear();
-    this.inversedEntrySet().clear();
+    this.inverseEntrySet().clear();
   }
 
   /**
@@ -326,7 +326,7 @@ public abstract class AbstractBidirectionalMap<K, V> implements BidirectionalMap
   @Override
   public Set<V> values() {
     if (this.values == null) {
-      this.values = this.toSet(this.inversedEntrySet().iterator(), false);
+      this.values = this.toSet(this.inverseEntrySet().iterator(), false);
     }
 
     return this.values;
@@ -387,7 +387,7 @@ public abstract class AbstractBidirectionalMap<K, V> implements BidirectionalMap
     };
   }
 
-  public abstract Set<Entry<V, K>> inversedEntrySet();
+  protected abstract Set<Entry<V, K>> inverseEntrySet();
 
   /**
    * Compares the specified object with this map for equality. Returns
