@@ -19,7 +19,7 @@ public class KeyValueSupportConfiguration {
 
   @Autowired
   @Bean
-  @ConditionalOnMissingBean
+  @ConditionalOnMissingBean // TODO use more traditional way (e.g. ImportSelector) instead of spring-boot
   public KeyValues keyValues(@Nullable Map<String, KeyValueLoader<?, ?>> loaders, KeyValueHolder holder) {
     KeyValuesFactory factory = new DefaultKeyValuesFactory();
     return factory.getKeyValues(loaders, holder);
