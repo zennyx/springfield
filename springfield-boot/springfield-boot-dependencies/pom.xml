@@ -13,7 +13,7 @@
    <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.4.0</version>
+    <version>2.4.1</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>zenny.toybox</groupId>
@@ -102,9 +102,10 @@
     <!--
      | Spring series.
      |-->
-    <spring-cloud.version>2020.0.0-M5</spring-cloud.version> <!-- TODO: non-release version -->
-    <spring-cloud-maven-plugin.version>3.0.0-M5</spring-cloud-maven-plugin.version> <!-- TODO: non-release version -->
-    <spring-geode.version>1.4.0-RC1</spring-geode.version> <!-- TODO: non-release version -->
+    <spring-cloud.version>2020.0.0</spring-cloud.version>
+    <spring-cloud-maven-plugin.version>3.0.0</spring-cloud-maven-plugin.version>
+    <spring-geode.version>1.4.0</spring-geode.version>
+    <spring-cloud-gcp.version>2.0.0-RC2</spring-cloud-gcp.version> <!-- TODO: release candidate -->
     <spring-boot-admin.version>2.3.1</spring-boot-admin.version>
     <!--
      | MyBatis series.
@@ -112,7 +113,7 @@
     <mybatis.version>3.5.6</mybatis.version>
     <mybatis-spring.version>2.0.6</mybatis-spring.version>
     <mybatis-spring-boot.version>2.1.4</mybatis-spring-boot.version>
-    <mybatis-migrations.version>3.3.8</mybatis-migrations.version>
+    <mybatis-migrations.version>3.3.9</mybatis-migrations.version>
     <mybatis-generator.version>1.4.0</mybatis-generator.version>
     <mybatis-generator-maven-plugin.version>${mybatis-generator.version}</mybatis-generator-maven-plugin.version>
     <pagehelper.version>5.2.0</pagehelper.version> <!-- TODO: out-of-date dependencies -->
@@ -120,13 +121,17 @@
     <!--
      | Hutool series.
      |-->
-     <hutool.version>5.5.1</hutool.version>
+     <hutool.version>5.5.6</hutool.version>
+    <!--
+     | Okta series.
+     |-->
+     <okta-spring.version>2.0.0</okta-spring.version>
     <!--
      | Extra.
      |-->
     <asciidoctor-maven-plugin.version>1.5.8</asciidoctor-maven-plugin.version>
     <flatten-maven-plugin.versoin>1.2.5</flatten-maven-plugin.versoin>
-    <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
+    <exec-maven-plugin.version>3.0.0</exec-maven-plugin.version>
   </properties>
 
   <!--
@@ -142,7 +147,6 @@
       <!--
        | Spring series.
        |-->
-      <!--
       <dependency>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-dependencies</artifactId>
@@ -154,6 +158,14 @@
         <groupId>org.springframework.geode</groupId>
         <artifactId>spring-geode-bom</artifactId>
         <version>${spring-geode.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <!--
+      <dependency>
+        <groupId>com.google.cloud</groupId>
+        <artifactId>spring-cloud-gcp-dependencies</artifactId>
+        <version>${spring-cloud-gcp.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -265,6 +277,14 @@
         <version>${hutool.version}</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <!--
+       | Okta series.
+       |-->
+      <dependency>
+        <groupId>com.okta.spring</groupId>
+        <artifactId>okta-spring-boot-starter</artifactId>
+        <version>${okta-spring.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
