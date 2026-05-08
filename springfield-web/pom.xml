@@ -1,20 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <!--
+   | Specifies the parent project from which this project inherits configuration.
+   |-->
   <parent>
     <groupId>zenny.toybox</groupId>
     <artifactId>springfield</artifactId>
     <version>${revision}</version>
   </parent>
+
+  <!--
+   | The identifier and packaging type of this module.
+   |-->
   <artifactId>springfield-web</artifactId>
   <packaging>pom</packaging>
 
+  <!--
+   | Human-readable metadata of this module.
+   |-->
   <name>Springfield Web</name>
-  <description>Springfield Web</description>
+  <description>Web-layer extensions for Springfield, providing enhanced Spring MVC and web application support.</description>
 
+  <!--
+   | Sub-modules aggregated by this project.
+   |-->
   <modules>
     <module>springfield-web-commons</module>
   </modules>

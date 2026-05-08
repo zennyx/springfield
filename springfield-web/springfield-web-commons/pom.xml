@@ -1,19 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <!--
+   | Specifies the parent project from which this project inherits configuration.
+   |-->
   <parent>
     <groupId>zenny.toybox</groupId>
     <artifactId>springfield-web</artifactId>
     <version>${revision}</version>
   </parent>
+
+  <!--
+   | The identifier of this module.
+   |-->
   <artifactId>springfield-web-commons</artifactId>
 
+  <!--
+   | Human-readable metadata of this module.
+   |-->
   <name>Springfield Web Commons</name>
-  <description>Springfield Web Commons</description>
+  <description>Core web utilities and Spring MVC extensions shared across Springfield Web modules.</description>
 
+  <!--
+   | Dependencies required by this module.
+   |-->
   <dependencies>
     <dependency>
       <groupId>org.springframework</groupId>
@@ -23,24 +36,5 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-webflux</artifactId>
-    </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-source-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <configuration>
-          <layout>NONE</layout>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 </project>

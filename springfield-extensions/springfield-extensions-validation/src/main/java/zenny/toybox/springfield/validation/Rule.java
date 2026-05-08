@@ -1,6 +1,6 @@
 package zenny.toybox.springfield.validation;
 
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidatorContext;
 
 import org.springframework.lang.Nullable;
 

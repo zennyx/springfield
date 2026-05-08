@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <!--
+   | Declares to which version of project descriptor this POM conforms.
+   |-->
   <modelVersion>4.0.0</modelVersion>
 
+  <!--
+   | Specifies the parent project from which this project inherits configuration.
+   |-->
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.4.1</version>
+    <version>4.0.6</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>zenny.toybox</groupId>
@@ -15,11 +21,17 @@
   <version>${revision}</version>
   <packaging>pom</packaging>
 
+  <!--
+   | Describes the metadata of this project.
+   |-->
   <name>Springfield</name>
-  <description>An extension pack for Spring Framework.</description>
+  <description>A modular extension pack for Spring Framework, providing enhanced support for data access, security, web development, and more.</description>
   <inceptionYear>2018</inceptionYear>
   <url>https://github.com/zennyx/springfield</url>
 
+  <!--
+   | Describes the committers of this project.
+   |-->
   <developers>
     <developer>
       <name>Zenny Xu</name>
@@ -34,6 +46,14 @@
     </developer>
   </developers>
 
+  <!--
+   | This element describes all of the licenses for this project. Each
+   | license is described by a license element, which is then described
+   | by additional elements. Projects should only list the license(s)
+   | that applies to the project and not the licenses that apply to
+   | dependencies. If multiple licenses are listed, it is assumed that
+   | the user can select any of them, not that they must accept all.
+   |-->
   <licenses>
     <license>
       <name>MIT</name>
@@ -43,153 +63,149 @@
     </license>
   </licenses>
 
+  <!--
+   | The project's issue management system information.
+   |-->
   <issueManagement>
     <system>GitHub Issues</system>
     <url>https://github.com/zennyx/springfield/issues</url>
   </issueManagement>
 
+  <!--
+   | Specification for the SCM used by the project, such as CVS, Subversion, etc.
+   |-->
   <scm>
     <connection>scm:git:https://github.com/zennyx/springfield.git</connection>
     <developerConnection>scm:git:git@github.com:zennyx/springfield.git</developerConnection>
     <url>https://github.com/zennyx/springfield</url>
   </scm>
 
+  <!--
+   | The project's continuous integration information.
+   |-->
   <ciManagement>
-    <system>Travis CI</system>
-    <url>https://travis-ci.org/zennyx/springfield</url>
+    <system>GitHub Actions</system>
+    <url>https://github.com/zennyx/springfield/actions</url>
   </ciManagement>
 
-  <distributionManagement />
+  <!--
+   | The modules that are part of this project. Each module is a sub-project
+   | that can be built independently or as part of the reactor build.
+   |-->
+  <modules>
+    <module>springfield-commons</module>
+    <module>springfield-data</module>
+    <module>springfield-extensions</module>
+    <module>springfield-playground</module>
+    <module>springfield-security</module>
+    <module>springfield-web</module>
+  </modules>
 
-  <profiles>
-    <profile>
-      <id>full</id>
-      <modules>
-        <module>springfield-boot</module>
-        <module>springfield-commons</module>
-        <module>springfield-data</module>
-        <module>springfield-extensions</module>
-        <module>springfield-samples</module>
-        <module>springfield-security</module>
-        <module>springfield-web</module>
-      </modules>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-    </profile>
-    <profile>
-      <id>boot</id>
-      <modules>
-        <module>springfield-boot</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>commons</id>
-      <modules>
-        <module>springfield-commons</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>data</id>
-      <modules>
-        <module>springfield-data</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>extensions</id>
-      <modules>
-        <module>springfield-extensions</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>samples</id>
-      <modules>
-        <module>springfield-samples</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>security</id>
-      <modules>
-        <module>springfield-security</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>web</id>
-      <modules>
-        <module>springfield-web</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>repository</id>
-      <activation>
-        <property>
-          <name>repository</name>
-        </property>
-      </activation>
-      <repositories>
-        <repository>
-          <id>repository</id>
-          <url>${repository}</url>
-          <snapshots>
-            <enabled>false</enabled>
-          </snapshots>
-        </repository>
-      </repositories>
-      <pluginRepositories>
-        <pluginRepository>
-          <id>repository</id>
-          <url>${repository}</url>
-          <snapshots>
-            <enabled>false</enabled>
-          </snapshots>
-        </pluginRepository>
-      </pluginRepositories>
-    </profile>
-  </profiles>
-
+  <!--
+   | Properties that can be used throughout the POM as a substitution, and are used
+   | as filters in resources if enabled. The format is <name>value</name>.
+   |-->
   <properties>
+    <!--
+     | Basic properties.
+     |-->
     <revision>1.0.0</revision>
-    <java.version>1.8</java.version>
+    <java.version>21</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-    <spring-cloud.version>2020.0.0</spring-cloud.version>
-    <mybatis.version>3.5.6</mybatis.version>
-    <mybatis-spring.version>2.0.6</mybatis-spring.version>
-    <mybatis-spring-boot.version>2.1.4</mybatis-spring-boot.version>
-    <mybatis-generator.version>1.4.0</mybatis-generator.version>
-
     <!--
-     | Hot-fix for https://bugs.eclipse.org/bugs/show_bug.cgi?id=547340
-     |
-     | Please visit the link shown below for more information:
-     | https://stackoverflow.com/questions/56142369/why-am-i-getting-unknown-error-in-line-1-of-pom-xml
-     |
-     | Note: if your Eclipse/STS is up-to-date, this property shall be deleted
+     | Spring series.
      |-->
-    <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version> <!-- 3.2.0 -->
-    <kotlinx-serialization.version>1.0-M1-1.4.0-rc</kotlinx-serialization.version>
-    <checker.version>3.9.0</checker.version>
-    <findbugs.version>3.0.2</findbugs.version>
-    <errorprone.version>2.4.0</errorprone.version>
-    <plexu-maven-plugin.version>2.8.8</plexu-maven-plugin.version>
-    <exec-maven-plugin.version>3.0.0</exec-maven-plugin.version>
+    <spring-data.version>2025.1.5</spring-data.version>
     <!--
-     | http://maven.apache.org/maven-ci-friendly.html
+     | MyBatis series.
      |-->
-    <flatten-maven-plugin.versoin>1.2.5</flatten-maven-plugin.versoin>
+    <mybatis.version>3.5.19</mybatis.version>
+    <mybatis-spring.version>4.0.0</mybatis-spring.version>
+    <mybatis-generator.version>2.0.0</mybatis-generator.version>
+    <!--
+     | AWS SDK series.
+     |-->
+    <aws-sdk.version>2.44.0</aws-sdk.version>
+    <!--
+     | Testing libraries.
+     |-->
+    <tabletest.version>1.2.1</tabletest.version>
+    <!--
+     | Maven plugins.
+     |-->
+    <eclipse-lifecycle-mapping.version>1.0.0</eclipse-lifecycle-mapping.version> <!-- http://maven.apache.org/maven-ci-friendly.html -->
+    <codehaus-flatten.version>1.7.3</codehaus-flatten.version>
+    <diffplug-spotless.version>3.4.0</diffplug-spotless.version> <!-- https://github.com/diffplug/spotless -->
+    <google-java-format.version>1.35.0</google-java-format.version> <!-- https://github.com/google/google-java-format -->
   </properties>
 
+  <!--
+   | Default dependency information for projects that inherit from
+   | this one. The dependencies in this section are not immediately
+   | resolved. Instead, when a POM derived from this one declares a
+   | dependency described by a matching groupId and artifactId, the
+   | version and other values from this section are used for that
+   | dependency if they were not already specified.
+   |-->
   <dependencyManagement>
     <dependencies>
+      <!--
+       | Internal modules.
+       |-->
       <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-dependencies</artifactId>
-        <version>${spring-cloud.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
+        <groupId>zenny.toybox</groupId>
+        <artifactId>springfield-commons</artifactId>
+        <version>${revision}</version>
       </dependency>
-
+      <dependency>
+        <groupId>zenny.toybox</groupId>
+        <artifactId>springfield-data-mybatis</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>zenny.toybox</groupId>
+        <artifactId>springfield-extensions-jackson</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>zenny.toybox</groupId>
+        <artifactId>springfield-extensions-validation</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>zenny.toybox</groupId>
+        <artifactId>springfield-playground</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>zenny.toybox</groupId>
+        <artifactId>springfield-security-commons</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>zenny.toybox</groupId>
+        <artifactId>springfield-security-web</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>zenny.toybox</groupId>
+        <artifactId>springfield-web-commons</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <!--
+       | Spring series.
+       |-->
+      <dependency>
+        <groupId>org.springframework.data</groupId>
+        <artifactId>spring-data-bom</artifactId>
+        <version>${spring-data.version}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+      <!--
+       | MyBatis series.
+       |-->
       <dependency>
         <groupId>org.mybatis</groupId>
         <artifactId>mybatis</artifactId>
@@ -201,115 +217,42 @@
         <version>${mybatis-spring.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.mybatis.spring.boot</groupId>
-        <artifactId>mybatis-spring-boot-starter</artifactId>
-        <version>${mybatis-spring-boot.version.version}</version>
-      </dependency>
-      <dependency>
         <groupId>org.mybatis.generator</groupId>
         <artifactId>mybatis-generator-core</artifactId>
         <version>${mybatis-generator.version}</version>
       </dependency>
+      <!--
+       | AWS SDK series.
+       |-->
       <dependency>
-        <groupId>org.jetbrains.kotlinx</groupId>
-        <artifactId>kotlinx-serialization-runtime</artifactId>
-        <version>${kotlinx-serialization.version}</version>
+        <groupId>software.amazon.awssdk</groupId>
+        <artifactId>bom</artifactId>
+        <version>${aws-sdk.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
       </dependency>
+      <!--
+       | Testing libraries.
+       |-->
       <dependency>
-        <groupId>org.checkerframework</groupId>
-        <artifactId>checker-qual</artifactId>
-        <version>${checker.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.google.code.findbugs</groupId>
-        <artifactId>jsr305</artifactId>
-        <version>${findbugs.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.google.errorprone</groupId>
-        <artifactId>error_prone_annotations</artifactId>
-        <version>${errorprone.version}</version>
+        <groupId>org.tabletest</groupId>
+        <artifactId>tabletest-junit</artifactId>
+        <version>${tabletest.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
 
-  <repositories>
-    <repository>
-      <id>central</id>
-      <url>https://repo.maven.apache.org/maven2</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>kotlinx</id>
-      <url>https://kotlin.bintray.com/kotlinx</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>jcenter</id>
-      <url>https://jcenter.bintray.com/</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>spring-releases</id>
-      <url>https://repo.spring.io/release</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>spring-milestones</id>
-      <url>https://repo.spring.io/milestone</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>central</id>
-      <url>https://repo.maven.apache.org/maven2</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-    <pluginRepository>
-      <id>kotlinx</id>
-      <url>https://kotlin.bintray.com/kotlinx</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-    <pluginRepository>
-      <id>jcenter</id>
-      <url>https://jcenter.bintray.com/</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-    <pluginRepository>
-      <id>spring-releases</id>
-      <url>https://repo.spring.io/release</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-    <pluginRepository>
-      <id>spring-milestones</id>
-      <url>https://repo.spring.io/milestone</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-  </pluginRepositories>
-
+  <!--
+   | Information required to build the project.
+   |-->
   <build>
+    <!--
+     | Default plugin information to be made available for reference by
+     | projects derived from this one. This plugin configuration will not
+     | be resolved or bound to the lifecycle unless referenced. Any
+     | local configuration for a given plugin will override the plugin's
+     | entire definition here.
+     |-->
     <pluginManagement>
       <plugins>
         <!--
@@ -319,7 +262,7 @@
         <plugin>
           <groupId>org.eclipse.m2e</groupId>
           <artifactId>lifecycle-mapping</artifactId>
-          <version>1.0.0</version>
+          <version>${eclipse-lifecycle-mapping.version}</version>
           <configuration>
             <lifecycleMappingMetadata>
               <pluginExecutions>
@@ -333,130 +276,114 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore></ignore>
+                    <ignore />
                   </action>
                 </pluginExecution>
               </pluginExecutions>
             </lifecycleMappingMetadata>
           </configuration>
         </plugin>
+        <!--
+         | Enforces consistent code formatting across the project.
+         |-->
         <plugin>
-          <groupId>org.jetbrains.kotlin</groupId>
-          <artifactId>kotlin-maven-plugin</artifactId>
+          <groupId>com.diffplug.spotless</groupId>
+          <artifactId>spotless-maven-plugin</artifactId>
+          <version>${diffplug-spotless.version}</version>
           <configuration>
-            <compilerPlugins>
-              <compilerPlugin>kotlinx-serialization</compilerPlugin>
-            </compilerPlugins>
-          </configuration>
-          <dependencies>
-            <dependency>
-              <groupId>org.jetbrains.kotlinx</groupId>
-              <artifactId>kotlinx-maven-serialization-plugin</artifactId>
-              <version>${kotlinx-serialization.version}</version>
-            </dependency>
-          </dependencies>
-        </plugin>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>exec-maven-plugin</artifactId>
-          <version>${exec-maven-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>flatten-maven-plugin</artifactId>
-          <version>${flatten-maven-plugin.versoin}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <configuration>
-            <compilerId>javac-with-errorprone</compilerId>
-            <forceJavacCompilerUse>true</forceJavacCompilerUse>
-            <source>${java.version.short}</source>
-            <target>${java.version.short}</target>
-            <showWarnings>true</showWarnings>
-          </configuration>
-          <dependencies>
-            <dependency>
-              <groupId>org.codehaus.plexus</groupId>
-              <artifactId>plexus-compiler-javac-errorprone</artifactId>
-              <version>${plexu-maven-plugin.version}</version>
-            </dependency>
-            <!--
-             | Override plexus-compiler-javac-errorprone's dependency on Error Prone
-             | with the latest version.
-             |-->
-            <dependency>
-              <groupId>com.google.errorprone</groupId>
-              <artifactId>error_prone_core</artifactId>
-              <version>${errorprone.version}</version>
-            </dependency>
-          </dependencies>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-jar-plugin</artifactId>
-          <configuration>
-            <archive>
-              <manifestEntries>
-                <Built-By>Zenny Xu</Built-By>
-                <Build-Maven>${maven.version}</Build-Maven>
-              </manifestEntries>
-            </archive>
+            <lineEndings>PLATFORM_NATIVE</lineEndings>
+            <formats>
+              <format>
+                <includes>
+                  <include>.gitattributes</include>
+                  <include>.gitignore</include>
+                  <include>.cursorignore</include>
+                  <include>.editorconfig</include>
+                </includes>
+                <trimTrailingWhitespace/>
+                <endWithNewline/>
+                <indent>
+                  <spaces>true</spaces>
+                  <spacesPerTab>2</spacesPerTab>
+                </indent>
+              </format>
+            </formats>
+            <java>
+              <cleanthat />
+              <googleJavaFormat>
+                <version>${google-java-format.version}</version>
+                <style>GOOGLE</style>
+              </googleJavaFormat>
+              <tableTestFormatter />
+              <importOrder />
+              <removeUnusedImports />
+              <forbidWildcardImports />
+              <formatAnnotations />
+            </java>
+            <pom>
+              <sortPom>
+                <expandEmptyElements>false</expandEmptyElements>
+                <spaceBeforeCloseEmptyElement>true</spaceBeforeCloseEmptyElement>
+                <sortProperties>false</sortProperties>
+                <sortModules>true</sortModules>
+                <sortExecutions>true</sortExecutions>
+              </sortPom>
+            </pom>
+            <markdown>
+              <includes>
+                <include>**/*.md</include>
+              </includes>
+              <flexmark>
+                <emulationProfile>COMMONMARK</emulationProfile>
+                <pegdownExtensions>ALL,-HARDWRAPS</pegdownExtensions>
+              </flexmark>
+            </markdown>
+            <upToDateChecking>
+              <enabled>true</enabled>
+            </upToDateChecking>
           </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
+    <!--
+     | Plugins that are explicitly bound to the build lifecycle.
+     |-->
     <plugins>
       <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>build-helper-maven-plugin</artifactId>
-          <executions>
-            <execution>
-              <id>regex-property</id>
-              <goals>
-                <goal>regex-property</goal>
-              </goals>
-              <configuration>
-                <name>java.version.short</name>
-                <value>${java.version}</value>
-                <regex>1.</regex>
-                <replacement></replacement>
-                <failIfNoMatch>false</failIfNoMatch>
-              </configuration>
-            </execution>
-            <execution>
-              <id>maven-version</id>
-              <goals>
-                <goal>maven-version</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>flatten-maven-plugin</artifactId>
-          <configuration>
-            <updatePomFile>true</updatePomFile>
-            <flattenMode>resolveCiFriendliesOnly</flattenMode>
-          </configuration>
-          <executions>
-            <execution>
-              <id>flatten</id>
-              <phase>process-resources</phase>
-              <goals>
-                <goal>flatten</goal>
-              </goals>
-            </execution>
-            <execution>
-              <id>flatten.clean</id>
-              <phase>clean</phase>
-              <goals>
-                <goal>clean</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>flatten-maven-plugin</artifactId>
+        <version>${codehaus-flatten.version}</version>
+        <configuration>
+          <updatePomFile>true</updatePomFile>
+          <flattenMode>resolveCiFriendliesOnly</flattenMode>
+        </configuration>
+        <executions>
+          <execution>
+            <id>flatten</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>flatten</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>flatten.clean</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+      </plugin>
+      <!--
+      <plugin>
+        <groupId>com.diffplug.spotless</groupId>
+        <artifactId>spotless-maven-plugin</artifactId>
+      </plugin>
+      -->
     </plugins>
   </build>
 </project>

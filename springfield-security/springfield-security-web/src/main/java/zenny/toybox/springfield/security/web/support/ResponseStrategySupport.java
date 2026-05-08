@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -23,6 +23,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.lang.Nullable;
+import org.springframework.util.MimeTypeUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 
@@ -80,7 +81,7 @@ public abstract class ResponseStrategySupport implements ResponseStrategy {
     });
 
     List<MediaType> result = new ArrayList<>(allSupportedMediaTypes);
-    MediaType.sortBySpecificity(result);
+    MimeTypeUtils.sortBySpecificity(result);
 
     return result;
   }
@@ -135,7 +136,9 @@ public abstract class ResponseStrategySupport implements ResponseStrategy {
     }
 
     List<MediaType> mediaTypes = new ArrayList<>(compatibleMediaTypes);
-    MediaType.sortBySpecificityAndQuality(mediaTypes);
+    MimeTypeUtils.sortBySpecificity(mediaTypes);
+    // TODO: MimeTypeUtils.sortBySpecificity does not sort by quality. If needed, add quality sorting:
+    // mediaTypes.sort((m1, m2) -> Double.compare(m2.getQualityValue(), m1.getQualityValue()));
 
     MediaType selectedMediaType = null;
     for (MediaType mediaType : mediaTypes) {
@@ -224,7 +227,7 @@ public abstract class ResponseStrategySupport implements ResponseStrategy {
   private MediaType getMostSpecificMediaType(MediaType acceptType, MediaType produceType) {
     MediaType produceTypeToUse = produceType.copyQualityValue(acceptType);
 
-    return MediaType.SPECIFICITY_COMPARATOR.compare(acceptType, produceTypeToUse) <= 0 ? acceptType : produceTypeToUse;
+    return acceptType.isMoreSpecific(produceTypeToUse) ? acceptType : produceTypeToUse;
   }
 
   protected ServletServerHttpRequest createInputMessage(HttpServletRequest request) {

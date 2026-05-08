@@ -6,20 +6,19 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.lang.Nullable;
 
 import zenny.toybox.springfield.util.Assert;
-import zenny.toybox.springfield.util.CollectionUtils;
 import zenny.toybox.springfield.util.StringUtils;
 
 public class DefaultResponseStrategy extends ResponseStrategySupport {
@@ -38,7 +37,7 @@ public class DefaultResponseStrategy extends ResponseStrategySupport {
   }
 
   public DefaultResponseStrategy(HttpStatus status, @Nullable HttpHeaders headers) {
-    this(Collections.singleton(new MappingJackson2HttpMessageConverter()), status, headers);
+    this(Collections.singleton(new JacksonJsonHttpMessageConverter()), status, headers);
   }
 
   public DefaultResponseStrategy(Collection<HttpMessageConverter<?>> messageConverters, HttpStatus status,
@@ -63,15 +62,15 @@ public class DefaultResponseStrategy extends ResponseStrategySupport {
     ServletServerHttpResponse outputMessage = this.createOutputMessage(response);
 
     if (response.containsHeader(HttpHeaders.VARY) && this.headers != null
-        && this.headers.containsKey(HttpHeaders.VARY)) {
+        && this.headers.containsHeader(HttpHeaders.VARY)) {
       Collection<String> varyHeadsToAdd = this.getVaryResponseHeadersToAdd(response);
       if (!varyHeadsToAdd.isEmpty()) {
         response.addHeader(HttpHeaders.VARY, String.join(", ", varyHeadsToAdd));
       }
     }
 
-    if (!CollectionUtils.isEmpty(this.headers)) {
-      this.headers.entrySet().forEach(entry -> {
+    if (this.headers != null && !this.headers.isEmpty()) {
+      this.headers.headerSet().forEach(entry -> {
         if (!response.containsHeader(entry.getKey())) {
           response.setHeader(entry.getKey(), String.join(", ", entry.getValue()));
         }

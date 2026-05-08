@@ -94,7 +94,7 @@ public class PageAwareInterceptor implements Interceptor {
 
       paramMap.remove(pageableName);
       Pageable pageable = (Pageable) pageableValue;
-      this.arguments[2] = new RowBounds(new Long(pageable.getOffset()).intValue(), pageable.getPageSize());
+      this.arguments[2] = new RowBounds(Long.valueOf(pageable.getOffset()).intValue(), pageable.getPageSize());
 
       return pageable;
     }

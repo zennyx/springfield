@@ -12,8 +12,8 @@ import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import javax.validation.Constraint;
-import javax.validation.Payload;
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 
 import zenny.toybox.springfield.lang.Lab;
 import zenny.toybox.springfield.validation.constraint.PhoneNumber.List;

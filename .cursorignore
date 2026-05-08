@@ -1,0 +1,80 @@
+# VCS
+.git/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+.classpath
+.project
+.settings/
+.apt_generated/
+.factorypath/
+.metadata/
+.springBeans/
+.sts4-cache/
+nbproject/private/
+nbbuild/
+nbdist/
+.nb-gradle/
+
+# Build outputs (Maven/Gradle)
+**/target/
+**/build/
+out/
+dependency-reduced-pom.xml
+.flattened-pom.xml
+
+# Dependencies/cache
+**/.gradle/
+**/.mvn/wrapper/maven-wrapper.jar
+node_modules/
+
+# Logs/temp
+**/logs/
+**/*.log
+tmp/
+temp/
+
+# Coverage/reports
+**/coverage/
+**/site/
+**/jacoco*.xml
+**/surefire-reports/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Large/binary artifacts
+**/*.jar
+**/*.war
+**/*.ear
+**/*.zip
+**/*.tar
+**/*.gz
+**/*.7z
+**/*.class
+**/*.png
+**/*.jpg
+**/*.jpeg
+**/*.gif
+**/*.pdf
+
+# Secrets / env
+.env
+.env.*
+**/application-prod.yml
+**/application-prod.yaml
+**/application-local.yml
+**/application-local.yaml
+**/secrets/
+**/credentials/
+**/*.key
+**/*.pem
+**/*.p12
+**/*.pfx
+**/*.jks
+**/*.keystore

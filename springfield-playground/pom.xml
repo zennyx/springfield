@@ -14,22 +14,22 @@
   </parent>
 
   <!--
-   | The identifier and packaging type of this module.
+   | The identifier of this module.
    |-->
-  <artifactId>springfield-security</artifactId>
-  <packaging>pom</packaging>
+  <artifactId>springfield-playground</artifactId>
 
   <!--
    | Human-readable metadata of this module.
    |-->
-  <name>Springfield Security</name>
-  <description>Spring Security extensions for Springfield, providing enhanced authentication and authorization support.</description>
+  <name>Springfield Playground</name>
+  <description>A sandbox module for proof-of-concept experiments, excluded from install and deploy phases.</description>
 
   <!--
-   | Sub-modules aggregated by this project.
+   | Module-specific properties. This module is a POC sandbox and is
+   | excluded from install and deploy phases.
    |-->
-  <modules>
-    <module>springfield-security-commons</module>
-    <module>springfield-security-web</module>
-  </modules>
+  <properties>
+    <maven.install.skip>true</maven.install.skip>
+    <maven.deploy.skip>true</maven.deploy.skip>
+  </properties>
 </project>

@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 import org.springframework.lang.Nullable;
 import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;

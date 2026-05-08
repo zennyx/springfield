@@ -1,24 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <!--
+   | Specifies the parent project from which this project inherits configuration.
+   |-->
   <parent>
     <groupId>zenny.toybox</groupId>
     <artifactId>springfield-security</artifactId>
     <version>${revision}</version>
   </parent>
+
+  <!--
+   | The identifier of this module.
+   |-->
   <artifactId>springfield-security-web</artifactId>
 
+  <!--
+   | Human-readable metadata of this module.
+   |-->
   <name>Springfield Security Web</name>
-  <description>Springfield Security Web</description>
+  <description>Web-layer Spring Security extensions for Springfield, providing servlet-based authentication and authorization support.</description>
 
+  <!--
+   | Dependencies required by this module.
+   |-->
   <dependencies>
     <dependency>
       <groupId>zenny.toybox</groupId>
       <artifactId>springfield-commons</artifactId>
-      <version>${project.version}</version>
     </dependency>
 
     <dependency>
@@ -35,24 +47,13 @@
     </dependency>
 
     <dependency>
+      <groupId>jakarta.annotation</groupId>
+      <artifactId>jakarta.annotation-api</artifactId>
+    </dependency>
+    <dependency>
       <groupId>jakarta.servlet</groupId>
       <artifactId>jakarta.servlet-api</artifactId>
       <scope>provided</scope>
     </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-source-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <configuration>
-          <layout>NONE</layout>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 </project>

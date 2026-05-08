@@ -1,24 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <!--
+   | Specifies the parent project from which this project inherits configuration.
+   |-->
   <parent>
     <groupId>zenny.toybox</groupId>
     <artifactId>springfield-extensions</artifactId>
     <version>${revision}</version>
   </parent>
+
+  <!--
+   | The identifier of this module.
+   |-->
   <artifactId>springfield-extensions-validation</artifactId>
 
+  <!--
+   | Human-readable metadata of this module.
+   |-->
   <name>Springfield Extensions Validation</name>
-  <description>Springfield Extensions Validation</description>
+  <description>Validation rule extensions for Springfield, building on top of Jakarta Validation.</description>
 
+  <!--
+   | Dependencies required by this module.
+   |-->
   <dependencies>
     <dependency>
       <groupId>zenny.toybox</groupId>
       <artifactId>springfield-commons</artifactId>
-      <version>${project.version}</version>
     </dependency>
 
     <dependency>
@@ -26,19 +38,4 @@
       <artifactId>jakarta.validation-api</artifactId>
     </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-source-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <configuration>
-          <layout>NONE</layout>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 </project>

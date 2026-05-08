@@ -1,32 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <!--
+   | Specifies the parent project from which this project inherits configuration.
+   |-->
   <parent>
     <groupId>zenny.toybox</groupId>
     <artifactId>springfield-data</artifactId>
     <version>${revision}</version>
   </parent>
+
+  <!--
+   | The identifier of this module.
+   |-->
   <artifactId>springfield-data-mybatis</artifactId>
 
+  <!--
+   | Human-readable metadata of this module.
+   |-->
   <name>Springfield Data Mybatis</name>
-  <description>Mybatis extensions for Springfield Data</description>
+  <description>MyBatis integration with Spring Data, providing enhanced mapper support and code generation capabilities.</description>
 
+  <!--
+   | Dependencies required by this module.
+   |-->
   <dependencies>
     <dependency>
       <groupId>zenny.toybox</groupId>
       <artifactId>springfield-commons</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.sun</groupId>
-      <artifactId>tools</artifactId>
-      <version>${java.version}</version>
-      <scope>system</scope>
-      <systemPath>${java.home}/../lib/tools.jar</systemPath>
     </dependency>
 
     <dependency>
@@ -67,13 +71,23 @@
   <build>
     <plugins>
       <plugin>
-        <artifactId>maven-source-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <layout>NONE</layout>
+          <release combine.self="override" />
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+          <proc>none</proc>
+          <compilerArgs>
+            <arg>--add-exports</arg>
+            <arg>jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
+            <arg>--add-exports</arg>
+            <arg>jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED</arg>
+            <arg>--add-exports</arg>
+            <arg>jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED</arg>
+            <arg>--add-exports</arg>
+            <arg>jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED</arg>
+          </compilerArgs>
         </configuration>
       </plugin>
     </plugins>

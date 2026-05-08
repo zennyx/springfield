@@ -1,4 +1,4 @@
-= Todo List
+# Todo List
 
 - [ ] privacy
 - [ ] springfield-extensions-validation (resources for messages)
@@ -9,10 +9,10 @@
 - [ ] test case
 - [ ] springfield-data-mybatis part2 (proxy & generator)
 - [ ] springfield-web (tools for web)
-- [ ] travis-integration
-- [ ] kotlin-integration
+- [ ] github actions
 - [ ] try to replace or remove all depandencies of Google
+- [ ] tabletest(https://github.com/nchaugen/tabletest)
 
-= Memo
+# Memo
 
 - kotlin-integration canceled

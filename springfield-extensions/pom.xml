@@ -1,20 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <!--
+   | Specifies the parent project from which this project inherits configuration.
+   |-->
   <parent>
     <groupId>zenny.toybox</groupId>
     <artifactId>springfield</artifactId>
     <version>${revision}</version>
   </parent>
+
+  <!--
+   | The identifier and packaging type of this module.
+   |-->
   <artifactId>springfield-extensions</artifactId>
   <packaging>pom</packaging>
 
+  <!--
+   | Human-readable metadata of this module.
+   |-->
   <name>Springfield Extensions</name>
-  <description>Springfield Extensions</description>
+  <description>General-purpose extensions for Springfield, aggregating integrations with third-party libraries and specifications.</description>
 
+  <!--
+   | Sub-modules aggregated by this project.
+   |-->
   <modules>
     <module>springfield-extensions-validation</module>
     <module>springfield-extensions-jackson</module>

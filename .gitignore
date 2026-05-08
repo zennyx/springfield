@@ -1,33 +1,48 @@
 ### Maven ###
 target/
-!.mvn/wrapper/maven-wrapper.jar
+dependency-reduced-pom.xml
+.flattened-pom.xml
 
-### Eclipse/STS ###
-.apt_generated
+### IDE ###
+.apt_generated/
 .classpath
 .factorypath
 .project
-.settings
-.metadata
-.springBeans
-.sts4-cache
-
-### IntelliJ IDEA ###
-.idea
+.settings/
+.metadata/
+.springBeans/
+.sts4-cache/
+.idea/
 *.iws
 *.iml
 *.ipr
-
-### NetBeans ###
+.vscode/
 nbproject/private/
-build/
 nbbuild/
-dist/
 nbdist/
 .nb-gradle/
 
-### Visual Studio Code ###
-.vscode
+### Build ###
+build/
+out/
+dist/
 
-### OS X ###
+### OS ###
 .DS_Store
+Thumbs.db
+
+### Logs / Temp ###
+logs/
+*.log
+tmp/
+temp/
+
+### Local playground ###
+/springfield-playground/**
+!/springfield-playground/pom.xml
+
+### Coverage / Reports ###
+**/coverage/
+**/site/
+**/jacoco*.xml
+**/surefire-reports/
