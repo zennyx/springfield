@@ -7,20 +7,18 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-
-import jakarta.validation.Constraint;
-import jakarta.validation.Payload;
-
 import zenny.toybox.springfield.validation.constraint.IdentityCard.List;
 import zenny.toybox.springfield.validation.validator.IdentityCardValidator;
 
 @Documented
 @Retention(RUNTIME)
-@Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER })
+@Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER})
 @Repeatable(List.class)
 @Constraint(validatedBy = IdentityCardValidator.class)
 public @interface IdentityCard {
@@ -35,10 +33,10 @@ public @interface IdentityCard {
 
   Class<? extends Payload>[] payload() default {};
 
-  @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER })
+  @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER})
   @Retention(RUNTIME)
   @Documented
-  public @interface List {
+  @interface List {
     IdentityCard[] value();
   }
 }

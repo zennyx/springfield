@@ -3,14 +3,11 @@ package zenny.toybox.springfield.util;
 import java.util.Collection;
 import java.util.Map;
 import java.util.function.Supplier;
-
 import org.springframework.lang.Nullable;
 
 public final class Assert extends org.springframework.util.Assert {
 
-  /**
-   * Suppresses default constructor, ensuring non-instantiability.
-   */
+  /** Suppresses default constructor, ensuring non-instantiability. */
   private Assert() {
     throw new Error("No instances");
   }
@@ -21,7 +18,8 @@ public final class Assert extends org.springframework.util.Assert {
     }
   }
 
-  public static void noNullElements(@Nullable Collection<?> collection, Supplier<String> messageSupplier) {
+  public static void noNullElements(
+      @Nullable Collection<?> collection, Supplier<String> messageSupplier) {
     if (CollectionUtils.hasNullElements(collection)) {
       throw new IllegalArgumentException(nullSafeGet(messageSupplier));
     }
@@ -39,8 +37,7 @@ public final class Assert extends org.springframework.util.Assert {
     }
   }
 
-  @Nullable
-  private static String nullSafeGet(@Nullable Supplier<String> messageSupplier) {
+  @Nullable private static String nullSafeGet(@Nullable Supplier<String> messageSupplier) {
     return messageSupplier != null ? messageSupplier.get() : null;
   }
 }

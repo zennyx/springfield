@@ -1,26 +1,26 @@
 package zenny.toybox.springfield.security.web;
 
-import java.io.IOException;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
+import java.io.IOException;
 import org.springframework.core.ResolvableType;
 import org.springframework.lang.Nullable;
-
 import zenny.toybox.springfield.util.Assert;
 
 @FunctionalInterface
 public interface ResponseStrategy {
 
-  void response(HttpServletRequest request, HttpServletResponse response, @Nullable ResponseContent content,
-      @Nullable Callback fullback) throws IOException, ServletException;
+  void response(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      @Nullable ResponseContent content,
+      @Nullable Callback fullback)
+      throws IOException, ServletException;
 
-  static final class ResponseContent {
+  final class ResponseContent {
 
-    @Nullable
-    private final Object payload;
+    @Nullable private final Object payload;
 
     private final ResolvableType payloadType;
 

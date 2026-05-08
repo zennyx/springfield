@@ -1,10 +1,8 @@
 package zenny.toybox.springfield.util.keyvalue.support;
 
 import java.util.Map;
-
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.lang.Nullable;
-
 import zenny.toybox.springfield.util.Assert;
 import zenny.toybox.springfield.util.keyvalue.KeyValueHolder;
 
@@ -24,8 +22,7 @@ public class CachedKeyValueHolder implements KeyValueHolder {
   }
 
   @Cacheable(cacheNames = CACHE_NAME, key = CACHE_KEY)
-  @Nullable
-  @Override
+  @Nullable @Override
   public Map<?, ?> get(String name) {
     return this.delegate.get(name);
   }

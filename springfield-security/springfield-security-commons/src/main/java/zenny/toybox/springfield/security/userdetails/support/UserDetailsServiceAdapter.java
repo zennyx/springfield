@@ -1,12 +1,10 @@
 package zenny.toybox.springfield.security.userdetails.support;
 
+import jakarta.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
-
-import jakarta.annotation.PostConstruct;
-
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -17,7 +15,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
 import zenny.toybox.springfield.util.Assert;
 import zenny.toybox.springfield.util.CollectionUtils;
 import zenny.toybox.springfield.util.ObjectUtils;
@@ -27,11 +24,9 @@ public class UserDetailsServiceAdapter implements UserDetailsService, MessageSou
 
   private final Function<String, UserDetails> userDetailsRetriever;
 
-  @Nullable
-  private final Function<String, Collection<? extends GrantedAuthority>> userAuthoritiesRetriever;
+  @Nullable private final Function<String, Collection<? extends GrantedAuthority>> userAuthoritiesRetriever;
 
-  @Nullable
-  private final Promise serviceInitializer;
+  @Nullable private final Promise serviceInitializer;
 
   private MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
 
@@ -39,12 +34,14 @@ public class UserDetailsServiceAdapter implements UserDetailsService, MessageSou
     this(userDetailsRetriever, null, null);
   }
 
-  public UserDetailsServiceAdapter(Function<String, UserDetails> userDetailsRetriever,
+  public UserDetailsServiceAdapter(
+      Function<String, UserDetails> userDetailsRetriever,
       @Nullable Function<String, Collection<? extends GrantedAuthority>> userAuthoritiesRetriever) {
     this(userDetailsRetriever, userAuthoritiesRetriever, null);
   }
 
-  public UserDetailsServiceAdapter(Function<String, UserDetails> userDetailsRetriever,
+  public UserDetailsServiceAdapter(
+      Function<String, UserDetails> userDetailsRetriever,
       @Nullable Function<String, Collection<? extends GrantedAuthority>> userAuthoritiesRetriever,
       @Nullable Promise serviceInitializer) {
     Assert.notNull(userDetailsRetriever, "UserDetailsRetriever must not be null");
@@ -62,11 +59,13 @@ public class UserDetailsServiceAdapter implements UserDetailsService, MessageSou
   }
 
   @Override
-  public UserDetails loadUserByUsername(@Nullable String username) throws UsernameNotFoundException {
+  public UserDetails loadUserByUsername(@Nullable String username)
+      throws UsernameNotFoundException {
     UserDetails userDetails = this.userDetailsRetriever.apply(username);
     if (userDetails == null) {
-      throw new UsernameNotFoundException(this.messages.getMessage("UserDetailsServiceAdapter.notFound",
-          new Object[] { username }, "User {0} not found"));
+      throw new UsernameNotFoundException(
+          this.messages.getMessage(
+              "UserDetailsServiceAdapter.notFound", new Object[] {username}, "User {0} not found"));
     }
 
     Collection<? extends GrantedAuthority> userAuthorities = userDetails.getAuthorities();
@@ -74,8 +73,11 @@ public class UserDetailsServiceAdapter implements UserDetailsService, MessageSou
       userAuthorities = this.userAuthoritiesRetriever.apply(username);
     }
     if (CollectionUtils.isEmpty(userAuthorities)) {
-      throw new UsernameNotFoundException(this.messages.getMessage("UserDetailsServiceAdapter.noAuthority",
-          new Object[] { username }, "User {0} has no granted authority"));
+      throw new UsernameNotFoundException(
+          this.messages.getMessage(
+              "UserDetailsServiceAdapter.noAuthority",
+              new Object[] {username},
+              "User {0} has no granted authority"));
     }
 
     // Remove duplicates.
@@ -85,10 +87,18 @@ public class UserDetailsServiceAdapter implements UserDetailsService, MessageSou
     return this.createUserDetails(username, userDetails, actuallyAuthorities);
   }
 
-  protected UserDetails createUserDetails(@Nullable String username, UserDetails userFromUserQuery,
+  protected UserDetails createUserDetails(
+      @Nullable String username,
+      UserDetails userFromUserQuery,
       Collection<GrantedAuthority> combinedAuthorities) {
-    return new User(this.redefineUsername(username, userFromUserQuery), userFromUserQuery.getPassword(),
-        userFromUserQuery.isEnabled(), true, true, true, combinedAuthorities);
+    return new User(
+        this.redefineUsername(username, userFromUserQuery),
+        userFromUserQuery.getPassword(),
+        userFromUserQuery.isEnabled(),
+        true,
+        true,
+        true,
+        combinedAuthorities);
   }
 
   protected String redefineUsername(@Nullable String username, UserDetails userFromUserQuery) {
@@ -130,6 +140,7 @@ public class UserDetailsServiceAdapter implements UserDetailsService, MessageSou
     UserDetailsServiceAdapter otherAdapter = (UserDetailsServiceAdapter) other;
     return this.userDetailsRetriever.equals(otherAdapter.userDetailsRetriever)
         && this.messages.equals(otherAdapter.messages)
-        && ObjectUtils.nullSafeEquals(this.userAuthoritiesRetriever, otherAdapter.userAuthoritiesRetriever);
+        && ObjectUtils.nullSafeEquals(
+            this.userAuthoritiesRetriever, otherAdapter.userAuthoritiesRetriever);
   }
 }

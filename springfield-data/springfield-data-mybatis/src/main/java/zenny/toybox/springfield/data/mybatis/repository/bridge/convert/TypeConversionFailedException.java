@@ -1,7 +1,6 @@
 package zenny.toybox.springfield.data.mybatis.repository.bridge.convert;
 
 import java.lang.reflect.Type;
-
 import org.springframework.lang.Nullable;
 
 /**
@@ -12,11 +11,8 @@ import org.springframework.lang.Nullable;
 @SuppressWarnings("serial")
 public class TypeConversionFailedException extends TypeConversionException {
 
-  /**
-   * The source type.
-   */
-  @Nullable
-  private final Type sourceType;
+  /** The source type. */
+  @Nullable private final Type sourceType;
 
   /**
    * Create a new conversion exception.
@@ -44,8 +40,7 @@ public class TypeConversionFailedException extends TypeConversionException {
    *
    * @return the source type that was requested to convert from
    */
-  @Nullable
-  public Type getSourceType() {
+  @Nullable public Type getSourceType() {
     return this.sourceType;
   }
 }

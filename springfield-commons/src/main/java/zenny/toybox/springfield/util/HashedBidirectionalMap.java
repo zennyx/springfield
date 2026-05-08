@@ -19,9 +19,7 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
-
 import org.springframework.lang.Nullable;
-
 import zenny.toybox.springfield.util.algorithm.Hashing;
 
 /**
@@ -32,98 +30,86 @@ import zenny.toybox.springfield.util.algorithm.Hashing;
  * @param <V> the type of mapped values
  * @see HashMap
  */
-public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V> implements Cloneable, Serializable {
+public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
+    implements Cloneable, Serializable {
 
-  /**
-   * Serialization version
-   */
+  /** Serialization version */
   private static final long serialVersionUID = -819444677160561728L; // TODO
 
   /* ---------------- Constants -------------- */
 
-  /**
-   * The load factor used when none specified in constructor.
-   */
+  /** The load factor used when none specified in constructor. */
   static final float DEFAULT_LOAD_FACTOR = 0.75f;
 
-  /**
-   * The default initial capacity - MUST be a power of two.
-   */
+  /** The default initial capacity - MUST be a power of two. */
   static final int DEFAULT_INITIAL_CAPACITY = 1 << 4;
 
   /**
-   * The maximum capacity, used if a higher value is implicitly specified by
-   * either of the constructors with arguments. MUST be a power of two <= 1<<30.
+   * The maximum capacity, used if a higher value is implicitly specified by either of the
+   * constructors with arguments. MUST be a power of two <= 1<<30.
    */
   static final int MAXIMUM_CAPACITY = 1 << 30;
 
-  /**
-   * The hasher used when none specified in constructor.
-   */
+  /** The hasher used when none specified in constructor. */
   static final Hasher<Object> DEFAULT_HASHER = Hashing.HASHMAP;
 
   /**
-   * The bin count threshold for using a tree rather than list for a bin. Bins are
-   * converted to trees when adding an element to a bin with at least this many
-   * nodes. The value must be greater than 2 and should be at least 8 to mesh with
-   * assumptions in tree removal about conversion back to plain bins upon
-   * shrinkage.
+   * The bin count threshold for using a tree rather than list for a bin. Bins are converted to
+   * trees when adding an element to a bin with at least this many nodes. The value must be greater
+   * than 2 and should be at least 8 to mesh with assumptions in tree removal about conversion back
+   * to plain bins upon shrinkage.
    */
   static final int TREEIFY_THRESHOLD = 8;
 
   /**
-   * The bin count threshold for untreeifying a (split) bin during a resize
-   * operation. Should be less than TREEIFY_THRESHOLD, and at most 6 to mesh with
-   * shrinkage detection under removal.
+   * The bin count threshold for untreeifying a (split) bin during a resize operation. Should be
+   * less than TREEIFY_THRESHOLD, and at most 6 to mesh with shrinkage detection under removal.
    */
   static final int UNTREEIFY_THRESHOLD = 6;
 
   /**
-   * The smallest table capacity for which bins may be treeified. (Otherwise the
-   * table is resized if too many nodes in a bin.) Should be at least 4 *
-   * TREEIFY_THRESHOLD to avoid conflicts between resizing and treeification
-   * thresholds.
+   * The smallest table capacity for which bins may be treeified. (Otherwise the table is resized if
+   * too many nodes in a bin.) Should be at least 4 * TREEIFY_THRESHOLD to avoid conflicts between
+   * resizing and treeification thresholds.
    */
   static final int MIN_TREEIFY_CAPACITY = 64;
 
   /* ---------------- Fields -------------- */
 
   /**
-   * The table, initialized on first use, and resized as necessary. When
-   * allocated, length is always a power of two.
+   * The table, initialized on first use, and resized as necessary. When allocated, length is always
+   * a power of two.
    */
   final transient Nodes<K, V> bi; // TODO transient?
 
   /**
-   * The mirror to the {@code bi} table, initialized on first use, and resized as
-   * necessary. When allocated, length is always a power of two.
+   * The mirror to the {@code bi} table, initialized on first use, and resized as necessary. When
+   * allocated, length is always a power of two.
    */
   final transient Nodes<V, K> di;
 
   /**
-   * Holds cached {@code entrySet()}. Note that {@link AbstractBidirectionalMap}
-   * fields are used for {@code keySet()} and {@code values()}.
+   * Holds cached {@code entrySet()}. Note that {@link AbstractBidirectionalMap} fields are used for
+   * {@code keySet()} and {@code values()}.
    */
   transient Set<Entry<K, V>> entrySet;
 
   /**
-   * Holds cached {@code inversedEntrySet()}. Note that
-   * {@link AbstractBidirectionalMap} fields are used for {@code keySet()} and
-   * {@code values()}.
+   * Holds cached {@code inversedEntrySet()}. Note that {@link AbstractBidirectionalMap} fields are
+   * used for {@code keySet()} and {@code values()}.
    */
   transient Set<Map.Entry<V, K>> inverseEntrySet;
 
   /**
-   * Each of these fields are initialized to contain an instance of the
-   * appropriate view the first time this view is requested. The views are
-   * stateless, so there's no reason to create more than one of each.
-   * <p>
-   * Since there is no synchronization performed while accessing these fields, it
-   * is expected that java.util.Map view classes using these fields have no
-   * non-final fields (or any fields at all except for outer-this). Adhering to
-   * this rule would make the races on these fields benign.
-   * <p>
-   * It is also imperative that implementations read the field only once, as in:
+   * Each of these fields are initialized to contain an instance of the appropriate view the first
+   * time this view is requested. The views are stateless, so there's no reason to create more than
+   * one of each.
+   *
+   * <p>Since there is no synchronization performed while accessing these fields, it is expected
+   * that java.util.Map view classes using these fields have no non-final fields (or any fields at
+   * all except for outer-this). Adhering to this rule would make the races on these fields benign.
+   *
+   * <p>It is also imperative that implementations read the field only once, as in:
    *
    * <pre>
    * public Set<K> keySet() {
@@ -137,23 +123,22 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
    * </pre>
    */
   transient Set<K> keySet;
+
   transient Set<V> values;
 
   /* ---------------- Constructors -------------- */
 
   /**
-   * Constructs an empty {@code HashedBidirectionalMap} with the default initial
-   * capacity ({@code 16}), the default load factor ({@code 0.75}) and the default
-   * hasher ({@link Hashing#HASHMAP}).
+   * Constructs an empty {@code HashedBidirectionalMap} with the default initial capacity ({@code
+   * 16}), the default load factor ({@code 0.75}) and the default hasher ({@link Hashing#HASHMAP}).
    */
   public HashedBidirectionalMap() {
     this(DEFAULT_INITIAL_CAPACITY);
   }
 
   /**
-   * Constructs an empty {@code HashedBidirectionalMap} with the specified initial
-   * capacity and the default load factor ({@code 0.75}) and the default hasher
-   * ({@link Hashing#HASHMAP}).
+   * Constructs an empty {@code HashedBidirectionalMap} with the specified initial capacity and the
+   * default load factor ({@code 0.75}) and the default hasher ({@link Hashing#HASHMAP}).
    *
    * @param initialCapacity the initial capacity.
    * @throws IllegalArgumentException if the initial capacity is negative.
@@ -163,16 +148,17 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
   }
 
   /**
-   * Constructs an empty {@code HashedBidirectionalMap} with the specified initial
-   * capacity, load factor and hasher.
+   * Constructs an empty {@code HashedBidirectionalMap} with the specified initial capacity, load
+   * factor and hasher.
    *
    * @param initialCapacity the initial capacity
    * @param loadFactor the load factor
    * @param hasher the hasher to calculate hash-code for objects
-   * @throws IllegalArgumentException if the initial capacity is negative or the
-   * load factor is nonpositive
+   * @throws IllegalArgumentException if the initial capacity is negative or the load factor is
+   *     nonpositive
    */
-  public HashedBidirectionalMap(int initialCapacity, float loadFactor, @Nullable Hasher<Object> hasher) {
+  public HashedBidirectionalMap(
+      int initialCapacity, float loadFactor, @Nullable Hasher<Object> hasher) {
     Assert.isTrue(initialCapacity >= 0, "Illegal initial capacity: " + initialCapacity);
     Assert.isTrue(loadFactor > 0 && !Float.isNaN(loadFactor), "Illegal load factor: " + loadFactor);
 
@@ -185,14 +171,12 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
 
     this.bi = new Nodes<>(initialCapacity, loadFactor, hasher);
     this.di = new Nodes<>(initialCapacity, loadFactor, hasher);
-
   }
 
   /**
-   * Constructs a new {@code HashedBidirectionalMap} with the same mappings as the
-   * specified {@code Map}. The {@code HashedBidirectionalMap} is created with
-   * default load factor ({@code 0.75}) and an initial capacity sufficient to hold
-   * the mappings in the specified {@code Map}.
+   * Constructs a new {@code HashedBidirectionalMap} with the same mappings as the specified {@code
+   * Map}. The {@code HashedBidirectionalMap} is created with default load factor ({@code 0.75}) and
+   * an initial capacity sufficient to hold the mappings in the specified {@code Map}.
    *
    * @param m the map whose mappings are to be placed in this map
    * @throws NullPointerException if the specified map is null
@@ -202,10 +186,7 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
     this();
   }
 
-  /**
-   * A private constructor for the {@code HashedBidirectionalMap#inverse} method
-   * implementation.
-   */
+  /** A private constructor for the {@code HashedBidirectionalMap#inverse} method implementation. */
   private HashedBidirectionalMap(Nodes<K, V> bi, Nodes<V, K> di) {
     this.bi = bi;
     this.di = di;
@@ -245,8 +226,7 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
   }
 
   /**
-   * Returns {@code true} if this map maps one or more keys to the specified
-   * value.
+   * Returns {@code true} if this map maps one or more keys to the specified value.
    *
    * @param value value whose presence in this map is to be tested
    * @return {@code true} if this map maps one or more keys to the specified value
@@ -257,47 +237,42 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
   }
 
   /**
-   * Returns the value to which the specified key is mapped, or {@code null} if
-   * this map contains no mapping for the key.
-   * <p>
-   * More formally, if this map contains a mapping from a key {@code k} to a value
-   * {@code v} such that {@code (key==null ? k==null :
-   * key.equals(k))}, then this method returns {@code v}; otherwise it returns
-   * {@code null}. (There can be at most one such mapping.)
-   * <p>
-   * A return value of {@code null} does not <i>necessarily</i> indicate that the
-   * map contains no mapping for the key; it's also possible that the map
-   * explicitly maps the key to {@code null}. The {@link #containsKey containsKey}
-   * operation may be used to distinguish these two cases.
+   * Returns the value to which the specified key is mapped, or {@code null} if this map contains no
+   * mapping for the key.
+   *
+   * <p>More formally, if this map contains a mapping from a key {@code k} to a value {@code v} such
+   * that {@code (key==null ? k==null : key.equals(k))}, then this method returns {@code v};
+   * otherwise it returns {@code null}. (There can be at most one such mapping.)
+   *
+   * <p>A return value of {@code null} does not <i>necessarily</i> indicate that the map contains no
+   * mapping for the key; it's also possible that the map explicitly maps the key to {@code null}.
+   * The {@link #containsKey containsKey} operation may be used to distinguish these two cases.
    *
    * @see #put(Object, Object)
    */
-  @Nullable
-  @Override
+  @Nullable @Override
   public V get(@Nullable Object key) {
     Node<K, V> e;
     return (e = this.bi.get(key)) == null ? null : e.value;
   }
 
-  @Nullable
-  @Override
+  @Nullable @Override
   public K getKey(@Nullable Object value) {
     Node<V, K> e;
     return (e = this.di.get(value)) == null ? null : e.value;
   }
 
   /**
-   * Associates the specified value with the specified key in this map. If the map
-   * previously contained a mapping for the key, the old value is replaced.
+   * Associates the specified value with the specified key in this map. If the map previously
+   * contained a mapping for the key, the old value is replaced.
    *
    * @param key key with which the specified value is to be associated
    * @param value value to be associated with the specified key
-   * @return the previous value associated with {@code key}, or {@code null} if
-   * there was no mapping for {@code key}. (A {@code null} return can also
-   * indicate that the map previously associated {@code null} with {@code key}.)
+   * @return the previous value associated with {@code key}, or {@code null} if there was no mapping
+   *     for {@code key}. (A {@code null} return can also indicate that the map previously
+   *     associated {@code null} with {@code key}.)
    */
-  @Nullable
-  @Override
+  @Nullable @Override
   public V put(@Nullable K key, @Nullable V value) {
     return this.doPut(key, value, false);
   }
@@ -310,8 +285,7 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
    * @param onlyIfAbsent if true, don't change existing value
    * @return previous value, or {@code null} if none
    */
-  @Nullable
-  final V doPut(@Nullable K key, @Nullable V value, boolean onlyIfAbsent) {
+  @Nullable final V doPut(@Nullable K key, @Nullable V value, boolean onlyIfAbsent) {
     Optional<V> returned = this.bi.put(key, value, onlyIfAbsent);
     if (returned == null) { // no mapping found, put directly
       this.di.put(value, key, onlyIfAbsent);
@@ -330,9 +304,9 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
    * Removes the mapping for the specified key from this map if present.
    *
    * @param key key whose mapping is to be removed from the map
-   * @return the previous value associated with {@code key}, or {@code null} if
-   * there was no mapping for {@code key}. (A {@code null} return can also
-   * indicate that the map previously associated {@code null} with {@code key}.)
+   * @return the previous value associated with {@code key}, or {@code null} if there was no mapping
+   *     for {@code key}. (A {@code null} return can also indicate that the map previously
+   *     associated {@code null} with {@code key}.)
    */
   @Override
   public final V remove(@Nullable Object key) { // final for ValueSet#remove
@@ -357,9 +331,8 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
   }
 
   /**
-   * Copies all of the mappings from the specified map to this map. These mappings
-   * will replace any mappings that this map had for any of the keys currently in
-   * the specified map.
+   * Copies all of the mappings from the specified map to this map. These mappings will replace any
+   * mappings that this map had for any of the keys currently in the specified map.
    *
    * @param m mappings to be stored in this map
    * @throws NullPointerException if the specified map is null
@@ -373,10 +346,7 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
     // TODO
   }
 
-  /**
-   * Removes all of the mappings from this map. The map will be empty after this
-   * call returns.
-   */
+  /** Removes all of the mappings from this map. The map will be empty after this call returns. */
   @Override
   public void clear() {
     this.bi.clear();
@@ -384,15 +354,13 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
   }
 
   /**
-   * Returns a {@link Set} view of the keys contained in this map. The set is
-   * backed by the map, so changes to the map are reflected in the set, and
-   * vice-versa. If the map is modified while an iteration over the set is in
-   * progress (except through the iterator's own {@code remove} operation), the
-   * results of the iteration are undefined. The set supports element removal,
-   * which removes the corresponding mapping from the map, via the
-   * {@code Iterator.remove}, {@code Set.remove}, {@code removeAll},
-   * {@code retainAll}, and {@code clear} operations. It does not support the
-   * {@code add} or {@code addAll} operations.
+   * Returns a {@link Set} view of the keys contained in this map. The set is backed by the map, so
+   * changes to the map are reflected in the set, and vice-versa. If the map is modified while an
+   * iteration over the set is in progress (except through the iterator's own {@code remove}
+   * operation), the results of the iteration are undefined. The set supports element removal, which
+   * removes the corresponding mapping from the map, via the {@code Iterator.remove}, {@code
+   * Set.remove}, {@code removeAll}, {@code retainAll}, and {@code clear} operations. It does not
+   * support the {@code add} or {@code addAll} operations.
    *
    * @return a set view of the keys contained in this map
    */
@@ -407,15 +375,13 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
   }
 
   /**
-   * Returns a {@link Set} view of the values contained in this map. The set is
-   * backed by the map, so changes to the map are reflected in the set, and
-   * vice-versa. If the map is modified while an iteration over the set is in
-   * progress (except through the iterator's own {@code remove} operation), the
-   * results of the iteration are undefined. The set supports element removal,
-   * which removes the corresponding mapping from the map, via the
-   * {@code Iterator.remove}, {@code Set.remove}, {@code removeAll},
-   * {@code retainAll}, and {@code clear} operations. It does not support the
-   * {@code add} or {@code addAll} operations.
+   * Returns a {@link Set} view of the values contained in this map. The set is backed by the map,
+   * so changes to the map are reflected in the set, and vice-versa. If the map is modified while an
+   * iteration over the set is in progress (except through the iterator's own {@code remove}
+   * operation), the results of the iteration are undefined. The set supports element removal, which
+   * removes the corresponding mapping from the map, via the {@code Iterator.remove}, {@code
+   * Set.remove}, {@code removeAll}, {@code retainAll}, and {@code clear} operations. It does not
+   * support the {@code add} or {@code addAll} operations.
    *
    * @return a set view of the values contained in this map
    */
@@ -430,16 +396,14 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
   }
 
   /**
-   * Returns a {@link Set} view of the mappings contained in this map. The set is
-   * backed by the map, so changes to the map are reflected in the set, and
-   * vice-versa. If the map is modified while an iteration over the set is in
-   * progress (except through the iterator's own {@code remove} operation, or
-   * through the {@code setValue} operation on a map entry returned by the
-   * iterator) the results of the iteration are undefined. The set supports
-   * element removal, which removes the corresponding mapping from the map, via
-   * the {@code Iterator.remove}, {@code Set.remove}, {@code removeAll},
-   * {@code retainAll} and {@code clear} operations. It does not support the
-   * {@code add} or {@code addAll} operations.
+   * Returns a {@link Set} view of the mappings contained in this map. The set is backed by the map,
+   * so changes to the map are reflected in the set, and vice-versa. If the map is modified while an
+   * iteration over the set is in progress (except through the iterator's own {@code remove}
+   * operation, or through the {@code setValue} operation on a map entry returned by the iterator)
+   * the results of the iteration are undefined. The set supports element removal, which removes the
+   * corresponding mapping from the map, via the {@code Iterator.remove}, {@code Set.remove}, {@code
+   * removeAll}, {@code retainAll} and {@code clear} operations. It does not support the {@code add}
+   * or {@code addAll} operations.
    *
    * @return a set view of the mappings contained in this map
    */
@@ -450,23 +414,23 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
   }
 
   /**
-   * Returns a {@link Set} view of the inverse-mappings contained in this map. The
-   * set is backed by the map, so changes to the map are reflected in the set, and
-   * vice-versa. If the map is modified while an iteration over the set is in
-   * progress (except through the iterator's own {@code remove} operation, or
-   * through the {@code setValue} operation on a map entry returned by the
-   * iterator) the results of the iteration are undefined. The set supports
-   * element removal, which removes the corresponding mapping from the map, via
-   * the {@code Iterator.remove}, {@code Set.remove}, {@code removeAll},
-   * {@code retainAll} and {@code clear} operations. It does not support the
-   * {@code add} or {@code addAll} operations.
+   * Returns a {@link Set} view of the inverse-mappings contained in this map. The set is backed by
+   * the map, so changes to the map are reflected in the set, and vice-versa. If the map is modified
+   * while an iteration over the set is in progress (except through the iterator's own {@code
+   * remove} operation, or through the {@code setValue} operation on a map entry returned by the
+   * iterator) the results of the iteration are undefined. The set supports element removal, which
+   * removes the corresponding mapping from the map, via the {@code Iterator.remove}, {@code
+   * Set.remove}, {@code removeAll}, {@code retainAll} and {@code clear} operations. It does not
+   * support the {@code add} or {@code addAll} operations.
    *
    * @return a set view of the mappings contained in this map
    */
   @Override
   protected Set<Entry<V, K>> inverseEntrySet() { // protected for Collections#unmodifiableMap
     Set<Map.Entry<V, K>> ies;
-    return (ies = this.inverseEntrySet) == null ? (this.inverseEntrySet = new InverseEntrySet()) : ies;
+    return (ies = this.inverseEntrySet) == null
+        ? (this.inverseEntrySet = new InverseEntrySet())
+        : ies;
   }
 
   @Override
@@ -480,8 +444,7 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
    * (non-Javadoc)
    * @see java.util.Map#getOrDefault(java.lang.Object, java.lang.Object)
    */
-  @Nullable
-  @Override
+  @Nullable @Override
   public V getOrDefault(@Nullable Object key, @Nullable V defaultValue) {
     Node<K, V> e;
     return (e = this.bi.get(key)) == null ? defaultValue : e.value;
@@ -491,8 +454,7 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
    * (non-Javadoc)
    * @see java.util.Map#putIfAbsent(java.lang.Object, java.lang.Object)
    */
-  @Nullable
-  @Override
+  @Nullable @Override
   public V putIfAbsent(@Nullable K key, @Nullable V value) {
     return this.doPut(key, value, true);
   }
@@ -521,7 +483,8 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
   public boolean replace(@Nullable K key, @Nullable V oldValue, @Nullable V newValue) {
     Node<K, V> e;
     V v;
-    if ((e = this.bi.get(key)) != null && ((v = e.value) == oldValue || Objects.equals(v, oldValue))) {
+    if ((e = this.bi.get(key)) != null
+        && ((v = e.value) == oldValue || Objects.equals(v, oldValue))) {
       e.value = newValue;
       if (!Objects.equals(v, newValue)) {
         this.di.put(newValue, key, false);
@@ -536,8 +499,7 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
    * (non-Javadoc)
    * @see java.util.Map#replace(java.lang.Object, java.lang.Object)
    */
-  @Nullable
-  @Override
+  @Nullable @Override
   public V replace(@Nullable K key, @Nullable V value) {
     Node<K, V> e;
     if ((e = this.bi.get(key)) != null) {
@@ -557,8 +519,7 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
    * @see java.util.Map#computeIfAbsent(java.lang.Object,
    * java.util.function.Function)
    */
-  @Nullable
-  @Override
+  @Nullable @Override
   public V computeIfAbsent(@Nullable K key, Function<? super K, ? extends V> mappingFunction) {
     return null; // TODO
   }
@@ -568,9 +529,9 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
    * @see java.util.Map#computeIfPresent(java.lang.Object,
    * java.util.function.BiFunction)
    */
-  @Nullable
-  @Override
-  public V computeIfPresent(@Nullable K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
+  @Nullable @Override
+  public V computeIfPresent(
+      @Nullable K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
     return null; // TODO
   }
 
@@ -578,9 +539,9 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
    * (non-Javadoc)
    * @see java.util.Map#compute(java.lang.Object, java.util.function.BiFunction)
    */
-  @Nullable
-  @Override
-  public V compute(@Nullable K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
+  @Nullable @Override
+  public V compute(
+      @Nullable K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
     return null; // TODO
   }
 
@@ -589,9 +550,11 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
    * @see java.util.Map#merge(java.lang.Object, java.lang.Object,
    * java.util.function.BiFunction)
    */
-  @Nullable
-  @Override
-  public V merge(@Nullable K key, @Nullable V value, BiFunction<? super V, ? super V, ? extends V> remappingFunction) {
+  @Nullable @Override
+  public V merge(
+      @Nullable K key,
+      @Nullable V value,
+      BiFunction<? super V, ? super V, ? extends V> remappingFunction) {
     return null; // TODO
   }
 
@@ -616,8 +579,8 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
   /* ---------------- Cloning and serialization -------------- */
 
   /**
-   * Returns a shallow copy of this {@code HashedBidirectionalMap} instance: the
-   * keys and values themselves are not cloned.
+   * Returns a shallow copy of this {@code HashedBidirectionalMap} instance: the keys and values
+   * themselves are not cloned.
    *
    * @return a shallow copy of this map
    */
@@ -636,37 +599,31 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
 
   /* ---------------- Nodes -------------- */
 
-  /**
-   * Create a regular (non-tree) node
-   */
-  static <K, V> Node<K, V> newNode(int hash, @Nullable K key, @Nullable V value, @Nullable Node<K, V> next) {
+  /** Create a regular (non-tree) node */
+  static <K, V> Node<K, V> newNode(
+      int hash, @Nullable K key, @Nullable V value, @Nullable Node<K, V> next) {
     return new Node<>(hash, key, value, next);
   }
 
-  /**
-   * For conversion from TreeNodes to plain nodes
-   */
+  /** For conversion from TreeNodes to plain nodes */
   static <K, V> Node<K, V> replacementNode(Node<K, V> p, Node<K, V> next) {
     return new Node<>(p.hash, p.key, p.value, next);
   }
 
-  /**
-   * Create a tree bin node
-   */
-  static <K, V> TreeNode<K, V> newTreeNode(int hash, @Nullable K key, @Nullable V value, @Nullable Node<K, V> next) {
+  /** Create a tree bin node */
+  static <K, V> TreeNode<K, V> newTreeNode(
+      int hash, @Nullable K key, @Nullable V value, @Nullable Node<K, V> next) {
     return new TreeNode<>(hash, key, value, next);
   }
 
-  /**
-   * For treeifyBin
-   */
+  /** For treeifyBin */
   static <K, V> TreeNode<K, V> replacementTreeNode(Node<K, V> p, Node<K, V> next) {
     return new TreeNode<>(p.hash, p.key, p.value, next);
   }
 
   /**
-   * Basic hash bin node, used for most entries. (See below for TreeNode subclass,
-   * and in LinkedHashMap for its Entry subclass.)
+   * Basic hash bin node, used for most entries. (See below for TreeNode subclass, and in
+   * LinkedHashMap for its Entry subclass.)
    *
    * @param <K> the type of the key
    * @param <V> the type of the value
@@ -739,11 +696,9 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
       super(hash, key, val, next);
     }
 
-    /**
-     * Returns root of tree containing this node.
-     */
+    /** Returns root of tree containing this node. */
     TreeNode<K, V> root() {
-      for (TreeNode<K, V> r = this, p;;) {
+      for (TreeNode<K, V> r = this, p; ; ) {
         if ((p = r.parent) == null) {
           return r;
         }
@@ -753,8 +708,8 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
     }
 
     /**
-     * Finds the node starting at root p with the given hash and key. The kc
-     * argument caches comparableClassFor(key) upon first use comparing keys.
+     * Finds the node starting at root p with the given hash and key. The kc argument caches
+     * comparableClassFor(key) upon first use comparing keys.
      */
     TreeNode<K, V> find(int h, Object k, Class<?> kc) {
       TreeNode<K, V> p = this;
@@ -772,7 +727,8 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
           p = pr;
         } else if (pr == null) {
           p = pl;
-        } else if ((kc != null || (kc = comparableClassFor(k)) != null) && (dir = compareComparables(kc, k, pk)) != 0) {
+        } else if ((kc != null || (kc = comparableClassFor(k)) != null)
+            && (dir = compareComparables(kc, k, pk)) != 0) {
           p = dir < 0 ? pl : pr;
         } else if ((q = pr.find(h, k, kc)) != null) {
           return q;
@@ -784,16 +740,12 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
       return null;
     }
 
-    /**
-     * Calls find for root node.
-     */
+    /** Calls find for root node. */
     TreeNode<K, V> getTreeNode(int h, Object k) {
       return (this.parent != null ? this.root() : this).find(h, k, null);
     }
 
-    /**
-     * Forms tree of the nodes linked from this node.
-     */
+    /** Forms tree of the nodes linked from this node. */
     void treeify(Node<K, V>[] tab) {
       TreeNode<K, V> root = null;
       for (TreeNode<K, V> x = this, next; x != null; x = next) {
@@ -807,7 +759,7 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
           K k = x.key;
           int h = x.hash;
           Class<?> kc = null;
-          for (TreeNode<K, V> p = root;;) {
+          for (TreeNode<K, V> p = root; ; ) {
             int dir, ph;
             K pk = p.key;
             if ((ph = p.hash) > h) {
@@ -837,9 +789,7 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
       moveRootToFront(tab, root);
     }
 
-    /**
-     * Returns a list of non-TreeNodes replacing those linked from this node.
-     */
+    /** Returns a list of non-TreeNodes replacing those linked from this node. */
     Node<K, V> untreeify() {
       Node<K, V> hd = null, tl = null;
       for (Node<K, V> q = this; q != null; q = q.next) {
@@ -855,14 +805,12 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
       return hd;
     }
 
-    /**
-     * Tree version of putVal.
-     */
+    /** Tree version of putVal. */
     TreeNode<K, V> putTreeVal(Node<K, V>[] tab, int h, K k, V v) {
       Class<?> kc = null;
       boolean searched = false;
       TreeNode<K, V> root = this.parent != null ? this.root() : this;
-      for (TreeNode<K, V> p = root;;) {
+      for (TreeNode<K, V> p = root; ; ) {
         int dir, ph;
         K pk;
         if ((ph = p.hash) > h) {
@@ -871,7 +819,8 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
           dir = 1;
         } else if ((pk = p.key) == k || k != null && k.equals(pk)) {
           return p;
-        } else if (kc == null && (kc = comparableClassFor(k)) == null || (dir = compareComparables(kc, k, pk)) == 0) {
+        } else if (kc == null && (kc = comparableClassFor(k)) == null
+            || (dir = compareComparables(kc, k, pk)) == 0) {
           if (!searched) {
             TreeNode<K, V> q, ch;
             searched = true;
@@ -903,10 +852,7 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
       }
     }
 
-    /**
-     * Returns x's Class if it is of the form "class C implements Comparable<C>",
-     * else null.
-     */
+    /** Returns x's Class if it is of the form "class C implements Comparable<C>", else null. */
     static Class<?> comparableClassFor(Object x) {
       if (x instanceof Comparable) {
         Class<?> c;
@@ -918,8 +864,11 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
         }
         if ((ts = c.getGenericInterfaces()) != null) {
           for (Type type : ts) {
-            if ((t = type) instanceof ParameterizedType && (p = (ParameterizedType) t).getRawType() == Comparable.class
-                && (as = p.getActualTypeArguments()) != null && as.length == 1 && as[0] == c) {
+            if ((t = type) instanceof ParameterizedType
+                && (p = (ParameterizedType) t).getRawType() == Comparable.class
+                && (as = p.getActualTypeArguments()) != null
+                && as.length == 1
+                && as[0] == c) {
               return c;
             }
           }
@@ -929,24 +878,22 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
       return null;
     }
 
-    /**
-     * Returns k.compareTo(x) if x matches kc (k's screened comparable class), else
-     * 0.
-     */
-    @SuppressWarnings({ "rawtypes", "unchecked" }) // for cast to Comparable
+    /** Returns k.compareTo(x) if x matches kc (k's screened comparable class), else 0. */
+    @SuppressWarnings({"rawtypes", "unchecked"}) // for cast to Comparable
     static int compareComparables(Class<?> kc, Object k, Object x) {
       return x == null || x.getClass() != kc ? 0 : ((Comparable) k).compareTo(x);
     }
 
     /**
-     * Tie-breaking utility for ordering insertions when equal hashCodes and
-     * non-comparable. We don't require a total order, just a consistent insertion
-     * rule to maintain equivalence across rebalancings. Tie-breaking further than
-     * necessary simplifies testing a bit.
+     * Tie-breaking utility for ordering insertions when equal hashCodes and non-comparable. We
+     * don't require a total order, just a consistent insertion rule to maintain equivalence across
+     * rebalancings. Tie-breaking further than necessary simplifies testing a bit.
      */
     static int tieBreakOrder(Object a, Object b) {
       int d;
-      if (a == null || b == null || (d = a.getClass().getName().compareTo(b.getClass().getName())) == 0) {
+      if (a == null
+          || b == null
+          || (d = a.getClass().getName().compareTo(b.getClass().getName())) == 0) {
         d = System.identityHashCode(a) <= System.identityHashCode(b) ? -1 : 1;
       }
 
@@ -954,13 +901,12 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
     }
 
     /**
-     * Removes the given node, that must be present before this call. This is
-     * messier than typical red-black deletion code because we cannot swap the
-     * contents of an interior node with a leaf successor that is pinned by "next"
-     * pointers that are accessible independently during traversal. So instead we
-     * swap the tree linkages. If the current tree appears to have too few nodes,
-     * the bin is converted back to a plain bin. (The test triggers somewhere
-     * between 2 and 6 nodes, depending on tree structure).
+     * Removes the given node, that must be present before this call. This is messier than typical
+     * red-black deletion code because we cannot swap the contents of an interior node with a leaf
+     * successor that is pinned by "next" pointers that are accessible independently during
+     * traversal. So instead we swap the tree linkages. If the current tree appears to have too few
+     * nodes, the bin is converted back to a plain bin. (The test triggers somewhere between 2 and 6
+     * nodes, depending on tree structure).
      */
     void removeTreeNode(Node<K, V>[] tab, boolean movable) {
       int n;
@@ -1072,9 +1018,7 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
       }
     }
 
-    /**
-     * Ensures that the given root is the first node of its bin.
-     */
+    /** Ensures that the given root is the first node of its bin. */
     static <K, V> void moveRootToFront(Node<K, V>[] tab, TreeNode<K, V> root) {
       int n;
       if (root != null && tab != null && (n = tab.length) > 0) {
@@ -1101,9 +1045,8 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
     }
 
     /**
-     * Splits nodes in a tree bin into lower and upper tree bins, or untreeifies if
-     * now too small. Called only from resize; see above discussion about split bits
-     * and indices.
+     * Splits nodes in a tree bin into lower and upper tree bins, or untreeifies if now too small.
+     * Called only from resize; see above discussion about split bits and indices.
      *
      * @param tab the table for recording bin heads
      * @param index the index of the table being split
@@ -1202,7 +1145,7 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
 
     static <K, V> TreeNode<K, V> balanceInsertion(TreeNode<K, V> root, TreeNode<K, V> x) {
       x.red = true;
-      for (TreeNode<K, V> xp, xpp, xppl, xppr;;) {
+      for (TreeNode<K, V> xp, xpp, xppl, xppr; ; ) {
         if ((xp = x.parent) == null) {
           x.red = false;
           return x;
@@ -1252,7 +1195,7 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
     }
 
     static <K, V> TreeNode<K, V> balanceDeletion(TreeNode<K, V> root, TreeNode<K, V> x) {
-      for (TreeNode<K, V> xp, xpl, xpr;;) {
+      for (TreeNode<K, V> xp, xpl, xpr; ; ) {
         if (x == null || x == root) {
           return root;
         } else if ((xp = x.parent) == null) {
@@ -1337,11 +1280,13 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
       }
     }
 
-    /**
-     * Recursive invariant check
-     */
+    /** Recursive invariant check */
     static <K, V> boolean checkInvariants(TreeNode<K, V> t) {
-      TreeNode<K, V> tp = t.parent, tl = t.left, tr = t.right, tb = t.prev, tn = (TreeNode<K, V>) t.next;
+      TreeNode<K, V> tp = t.parent,
+          tl = t.left,
+          tr = t.right,
+          tb = t.prev,
+          tn = (TreeNode<K, V>) t.next;
       if (tb != null && tb.next != t) {
         return false;
       }
@@ -1382,9 +1327,7 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
       this.hasher = hasher;
     }
 
-    /**
-     * Returns a power of two size for the given target capacity.
-     */
+    /** Returns a power of two size for the given target capacity. */
     static int tableSizeFor(int cap) {
       int n = cap - 1;
       n |= n >>> 1;
@@ -1401,8 +1344,11 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
       Node<K, V> first, e;
       int n;
       K k;
-      if ((tab = this.table) != null && (n = tab.length) > 0 && (first = tab[n - 1 & hash]) != null) {
-        if (first.hash == hash && // always check first node
+      if ((tab = this.table) != null
+          && (n = tab.length) > 0
+          && (first = tab[n - 1 & hash]) != null) {
+        if (first.hash == hash
+            && // always check first node
             ((k = first.key) == key || key != null && key.equals(k))) {
           return first;
         }
@@ -1438,7 +1384,7 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
         } else if (p instanceof TreeNode) {
           e = ((TreeNode<K, V>) p).putTreeVal(tab, hash, key, value);
         } else {
-          for (int binCount = 0;; ++binCount) {
+          for (int binCount = 0; ; ++binCount) {
             if ((e = p.next) == null) {
               p.next = newNode(hash, key, value, null);
               if (binCount >= TREEIFY_THRESHOLD - 1) {
@@ -1472,7 +1418,9 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
       Node<K, V>[] tab;
       Node<K, V> p;
       int n, index;
-      if ((tab = this.table) != null && (n = tab.length) > 0 && (p = tab[index = n - 1 & hash]) != null) {
+      if ((tab = this.table) != null
+          && (n = tab.length) > 0
+          && (p = tab[index = n - 1 & hash]) != null) {
         Node<K, V> node = null, e;
         K k;
         V v;
@@ -1491,7 +1439,8 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
             } while ((e = e.next) != null);
           }
         }
-        if (node != null && (!matchValue || (v = node.value) == value || value != null && value.equals(v))) {
+        if (node != null
+            && (!matchValue || (v = node.value) == value || value != null && value.equals(v))) {
           if (node instanceof TreeNode) {
             ((TreeNode<K, V>) node).removeTreeNode(tab, movable);
           } else if (node == p) {
@@ -1527,7 +1476,8 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
         if (oldCap >= MAXIMUM_CAPACITY) {
           this.threshold = Integer.MAX_VALUE;
           return oldTab;
-        } else if ((newCap = oldCap << 1) < MAXIMUM_CAPACITY && oldCap >= DEFAULT_INITIAL_CAPACITY) {
+        } else if ((newCap = oldCap << 1) < MAXIMUM_CAPACITY
+            && oldCap >= DEFAULT_INITIAL_CAPACITY) {
           newThr = oldThr << 1; // double threshold
         }
       } else if (oldThr > 0) {
@@ -1542,7 +1492,7 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
       }
       this.threshold = newThr;
 
-      @SuppressWarnings({ "unchecked" })
+      @SuppressWarnings({"unchecked"})
       Node<K, V>[] newTab = new Node[newCap];
       this.table = newTab;
 
@@ -1627,7 +1577,8 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
     int est; // size estimate
     int expectedModCount; // for comodification checks
 
-    HashedMapSpliterator(Nodes<K, V> b, Nodes<V, K> d, int origin, int fence, int est, int expectedModCount) {
+    HashedMapSpliterator(
+        Nodes<K, V> b, Nodes<V, K> d, int origin, int fence, int est, int expectedModCount) {
       this.bi = b;
       this.di = d;
       this.index = origin;
@@ -1654,16 +1605,20 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
     }
   }
 
-  static final class KeySpliterator<K, V> extends HashedMapSpliterator<K, V> implements Spliterator<K> {
-    KeySpliterator(Nodes<K, V> b, Nodes<V, K> d, int origin, int fence, int est, int expectedModCount) {
+  static final class KeySpliterator<K, V> extends HashedMapSpliterator<K, V>
+      implements Spliterator<K> {
+    KeySpliterator(
+        Nodes<K, V> b, Nodes<V, K> d, int origin, int fence, int est, int expectedModCount) {
       super(b, d, origin, fence, est, expectedModCount);
     }
 
     @Override
     public KeySpliterator<K, V> trySplit() {
       int hi = this.getFence(), lo = this.index, mid = lo + hi >>> 1;
-      return lo >= mid || this.current != null ? null
-          : new KeySpliterator<>(this.bi, this.di, lo, this.index = mid, this.est >>>= 1, this.expectedModCount);
+      return lo >= mid || this.current != null
+          ? null
+          : new KeySpliterator<>(
+              this.bi, this.di, lo, this.index = mid, this.est >>>= 1, this.expectedModCount);
     }
 
     @Override
@@ -1681,7 +1636,10 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
       } else {
         mc = this.expectedModCount;
       }
-      if (tab != null && tab.length >= hi && (i = this.index) >= 0 && (i < (this.index = hi) || this.current != null)) {
+      if (tab != null
+          && tab.length >= hi
+          && (i = this.index) >= 0
+          && (i < (this.index = hi) || this.current != null)) {
         Node<K, V> p = this.current;
         this.current = null;
         do {
@@ -1725,20 +1683,25 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
 
     @Override
     public int characteristics() {
-      return (this.fence < 0 || this.est == this.bi.size ? Spliterator.SIZED : 0) | Spliterator.DISTINCT;
+      return (this.fence < 0 || this.est == this.bi.size ? Spliterator.SIZED : 0)
+          | Spliterator.DISTINCT;
     }
   }
 
-  static final class ValueSpliterator<K, V> extends HashedMapSpliterator<K, V> implements Spliterator<V> {
-    ValueSpliterator(Nodes<K, V> b, Nodes<V, K> d, int origin, int fence, int est, int expectedModCount) {
+  static final class ValueSpliterator<K, V> extends HashedMapSpliterator<K, V>
+      implements Spliterator<V> {
+    ValueSpliterator(
+        Nodes<K, V> b, Nodes<V, K> d, int origin, int fence, int est, int expectedModCount) {
       super(b, d, origin, fence, est, expectedModCount);
     }
 
     @Override
     public ValueSpliterator<K, V> trySplit() {
       int hi = this.getFence(), lo = this.index, mid = lo + hi >>> 1;
-      return lo >= mid || this.current != null ? null
-          : new ValueSpliterator<>(this.bi, this.di, lo, this.index = mid, this.est >>>= 1, this.expectedModCount);
+      return lo >= mid || this.current != null
+          ? null
+          : new ValueSpliterator<>(
+              this.bi, this.di, lo, this.index = mid, this.est >>>= 1, this.expectedModCount);
     }
 
     @Override
@@ -1756,7 +1719,10 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
       } else {
         mc = this.expectedModCount;
       }
-      if (tab != null && tab.length >= hi && (i = this.index) >= 0 && (i < (this.index = hi) || this.current != null)) {
+      if (tab != null
+          && tab.length >= hi
+          && (i = this.index) >= 0
+          && (i < (this.index = hi) || this.current != null)) {
         Node<K, V> p = this.current;
         this.current = null;
         do {
@@ -1804,16 +1770,20 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
     }
   }
 
-  static final class EntrySpliterator<K, V> extends HashedMapSpliterator<K, V> implements Spliterator<Map.Entry<K, V>> {
-    EntrySpliterator(Nodes<K, V> b, Nodes<V, K> d, int origin, int fence, int est, int expectedModCount) {
+  static final class EntrySpliterator<K, V> extends HashedMapSpliterator<K, V>
+      implements Spliterator<Map.Entry<K, V>> {
+    EntrySpliterator(
+        Nodes<K, V> b, Nodes<V, K> d, int origin, int fence, int est, int expectedModCount) {
       super(b, d, origin, fence, est, expectedModCount);
     }
 
     @Override
     public EntrySpliterator<K, V> trySplit() {
       int hi = this.getFence(), lo = this.index, mid = lo + hi >>> 1;
-      return lo >= mid || this.current != null ? null
-          : new EntrySpliterator<>(this.bi, this.di, lo, this.index = mid, this.est >>>= 1, this.expectedModCount);
+      return lo >= mid || this.current != null
+          ? null
+          : new EntrySpliterator<>(
+              this.bi, this.di, lo, this.index = mid, this.est >>>= 1, this.expectedModCount);
     }
 
     @Override
@@ -1831,7 +1801,10 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
       } else {
         mc = this.expectedModCount;
       }
-      if (tab != null && tab.length >= hi && (i = this.index) >= 0 && (i < (this.index = hi) || this.current != null)) {
+      if (tab != null
+          && tab.length >= hi
+          && (i = this.index) >= 0
+          && (i < (this.index = hi) || this.current != null)) {
         Node<K, V> p = this.current;
         this.current = null;
         do {
@@ -1875,7 +1848,8 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
 
     @Override
     public int characteristics() {
-      return (this.fence < 0 || this.est == this.bi.size ? Spliterator.SIZED : 0) | Spliterator.DISTINCT;
+      return (this.fence < 0 || this.est == this.bi.size ? Spliterator.SIZED : 0)
+          | Spliterator.DISTINCT;
     }
   }
 
@@ -1899,8 +1873,7 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
       this.current = this.next = null;
       this.index = 0;
       if (t != null && nodes.size > 0) { // advance to first entry
-        do {
-        } while (this.index < t.length && (this.next = t[this.index++]) == null);
+        do {} while (this.index < t.length && (this.next = t[this.index++]) == null);
       }
     }
 
@@ -1918,8 +1891,7 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
         throw new NoSuchElementException();
       }
       if ((this.next = (this.current = e).next) == null && (t = this.nodes.table) != null) {
-        do {
-        } while (this.index < t.length && (this.next = t[this.index++]) == null);
+        do {} while (this.index < t.length && (this.next = t[this.index++]) == null);
       }
       return e;
     }
@@ -1975,7 +1947,8 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
     }
   }
 
-  final class InverseEntryIterator extends HashedIterator<V, K> implements Iterator<Map.Entry<V, K>> {
+  final class InverseEntryIterator extends HashedIterator<V, K>
+      implements Iterator<Map.Entry<V, K>> {
     InverseEntryIterator() {
       super(HashedBidirectionalMap.this.di, HashedBidirectionalMap.this.bi);
     }
@@ -2028,7 +2001,8 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
 
     @Override
     public Spliterator<Map.Entry<K, V>> spliterator() {
-      return new EntrySpliterator<>(HashedBidirectionalMap.this.bi, HashedBidirectionalMap.this.di, 0, -1, 0, 0);
+      return new EntrySpliterator<>(
+          HashedBidirectionalMap.this.bi, HashedBidirectionalMap.this.di, 0, -1, 0, 0);
     }
 
     @Override
@@ -2094,7 +2068,8 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
 
     @Override
     public Spliterator<Map.Entry<V, K>> spliterator() {
-      return new EntrySpliterator<>(HashedBidirectionalMap.this.di, HashedBidirectionalMap.this.bi, 0, -1, 0, 0);
+      return new EntrySpliterator<>(
+          HashedBidirectionalMap.this.di, HashedBidirectionalMap.this.bi, 0, -1, 0, 0);
     }
 
     @Override
@@ -2148,7 +2123,8 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
 
     @Override
     public Spliterator<K> spliterator() {
-      return new KeySpliterator<>(HashedBidirectionalMap.this.bi, HashedBidirectionalMap.this.di, 0, -1, 0, 0);
+      return new KeySpliterator<>(
+          HashedBidirectionalMap.this.bi, HashedBidirectionalMap.this.di, 0, -1, 0, 0);
     }
 
     @Override
@@ -2207,7 +2183,8 @@ public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
 
     @Override
     public Spliterator<V> spliterator() {
-      return new KeySpliterator<>(HashedBidirectionalMap.this.di, HashedBidirectionalMap.this.bi, 0, -1, 0, 0);
+      return new KeySpliterator<>(
+          HashedBidirectionalMap.this.di, HashedBidirectionalMap.this.bi, 0, -1, 0, 0);
     }
 
     @Override

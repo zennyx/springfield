@@ -1,7 +1,6 @@
 package zenny.toybox.springfield.data.mybatis.config;
 
 import java.util.List;
-
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.factory.ObjectFactory;
 import org.apache.ibatis.reflection.property.PropertyTokenizer;
@@ -62,7 +61,9 @@ class PageWrapper implements ObjectWrapper {
   }
 
   @Override
-  public MetaObject instantiatePropertyValue(@Nullable String name, @Nullable PropertyTokenizer prop,
+  public MetaObject instantiatePropertyValue(
+      @Nullable String name,
+      @Nullable PropertyTokenizer prop,
       @Nullable ObjectFactory objectFactory) {
     throw new UnsupportedOperationException();
   }

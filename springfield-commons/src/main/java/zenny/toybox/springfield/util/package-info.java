@@ -1,6 +1,6 @@
 /**
- * Miscellaneous utility classes, such as String manipulation utilities, some
- * useful data structures, and so on.
+ * Miscellaneous utility classes, such as String manipulation utilities, some useful data
+ * structures, and so on.
  */
 @NonNullApi
 @NonNullFields

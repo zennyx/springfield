@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.MessageSource;
@@ -15,14 +14,11 @@ import org.springframework.security.core.SpringSecurityMessageSource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
 import zenny.toybox.springfield.util.Assert;
 
 public class DelegatingUserDetailsService implements UserDetailsService, MessageSourceAware {
 
-  /**
-   * Logger used by this class. Available to subclasses.
-   */
+  /** Logger used by this class. Available to subclasses. */
   protected final Log logger = LogFactory.getLog(this.getClass());
 
   private final Set<UserDetailsService> userDetailsServices = new LinkedHashSet<>();
@@ -46,7 +42,8 @@ public class DelegatingUserDetailsService implements UserDetailsService, Message
   }
 
   @Override
-  public UserDetails loadUserByUsername(@Nullable String username) throws UsernameNotFoundException {
+  public UserDetails loadUserByUsername(@Nullable String username)
+      throws UsernameNotFoundException {
     for (UserDetailsService userDetailsService : this.userDetailsServices) {
       try {
         return userDetailsService.loadUserByUsername(username);
@@ -59,8 +56,11 @@ public class DelegatingUserDetailsService implements UserDetailsService, Message
       }
     }
 
-    throw new UsernameNotFoundException(this.messages.getMessage("CompositeUserDetailsService.notFound",
-        new Object[] { username }, "Username {0} not found in all detailsServices"));
+    throw new UsernameNotFoundException(
+        this.messages.getMessage(
+            "CompositeUserDetailsService.notFound",
+            new Object[] {username},
+            "Username {0} not found in all detailsServices"));
   }
 
   protected MessageSourceAccessor getMessages() {

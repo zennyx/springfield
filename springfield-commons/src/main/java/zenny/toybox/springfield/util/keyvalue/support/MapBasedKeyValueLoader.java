@@ -3,9 +3,7 @@ package zenny.toybox.springfield.util.keyvalue.support;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.springframework.lang.Nullable;
-
 import zenny.toybox.springfield.util.Assert;
 import zenny.toybox.springfield.util.HierarchicalBuilder;
 import zenny.toybox.springfield.util.keyvalue.KeyValueLoader;
@@ -20,7 +18,8 @@ public class MapBasedKeyValueLoader<K, V> implements KeyValueLoader<K, V> {
     this.source = Collections.unmodifiableMap(source);
   }
 
-  public static <K, V> MapBasedKeyValueLoaderBuilder<K, V> from(@Nullable Map<? extends K, ? extends V> source) {
+  public static <K, V> MapBasedKeyValueLoaderBuilder<K, V> from(
+      @Nullable Map<? extends K, ? extends V> source) {
     return new MapBasedKeyValueLoaderBuilder<>(source);
   }
 
@@ -55,7 +54,8 @@ public class MapBasedKeyValueLoader<K, V> implements KeyValueLoader<K, V> {
       return this.self();
     }
 
-    public MapBasedKeyValueLoaderBuilder<K, V> appendMore(@Nullable Map<? extends K, ? extends V> source) {
+    public MapBasedKeyValueLoaderBuilder<K, V> appendMore(
+        @Nullable Map<? extends K, ? extends V> source) {
       this.source.putAll(source);
 
       return this.self();

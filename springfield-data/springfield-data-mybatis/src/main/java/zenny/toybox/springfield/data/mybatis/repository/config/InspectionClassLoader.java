@@ -3,9 +3,8 @@ package zenny.toybox.springfield.data.mybatis.repository.config;
 import org.springframework.instrument.classloading.ShadowingClassLoader;
 
 /**
- * Disposable {@link ClassLoader} used to inspect user-code classes within an
- * isolated class loader without preventing class transformation at a later
- * time.
+ * Disposable {@link ClassLoader} used to inspect user-code classes within an isolated class loader
+ * without preventing class transformation at a later time.
  *
  * @author Zenny Xu
  */

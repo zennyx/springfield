@@ -2,7 +2,8 @@ package zenny.toybox.springfield.util.keyvalue.support;
 
 import java.util.function.Function;
 
-public class SimpleEnumBasedKeyValueLoader<E extends Enum<E>> extends EnumBasedKeyValueLoader<Integer, String, E> {
+public class SimpleEnumBasedKeyValueLoader<E extends Enum<E>>
+    extends EnumBasedKeyValueLoader<Integer, String, E> {
 
   public SimpleEnumBasedKeyValueLoader(Class<E> enumClass) {
     super(enumClass, toKeyIteratee(), toValueIteratee());

@@ -3,19 +3,17 @@ package zenny.toybox.springfield.data.mybatis.web.config;
 import java.io.Serializable;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.data.domain.Pageable;
-
 import zenny.toybox.springfield.util.Assert;
 import zenny.toybox.springfield.util.function.Promise;
 
 /**
  * Adapter to simplify the paging-operations in MyBatis.
- * <p>
- * Example usage:
+ *
+ * <p>Example usage:
  *
  * <pre>
  * &#64;EnableAspectJAutoProxy
@@ -50,18 +48,18 @@ import zenny.toybox.springfield.util.function.Promise;
 @SuppressWarnings("serial")
 public class PagingAroundAdvisorAdapter implements Serializable {
 
-  private static final BiFunction<Object, Pageable, Object> DEFAULT_AFTER_RETURNING_ADVICE = (o, p) -> {
-    return o;
-  };
+  private static final BiFunction<Object, Pageable, Object> DEFAULT_AFTER_RETURNING_ADVICE =
+      (o, p) -> {
+        return o;
+      };
 
   private final Consumer<Pageable> before;
 
   /**
    * Page-info can be merged into the proceeded result at this step.
-   * <p>
-   * Some clients (such as DataTable) may require the page-info which them sent before
-   * to synchronize requests.
-   * Do nothing except for returning the proceeded result by default.
+   *
+   * <p>Some clients (such as DataTable) may require the page-info which them sent before to
+   * synchronize requests. Do nothing except for returning the proceeded result by default.
    */
   private final BiFunction<Object, Pageable, Object> afterReturning;
 
@@ -71,7 +69,9 @@ public class PagingAroundAdvisorAdapter implements Serializable {
     this(before, DEFAULT_AFTER_RETURNING_ADVICE, after);
   }
 
-  public PagingAroundAdvisorAdapter(Consumer<Pageable> before, BiFunction<Object, Pageable, Object> afterReturning,
+  public PagingAroundAdvisorAdapter(
+      Consumer<Pageable> before,
+      BiFunction<Object, Pageable, Object> afterReturning,
       Promise after) {
     Assert.notNull(before, "Before-advice must not be null");
     Assert.notNull(afterReturning, "AfterReturning-advice must not be null");
@@ -82,10 +82,11 @@ public class PagingAroundAdvisorAdapter implements Serializable {
     this.after = after;
   }
 
-  @Around("execution(public * *(.., @Paging (org.springframework.data.domain.Pageable+), ..))"
-      + "&& (@within(org.springframework.stereotype.Controller) "
+  @Around(
+      "execution(public * *(.., @Paging (org.springframework.data.domain.Pageable+), ..))"
+          + "&& (@within(org.springframework.stereotype.Controller) "
           + "|| @within(org.springframework.web.bind.annotation.RestController))"
-      + "&& (@annotation(org.springframework.web.bind.annotation.RequestMapping) "
+          + "&& (@annotation(org.springframework.web.bind.annotation.RequestMapping) "
           + "|| @annotation(org.springframework.web.bind.annotation.GetMapping) "
           + "|| @annotation(org.springframework.web.bind.annotation.PostMapping) "
           + "|| @annotation(org.springframework.web.bind.annotation.PutMapping) "

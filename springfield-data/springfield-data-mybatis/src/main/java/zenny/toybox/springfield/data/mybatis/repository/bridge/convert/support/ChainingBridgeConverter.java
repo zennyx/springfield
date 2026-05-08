@@ -1,7 +1,6 @@
 package zenny.toybox.springfield.data.mybatis.repository.bridge.convert.support;
 
 import org.springframework.lang.Nullable;
-
 import zenny.toybox.springfield.data.mybatis.repository.bridge.convert.BridgeConverter;
 import zenny.toybox.springfield.data.mybatis.repository.bridge.convert.ResolvedType;
 import zenny.toybox.springfield.util.Assert;
@@ -19,35 +18,38 @@ public class ChainingBridgeConverter implements BridgeConverter<Object, Object> 
     this.delegate = delegate;
   }
 
-  public static ChainingBridgeConverter of(Class<?> targetType, BridgeConverter<Object, Object> delegate) {
+  public static ChainingBridgeConverter of(
+      Class<?> targetType, BridgeConverter<Object, Object> delegate) {
     return new ChainingBridgeConverter(targetType, delegate);
   }
 
   public ChainingBridgeConverter and(final BridgeConverter<Object, Object> converter) {
     Assert.notNull(converter, "Converter must not be null.");
 
-    return new ChainingBridgeConverter(this.targetType, new BridgeConverter<Object, Object>() {
+    return new ChainingBridgeConverter(
+        this.targetType,
+        new BridgeConverter<Object, Object>() {
 
-      @Override
-      @Nullable
-      public Object convert(Object source) {
-        Object intermediate = ChainingBridgeConverter.this.convert(source);
-        return ChainingBridgeConverter.this.targetType.isInstance(intermediate) ? intermediate
-            : converter.convert(intermediate);
-      }
+          @Override
+          @Nullable public Object convert(Object source) {
+            Object intermediate = ChainingBridgeConverter.this.convert(source);
+            return ChainingBridgeConverter.this.targetType.isInstance(intermediate)
+                ? intermediate
+                : converter.convert(intermediate);
+          }
 
-      @Override
-      public ResolvedType<Object> convert(ResolvedType<Object> source) {
-        ResolvedType<Object> intermediate = ChainingBridgeConverter.this.convert(source);
-        return ChainingBridgeConverter.this.targetType.equals(intermediate.getResolved()) ? intermediate
-            : converter.convert(intermediate);
-      }
-    });
+          @Override
+          public ResolvedType<Object> convert(ResolvedType<Object> source) {
+            ResolvedType<Object> intermediate = ChainingBridgeConverter.this.convert(source);
+            return ChainingBridgeConverter.this.targetType.equals(intermediate.getResolved())
+                ? intermediate
+                : converter.convert(intermediate);
+          }
+        });
   }
 
   @Override
-  @Nullable
-  public Object convert(Object source) {
+  @Nullable public Object convert(Object source) {
     return this.delegate.convert(source);
   }
 

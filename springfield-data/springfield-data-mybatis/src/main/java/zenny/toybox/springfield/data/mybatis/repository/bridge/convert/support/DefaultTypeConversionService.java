@@ -4,12 +4,10 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.core.DecoratingProxy;
 import org.springframework.core.ResolvableType;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ConcurrentReferenceHashMap;
-
 import zenny.toybox.springfield.data.mybatis.repository.bridge.convert.ResolvedType;
 import zenny.toybox.springfield.data.mybatis.repository.bridge.convert.TypeConversionFailedException;
 import zenny.toybox.springfield.data.mybatis.repository.bridge.convert.TypeConversionService;
@@ -20,7 +18,8 @@ import zenny.toybox.springfield.util.Assert;
 public class DefaultTypeConversionService implements TypeConversionService {
 
   private final List<TypeConverterProxy> converters = new ArrayList<>();
-  private final Map<ConverterCacheKey, TypeConverterProxy> converterCache = new ConcurrentReferenceHashMap<>(8);
+  private final Map<ConverterCacheKey, TypeConverterProxy> converterCache =
+      new ConcurrentReferenceHashMap<>(8);
 
   @Override
   public boolean canConvert(@Nullable Type source) {
@@ -106,9 +105,7 @@ public class DefaultTypeConversionService implements TypeConversionService {
     return this.converters.toString();
   }
 
-  /**
-   * A Proxy to a {@link TypeConverter}.
-   */
+  /** A Proxy to a {@link TypeConverter}. */
   @SuppressWarnings("unchecked")
   private static class TypeConverterProxy {
 
@@ -118,11 +115,16 @@ public class DefaultTypeConversionService implements TypeConversionService {
     public TypeConverterProxy(TypeConverter<?, ?> delegate) {
       Class<?> typeInfo = getSourceTypeInfo(delegate.getClass(), TypeConverter.class);
       if (typeInfo == null && delegate instanceof DecoratingProxy) {
-        typeInfo = getSourceTypeInfo(((DecoratingProxy) delegate).getDecoratedClass(), TypeConverter.class);
+        typeInfo =
+            getSourceTypeInfo(
+                ((DecoratingProxy) delegate).getDecoratedClass(), TypeConverter.class);
       }
       if (typeInfo == null) {
-        throw new IllegalArgumentException("Unable to determine source type <S> and target type <T> for your "
-            + "Converter [" + delegate.getClass().getName() + "]; does the class parameterize those types?");
+        throw new IllegalArgumentException(
+            "Unable to determine source type <S> and target type <T> for your "
+                + "Converter ["
+                + delegate.getClass().getName()
+                + "]; does the class parameterize those types?");
       }
 
       this.delegate = (TypeConverter<Object, Object>) delegate;
@@ -146,7 +148,8 @@ public class DefaultTypeConversionService implements TypeConversionService {
     }
 
     public boolean matches(ResolvableType actuallySourceType) {
-      if (actuallySourceType == ResolvableType.NONE || actuallySourceType.hasUnresolvableGenerics()) {
+      if (actuallySourceType == ResolvableType.NONE
+          || actuallySourceType.hasUnresolvableGenerics()) {
         return false;
       }
 
@@ -189,9 +192,7 @@ public class DefaultTypeConversionService implements TypeConversionService {
     }
   }
 
-  /**
-   * Key for use with the converter cache.
-   */
+  /** Key for use with the converter cache. */
   private static class ConverterCacheKey implements Comparable<ConverterCacheKey> {
 
     private final Type type;

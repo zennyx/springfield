@@ -1,12 +1,10 @@
 package zenny.toybox.springfield.util.id.config;
 
 import java.io.Serializable;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.config.AbstractFactoryBean;
 import org.springframework.lang.Nullable;
-
 import zenny.toybox.springfield.util.Assert;
 import zenny.toybox.springfield.util.id.IdGenerator;
 import zenny.toybox.springfield.util.id.config.Configuration.Customizer;
@@ -14,19 +12,17 @@ import zenny.toybox.springfield.util.id.config.Configuration.Customizer;
 public abstract class AbstractIdGeneratorFactoryBean<ID extends Serializable & Comparable<ID>>
     extends AbstractFactoryBean<IdGenerator<ID>> {
 
-  /**
-   * Logger used by this class. Available to subclasses.
-   */
+  /** Logger used by this class. Available to subclasses. */
   protected final Log logger = LogFactory.getLog(this.getClass());
 
-  @Nullable
-  private final Configuration config;
+  @Nullable private final Configuration config;
 
   public AbstractIdGeneratorFactoryBean() {
     this(null);
   }
 
-  public AbstractIdGeneratorFactoryBean(@Nullable Configuration config, @Nullable Customizer... customizers) {
+  public AbstractIdGeneratorFactoryBean(
+      @Nullable Configuration config, @Nullable Customizer... customizers) {
     Assert.noNullElements(customizers, "Customizers must contain no null elements");
 
     if (config != null && customizers != null) {
@@ -48,7 +44,7 @@ public abstract class AbstractIdGeneratorFactoryBean<ID extends Serializable & C
     return generator;
   }
 
-  abstract protected IdGenerator<ID> doCreateInstance() throws Exception;
+  protected abstract IdGenerator<ID> doCreateInstance() throws Exception;
 
   protected Configuration getConfig() {
     return this.config;

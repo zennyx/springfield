@@ -7,21 +7,19 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-
-import jakarta.validation.Constraint;
-import jakarta.validation.Payload;
-
 import zenny.toybox.springfield.lang.Lab;
 import zenny.toybox.springfield.validation.constraint.PhoneNumber.List;
 import zenny.toybox.springfield.validation.validator.PhoneNumberValidator;
 
 @Documented
 @Retention(RUNTIME)
-@Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER })
+@Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER})
 @Repeatable(List.class)
 @Constraint(validatedBy = PhoneNumberValidator.class)
 @Lab
@@ -39,14 +37,15 @@ public @interface PhoneNumber {
 
   Class<? extends Payload>[] payload() default {};
 
-  @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER })
+  @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER})
   @Retention(RUNTIME)
   @Documented
-  public @interface List {
+  @interface List {
     PhoneNumber[] value();
   }
 
-  public enum Type {
-    LINE, MOBILE;
+  enum Type {
+    LINE,
+    MOBILE;
   }
 }

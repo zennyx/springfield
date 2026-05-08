@@ -2,9 +2,7 @@ package zenny.toybox.springfield.util.keyvalue.support;
 
 import java.util.Map;
 import java.util.function.Function;
-
 import org.springframework.lang.Nullable;
-
 import zenny.toybox.springfield.util.Assert;
 import zenny.toybox.springfield.util.CollectionUtils;
 import zenny.toybox.springfield.util.keyvalue.KeyValueLoader;
@@ -17,8 +15,10 @@ public class EnumBasedKeyValueLoader<K, V, E extends Enum<E>> implements KeyValu
 
   private final Function<E, V> valueIteratee;
 
-  public EnumBasedKeyValueLoader(Class<E> enumClass, Function<E, K> keyIteratee, Function<E, V> valueIteratee) {
-    Assert.isTrue(Enum.class.isAssignableFrom(enumClass), "EnumClass must be assigned to objects of Enum");
+  public EnumBasedKeyValueLoader(
+      Class<E> enumClass, Function<E, K> keyIteratee, Function<E, V> valueIteratee) {
+    Assert.isTrue(
+        Enum.class.isAssignableFrom(enumClass), "EnumClass must be assigned to objects of Enum");
     Assert.notNull(keyIteratee, "KeyIteratee must not be null");
     Assert.notNull(valueIteratee, "ValueIteratee must not be null");
 
@@ -28,8 +28,7 @@ public class EnumBasedKeyValueLoader<K, V, E extends Enum<E>> implements KeyValu
   }
 
   @Override
-  @Nullable
-  public Map<K, V> load() {
+  @Nullable public Map<K, V> load() {
     return CollectionUtils.toMap(this.enumClass, this.keyIteratee, this.valueIteratee);
   }
 }

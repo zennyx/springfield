@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <!--
    | Declares to which version of project descriptor this POM conforms.
    |-->
@@ -14,7 +12,8 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>4.0.6</version>
-    <relativePath/> <!-- lookup parent from repository -->
+    <relativePath />
+    <!-- lookup parent from repository -->
   </parent>
   <groupId>zenny.toybox</groupId>
   <artifactId>springfield</artifactId>
@@ -26,25 +25,8 @@
    |-->
   <name>Springfield</name>
   <description>A modular extension pack for Spring Framework, providing enhanced support for data access, security, web development, and more.</description>
-  <inceptionYear>2018</inceptionYear>
   <url>https://github.com/zennyx/springfield</url>
-
-  <!--
-   | Describes the committers of this project.
-   |-->
-  <developers>
-    <developer>
-      <name>Zenny Xu</name>
-      <email>blinkbaby@163.com</email>
-      <url>https://github.com/zennyx</url>
-      <roles>
-        <role>owner</role>
-        <role>committer</role>
-        <role>developer</role>
-      </roles>
-      <timezone>+8</timezone>
-    </developer>
-  </developers>
+  <inceptionYear>2018</inceptionYear>
 
   <!--
    | This element describes all of the licenses for this project. Each
@@ -64,29 +46,21 @@
   </licenses>
 
   <!--
-   | The project's issue management system information.
+   | Describes the committers of this project.
    |-->
-  <issueManagement>
-    <system>GitHub Issues</system>
-    <url>https://github.com/zennyx/springfield/issues</url>
-  </issueManagement>
-
-  <!--
-   | Specification for the SCM used by the project, such as CVS, Subversion, etc.
-   |-->
-  <scm>
-    <connection>scm:git:https://github.com/zennyx/springfield.git</connection>
-    <developerConnection>scm:git:git@github.com:zennyx/springfield.git</developerConnection>
-    <url>https://github.com/zennyx/springfield</url>
-  </scm>
-
-  <!--
-   | The project's continuous integration information.
-   |-->
-  <ciManagement>
-    <system>GitHub Actions</system>
-    <url>https://github.com/zennyx/springfield/actions</url>
-  </ciManagement>
+  <developers>
+    <developer>
+      <name>Zenny Xu</name>
+      <email>blinkbaby@163.com</email>
+      <url>https://github.com/zennyx</url>
+      <roles>
+        <role>owner</role>
+        <role>committer</role>
+        <role>developer</role>
+      </roles>
+      <timezone>+8</timezone>
+    </developer>
+  </developers>
 
   <!--
    | The modules that are part of this project. Each module is a sub-project
@@ -100,6 +74,31 @@
     <module>springfield-security</module>
     <module>springfield-web</module>
   </modules>
+
+  <!--
+   | Specification for the SCM used by the project, such as CVS, Subversion, etc.
+   |-->
+  <scm>
+    <connection>scm:git:https://github.com/zennyx/springfield.git</connection>
+    <developerConnection>scm:git:git@github.com:zennyx/springfield.git</developerConnection>
+    <url>https://github.com/zennyx/springfield</url>
+  </scm>
+
+  <!--
+   | The project's issue management system information.
+   |-->
+  <issueManagement>
+    <system>GitHub Issues</system>
+    <url>https://github.com/zennyx/springfield/issues</url>
+  </issueManagement>
+
+  <!--
+   | The project's continuous integration information.
+   |-->
+  <ciManagement>
+    <system>GitHub Actions</system>
+    <url>https://github.com/zennyx/springfield/actions</url>
+  </ciManagement>
 
   <!--
    | Properties that can be used throughout the POM as a substitution, and are used
@@ -134,10 +133,13 @@
     <!--
      | Maven plugins.
      |-->
-    <eclipse-lifecycle-mapping.version>1.0.0</eclipse-lifecycle-mapping.version> <!-- http://maven.apache.org/maven-ci-friendly.html -->
+    <eclipse-lifecycle-mapping.version>1.0.0</eclipse-lifecycle-mapping.version>
+    <!-- http://maven.apache.org/maven-ci-friendly.html -->
     <codehaus-flatten.version>1.7.3</codehaus-flatten.version>
-    <diffplug-spotless.version>3.4.0</diffplug-spotless.version> <!-- https://github.com/diffplug/spotless -->
-    <google-java-format.version>1.35.0</google-java-format.version> <!-- https://github.com/google/google-java-format -->
+    <diffplug-spotless.version>3.4.0</diffplug-spotless.version>
+    <!-- https://github.com/diffplug/spotless -->
+    <google-java-format.version>1.35.0</google-java-format.version>
+    <!-- https://github.com/google/google-java-format -->
   </properties>
 
   <!--
@@ -200,8 +202,8 @@
         <groupId>org.springframework.data</groupId>
         <artifactId>spring-data-bom</artifactId>
         <version>${spring-data.version}</version>
-        <scope>import</scope>
         <type>pom</type>
+        <scope>import</scope>
       </dependency>
       <!--
        | MyBatis series.
@@ -300,8 +302,8 @@
                   <include>.cursorignore</include>
                   <include>.editorconfig</include>
                 </includes>
-                <trimTrailingWhitespace/>
-                <endWithNewline/>
+                <trimTrailingWhitespace />
+                <endWithNewline />
                 <indent>
                   <spaces>true</spaces>
                   <spacesPerTab>2</spacesPerTab>
@@ -329,6 +331,12 @@
                 <sortExecutions>true</sortExecutions>
               </sortPom>
             </pom>
+            <!--
+             | Markdown formatting is temporarily disabled due to flexmark-java
+             | incompatibility with JDK 21. See https://github.com/vsch/flexmark-java/issues/632
+             | Re-enable once flexmark-java fixes JDK 21 support.
+             |-->
+            <!--
             <markdown>
               <includes>
                 <include>**/*.md</include>
@@ -338,6 +346,7 @@
                 <pegdownExtensions>ALL,-HARDWRAPS</pegdownExtensions>
               </flexmark>
             </markdown>
+            -->
             <upToDateChecking>
               <enabled>true</enabled>
             </upToDateChecking>
@@ -359,18 +368,18 @@
         </configuration>
         <executions>
           <execution>
-            <id>flatten</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>flatten</goal>
-            </goals>
-          </execution>
-          <execution>
             <id>flatten.clean</id>
-            <phase>clean</phase>
             <goals>
               <goal>clean</goal>
             </goals>
+            <phase>clean</phase>
+          </execution>
+          <execution>
+            <id>flatten</id>
+            <goals>
+              <goal>flatten</goal>
+            </goals>
+            <phase>process-resources</phase>
           </execution>
         </executions>
       </plugin>
@@ -378,12 +387,10 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
       </plugin>
-      <!--
       <plugin>
         <groupId>com.diffplug.spotless</groupId>
         <artifactId>spotless-maven-plugin</artifactId>
       </plugin>
-      -->
     </plugins>
   </build>
 </project>

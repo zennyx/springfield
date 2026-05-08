@@ -5,34 +5,30 @@ import java.io.StringWriter;
 import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.stream.Collector;
-
 import org.springframework.lang.Nullable;
-
 import zenny.toybox.springfield.lang.Internal;
 
 /**
  * Static utility methods pertaining to instances of {@link Throwable}.
- * <p>
- * Mainly for internal use within the framework; consider
- * <a href="https://github.com/google/guava/">Google Guava</a> for a more
- * comprehensive suite of {@code Throwable} utilities.
+ *
+ * <p>Mainly for internal use within the framework; consider <a
+ * href="https://github.com/google/guava/">Google Guava</a> for a more comprehensive suite of {@code
+ * Throwable} utilities.
  *
  * @author Zenny Xu
  */
 @Internal
 public final class ThrowableUtils {
 
-  /**
-   * Suppresses default constructor, ensuring non-instantiability.
-   */
+  /** Suppresses default constructor, ensuring non-instantiability. */
   private ThrowableUtils() {
     throw new Error("No instances");
   }
 
   /**
    * Throws {@code throwable} if it is an instance of {@code declaredType}.
-   * <p>
-   * Example usage:
+   *
+   * <p>Example usage:
    *
    * <pre>
    * for (Foo foo : foos) {
@@ -50,8 +46,8 @@ public final class ThrowableUtils {
    * @param declaredType the expected error type
    * @throws X if {@code throwable} is an instance of {@code declaredType}
    */
-  public static <X extends Throwable> void throwIfInstanceOf(@Nullable Throwable throwable, Class<X> declaredType)
-      throws X {
+  public static <X extends Throwable> void throwIfInstanceOf(
+      @Nullable Throwable throwable, Class<X> declaredType) throws X {
     Assert.notNull(declaredType, "DeclaredType must not be null");
 
     if (throwable == null) {
@@ -64,10 +60,9 @@ public final class ThrowableUtils {
   }
 
   /**
-   * Throws {@code throwable} if it is a {@link RuntimeException} or
-   * {@link Error}.
-   * <p>
-   * Example usage:
+   * Throws {@code throwable} if it is a {@link RuntimeException} or {@link Error}.
+   *
+   * <p>Example usage:
    *
    * <pre>
    * for (Foo foo : foos) {
@@ -97,8 +92,8 @@ public final class ThrowableUtils {
 
   /**
    * Throws {@code throwable} as an instance of {@link RuntimeException}.
-   * <p>
-   * Example usage:
+   *
+   * <p>Example usage:
    *
    * <pre>
    * for (Foo foo : foos) {
@@ -118,10 +113,10 @@ public final class ThrowableUtils {
   }
 
   /**
-   * Throws {@code throwable} as an instance of {@code declaredType}, which is a
-   * sub-class of {@link RuntimeException}.
-   * <p>
-   * Example usage:
+   * Throws {@code throwable} as an instance of {@code declaredType}, which is a sub-class of {@link
+   * RuntimeException}.
+   *
+   * <p>Example usage:
    *
    * <pre>
    * for (Foo foo : foos) {
@@ -137,8 +132,8 @@ public final class ThrowableUtils {
    * @param throwable the error to throw
    * @param declaredType the expected error type
    */
-  public static <X extends RuntimeException> void throwAsUnchecked(@Nullable Throwable throwable,
-      Class<X> declaredType) {
+  public static <X extends RuntimeException> void throwAsUnchecked(
+      @Nullable Throwable throwable, Class<X> declaredType) {
     Assert.notNull(declaredType, "DeclaredType must not be null");
 
     if (throwable == null) {
@@ -162,11 +157,10 @@ public final class ThrowableUtils {
   }
 
   /**
-   * Returns the innermost cause of {@code throwable}. The first throwable in a
-   * chain provides context from when the error or exception was initially
-   * detected.
-   * <p>
-   * Example usage:
+   * Returns the innermost cause of {@code throwable}. The first throwable in a chain provides
+   * context from when the error or exception was initially detected.
+   *
+   * <p>Example usage:
    *
    * <pre>
    * assertEquals("Unable to assign a customer id", ThrowableUtils.getRootCause(e).getMessage());
@@ -174,32 +168,29 @@ public final class ThrowableUtils {
    *
    * @param throwable the error to throw
    */
-  @Nullable
-  public static Throwable getRootCause(@Nullable Throwable throwable) {
+  @Nullable public static Throwable getRootCause(@Nullable Throwable throwable) {
     Throwable[] rootCause = new Throwable[1];
     mapCauses(throwable, ex -> rootCause[0] = ex);
     return rootCause[0];
   }
 
   /**
-   * Gets a {@code Throwable} causal chain as a collection. The first entry in the
-   * collection will be {@code throwable} followed by its cause hierarchy.
-   * <p>
-   * Example usage:
+   * Gets a {@code Throwable} causal chain as a collection. The first entry in the collection will
+   * be {@code throwable} followed by its cause hierarchy.
+   *
+   * <p>Example usage:
    *
    * <pre>
    * ThrowableUtils.flattenCauses(e, Collectors.&lt;Throwable&gt;toList());
    * </pre>
    *
    * @param throwable the error to throw
-   * @param collector the operation to flatten the causal chain of
-   * {@code throwable}
+   * @param collector the operation to flatten the causal chain of {@code throwable}
    * @return flattened causal chain
    */
   @SuppressWarnings("unchecked")
-  @Nullable
-  public static <A, R extends Collection<Throwable>> R flattenCauses(@Nullable Throwable throwable,
-      Collector<Throwable, A, R> collector) {
+  @Nullable public static <A, R extends Collection<Throwable>> R flattenCauses(
+      @Nullable Throwable throwable, Collector<Throwable, A, R> collector) {
     Assert.notNull(collector, "Callback must not be null");
 
     if (throwable == null) {
@@ -208,15 +199,15 @@ public final class ThrowableUtils {
 
     A container = collector.supplier().get();
     mapCauses(throwable, e -> collector.accumulator().accept(container, e));
-    return collector.characteristics().contains(Collector.Characteristics.IDENTITY_FINISH) ? (R) container
+    return collector.characteristics().contains(Collector.Characteristics.IDENTITY_FINISH)
+        ? (R) container
         : collector.finisher().apply(container);
   }
 
   /**
-   * Maps a {@code Throwable} causal chain and applies the given {@code callback}
-   * for each cause.
-   * <p>
-   * Example usage:
+   * Maps a {@code Throwable} causal chain and applies the given {@code callback} for each cause.
+   *
+   * <p>Example usage:
    *
    * <pre>
    * ThrowableUtils.mapCauses(e, t -> {
@@ -256,13 +247,11 @@ public final class ThrowableUtils {
   }
 
   /**
-   * Returns a string containing the result of {@link Throwable#toString()
-   * toString()}, followed by the full, recursive stack trace of
-   * {@code throwable}.
+   * Returns a string containing the result of {@link Throwable#toString() toString()}, followed by
+   * the full, recursive stack trace of {@code throwable}.
    *
    * @param throwable the error to throw
-   * @return a string containing the full, recursive stack trace of
-   * {@code throwable}
+   * @return a string containing the full, recursive stack trace of {@code throwable}
    */
   public static String getStackTraceAsString(@Nullable Throwable throwable) {
     if (throwable == null) {

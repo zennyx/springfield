@@ -6,13 +6,11 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.function.Function;
-
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.lang.Nullable;
 import org.springframework.util.PropertiesPersister;
-
 import zenny.toybox.springfield.util.Assert;
 import zenny.toybox.springfield.util.CollectionUtils;
 import zenny.toybox.springfield.util.HierarchicalBuilder;
@@ -26,7 +24,9 @@ public class ResourceBasedKeyValueLoader<K, V> implements KeyValueLoader<K, V> {
 
   private final Function<String, V> valueIteratee;
 
-  private ResourceBasedKeyValueLoader(ResourceBundleMessageSourceAgent agent, Function<String, K> keyIteratee,
+  private ResourceBasedKeyValueLoader(
+      ResourceBundleMessageSourceAgent agent,
+      Function<String, K> keyIteratee,
       Function<String, V> valueIteratee) {
     Assert.notNull(agent, "Agent must not be null");
     Assert.notNull(keyIteratee, "KeyIteratee must not be null");
@@ -37,7 +37,8 @@ public class ResourceBasedKeyValueLoader<K, V> implements KeyValueLoader<K, V> {
     this.valueIteratee = valueIteratee;
   }
 
-  public static <K, V> ResourceBasedKeyValueLoaderBuilder<K, V> includes(@Nullable String... basenames) {
+  public static <K, V> ResourceBasedKeyValueLoaderBuilder<K, V> includes(
+      @Nullable String... basenames) {
     return new ResourceBasedKeyValueLoaderBuilder<>(basenames);
   }
 
@@ -50,15 +51,18 @@ public class ResourceBasedKeyValueLoader<K, V> implements KeyValueLoader<K, V> {
     }
 
     Map<K, V> result = new HashMap<>();
-    keys.forEach(key -> {
-      result.put(this.keyIteratee.apply(key),
-          this.valueIteratee.apply(this.agent.getMessage(key, null, currentLocale)));
-    });
+    keys.forEach(
+        key -> {
+          result.put(
+              this.keyIteratee.apply(key),
+              this.valueIteratee.apply(this.agent.getMessage(key, null, currentLocale)));
+        });
 
     return result;
   }
 
-  private static class ResourceBundleMessageSourceAgent extends ReloadableResourceBundleMessageSource {
+  private static class ResourceBundleMessageSourceAgent
+      extends ReloadableResourceBundleMessageSource {
 
     private Set<String> getKeySet(Locale locale) {
       return this.getMergedProperties(locale).getProperties().stringPropertyNames();
@@ -66,10 +70,10 @@ public class ResourceBasedKeyValueLoader<K, V> implements KeyValueLoader<K, V> {
   }
 
   public static class ResourceBasedKeyValueLoaderBuilder<K, V>
-      implements HierarchicalBuilder<KeyValueLoader<K, V>, ResourceBasedKeyValueLoaderBuilder<K, V>> {
+      implements HierarchicalBuilder<
+          KeyValueLoader<K, V>, ResourceBasedKeyValueLoaderBuilder<K, V>> {
 
-    @Nullable
-    private String[] baseNames = null;
+    @Nullable private String[] baseNames = null;
 
     private long cacheMillis = -1;
 
@@ -77,25 +81,19 @@ public class ResourceBasedKeyValueLoader<K, V> implements KeyValueLoader<K, V> {
 
     private boolean concurrentRefresh = true;
 
-    @Nullable
-    private String defaultEncoding = null;
+    @Nullable private String defaultEncoding = null;
 
     private boolean fallbackToSystemLocale = true;
 
-    @Nullable
-    private Properties fileEncodings = null;
+    @Nullable private Properties fileEncodings = null;
 
-    @Nullable
-    private PropertiesPersister propertiesPersister = null;
+    @Nullable private PropertiesPersister propertiesPersister = null;
 
-    @Nullable
-    private ResourceLoader resourceLoader = null;
+    @Nullable private ResourceLoader resourceLoader = null;
 
-    @Nullable
-    private Function<String, K> keyIteratee = null;
+    @Nullable private Function<String, K> keyIteratee = null;
 
-    @Nullable
-    private Function<String, V> valueIteratee = null;
+    @Nullable private Function<String, V> valueIteratee = null;
 
     private ResourceBasedKeyValueLoaderBuilder(@Nullable String... basenames) {
       this.baseNames = basenames;
@@ -124,13 +122,15 @@ public class ResourceBasedKeyValueLoader<K, V> implements KeyValueLoader<K, V> {
       return this.self();
     }
 
-    public ResourceBasedKeyValueLoaderBuilder<K, V> defaultEncoding(@Nullable String defaultEncoding) {
+    public ResourceBasedKeyValueLoaderBuilder<K, V> defaultEncoding(
+        @Nullable String defaultEncoding) {
       this.defaultEncoding = defaultEncoding;
 
       return this.self();
     }
 
-    public ResourceBasedKeyValueLoaderBuilder<K, V> fallbackToSystemLocale(boolean fallbackToSystemLocale) {
+    public ResourceBasedKeyValueLoaderBuilder<K, V> fallbackToSystemLocale(
+        boolean fallbackToSystemLocale) {
       this.fallbackToSystemLocale = fallbackToSystemLocale;
 
       return this.self();
@@ -143,19 +143,22 @@ public class ResourceBasedKeyValueLoader<K, V> implements KeyValueLoader<K, V> {
       return this.self();
     }
 
-    public ResourceBasedKeyValueLoaderBuilder<K, V> resourceLoader(@Nullable ResourceLoader resourceLoader) {
+    public ResourceBasedKeyValueLoaderBuilder<K, V> resourceLoader(
+        @Nullable ResourceLoader resourceLoader) {
       this.resourceLoader = resourceLoader;
 
       return this.self();
     }
 
-    public ResourceBasedKeyValueLoaderBuilder<K, V> keyIteratee(@Nullable Function<String, K> keyIteratee) {
+    public ResourceBasedKeyValueLoaderBuilder<K, V> keyIteratee(
+        @Nullable Function<String, K> keyIteratee) {
       this.keyIteratee = keyIteratee;
 
       return this.self();
     }
 
-    public ResourceBasedKeyValueLoaderBuilder<K, V> valueIteratee(@Nullable Function<String, V> valueIteratee) {
+    public ResourceBasedKeyValueLoaderBuilder<K, V> valueIteratee(
+        @Nullable Function<String, V> valueIteratee) {
       this.valueIteratee = valueIteratee;
 
       return this.self();
@@ -178,14 +181,16 @@ public class ResourceBasedKeyValueLoader<K, V> implements KeyValueLoader<K, V> {
         agent.setResourceLoader(this.resourceLoader);
       }
       if (this.keyIteratee == null) {
-        this.keyIteratee = (key) -> {
-          return null;
-        };
+        this.keyIteratee =
+            (key) -> {
+              return null;
+            };
       }
       if (this.valueIteratee == null) {
-        this.valueIteratee = (value) -> {
-          return null;
-        };
+        this.valueIteratee =
+            (value) -> {
+              return null;
+            };
       }
 
       return new ResourceBasedKeyValueLoader<>(agent, this.keyIteratee, this.valueIteratee);

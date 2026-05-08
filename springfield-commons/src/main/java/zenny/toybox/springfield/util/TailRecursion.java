@@ -1,18 +1,15 @@
 package zenny.toybox.springfield.util;
 
 import java.util.stream.Stream;
-
 import org.springframework.lang.Nullable;
 
 /**
- * A helper interface to optimize tail recursion in Java. Since Java has not yet
- * optimized for tail recursion, it is usually converted to a loop to avoid the
- * risk of stack overflow when recursive calls are invoked, but this also
- * undermine the developers writing habits. This interface is designed to
- * optimize the performance of tail recursive calls without changing those
- * habits.
- * <p>
- * Example usage:
+ * A helper interface to optimize tail recursion in Java. Since Java has not yet optimized for tail
+ * recursion, it is usually converted to a loop to avoid the risk of stack overflow when recursive
+ * calls are invoked, but this also undermine the developers writing habits. This interface is
+ * designed to optimize the performance of tail recursive calls without changing those habits.
+ *
+ * <p>Example usage:
  *
  * <pre>
  * public static TailRecursion&lt;Integer&gt; accumulate(int number, int total) {
@@ -25,8 +22,7 @@ import org.springframework.lang.Nullable;
  * accumulate(5, 1).collect(); // =&gt; 15
  * </pre>
  *
- * The above exmaple is equivalent to the standard recursion shown below (,
- * except for performance):
+ * The above exmaple is equivalent to the standard recursion shown below (, except for performance):
  *
  * <pre>
  * public static int stdAccumulate(int number, int total) {
@@ -60,17 +56,20 @@ public interface TailRecursion<O> {
   /**
    * @return
    */
-  @Nullable
-  default O get() {
-    throw new IllegalStateException("Unable to get value because the tail recursive call has not completed yet");
+  @Nullable default O get() {
+    throw new IllegalStateException(
+        "Unable to get value because the tail recursive call has not completed yet");
   }
 
   /**
    * @return
    */
-  @Nullable
-  default O collect() {
-    return Stream.iterate(this, TailRecursion::invoke).filter(TailRecursion::done).findFirst().get().get();
+  @Nullable default O collect() {
+    return Stream.iterate(this, TailRecursion::invoke)
+        .filter(TailRecursion::done)
+        .findFirst()
+        .get()
+        .get();
   }
 
   /**
@@ -85,13 +84,10 @@ public interface TailRecursion<O> {
    * @author Zenny Xu
    * @param <O> the type of the output
    */
-  static final class LastStackFrame<O> implements TailRecursion<O> {
+  final class LastStackFrame<O> implements TailRecursion<O> {
 
-    /**
-     *
-     */
-    @Nullable
-    private final O output;
+    /** */
+    @Nullable private final O output;
 
     /**
      * @param output
@@ -100,28 +96,21 @@ public interface TailRecursion<O> {
       this.output = output;
     }
 
-    /**
-     *
-     */
+    /** */
     @Override
     public TailRecursion<O> invoke() {
       throw new IllegalStateException("The tail recursion has been executed and cannot continue");
     }
 
-    /**
-     *
-     */
+    /** */
     @Override
     public boolean done() {
       return true;
     }
 
-    /**
-     *
-     */
+    /** */
     @Override
-    @Nullable
-    public O get() {
+    @Nullable public O get() {
       return output;
     }
   }

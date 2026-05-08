@@ -8,10 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.springframework.core.ResolvableType;
-import org.springframework.data.repository.core.RepositoryInformation;
-
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.NamingStrategy;
 import net.bytebuddy.dynamic.DynamicType;
@@ -19,6 +15,8 @@ import net.bytebuddy.dynamic.DynamicType.Builder.MethodDefinition.ParameterDefin
 import net.bytebuddy.dynamic.DynamicType.Builder.MethodDefinition.ParameterDefinition.Initial;
 import net.bytebuddy.dynamic.DynamicType.Builder.MethodDefinition.ReceiverTypeDefinition;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
+import org.springframework.core.ResolvableType;
+import org.springframework.data.repository.core.RepositoryInformation;
 import zenny.toybox.springfield.data.mybatis.repository.bridge.BridgeMapperFactory;
 import zenny.toybox.springfield.data.mybatis.repository.bridge.ClassAlreadyExistsException;
 import zenny.toybox.springfield.data.mybatis.repository.bridge.IllegalMethodArgumentException;
@@ -52,7 +50,9 @@ public abstract class BridgeMapperFactorySupport implements BridgeMapperFactory 
 
       if (bridgeMapper == null) {
         throw new NoBridgeMapperFoundException(
-            "No suitable bridge mapper found for repository interface [" + repositoryInterface + "]");
+            "No suitable bridge mapper found for repository interface ["
+                + repositoryInterface
+                + "]");
       }
 
       BRIDGE_MAPPER_CACHE.put(repositoryInterface, bridgeMapper);
@@ -64,13 +64,18 @@ public abstract class BridgeMapperFactorySupport implements BridgeMapperFactory 
   protected Class<?> doGetBridgeMapper(RepositoryInformation information) {
     final String mapperName = this.getMapperName(information);
 
-    DynamicType.Builder<?> builder = new ByteBuddy().with(new NamingStrategy.AbstractBase() {
-      @Override
-      protected String name(net.bytebuddy.description.type.TypeDescription superClass) {
-        return mapperName;
-      }
-    }).makeInterface().modifiers(information.getRepositoryInterface().getModifiers())
-        .annotateType(this.getMapperAnnotations(information));
+    DynamicType.Builder<?> builder =
+        new ByteBuddy()
+            .with(
+                new NamingStrategy.AbstractBase() {
+                  @Override
+                  protected String name(net.bytebuddy.description.type.TypeDescription superClass) {
+                    return mapperName;
+                  }
+                })
+            .makeInterface()
+            .modifiers(information.getRepositoryInterface().getModifiers())
+            .annotateType(this.getMapperAnnotations(information));
 
     Iterable<Method> methods = information.getQueryMethods();
     if (methods != null) {
@@ -81,8 +86,11 @@ public abstract class BridgeMapperFactorySupport implements BridgeMapperFactory 
           continue;
         }
 
-        Initial<?> initial = builder.defineMethod(method.getName(), this.getMethodReturnType(method, information),
-            method.getModifiers());
+        Initial<?> initial =
+            builder.defineMethod(
+                method.getName(),
+                this.getMethodReturnType(method, information),
+                method.getModifiers());
         int parameterCount = method.getParameterCount();
         ReceiverTypeDefinition<?> receiverTypeDefinition = null;
 
@@ -98,11 +106,14 @@ public abstract class BridgeMapperFactorySupport implements BridgeMapperFactory 
             int parameterModifiers = parameter.getModifiers();
             Annotation[] parameterAnnotations = parameter.getAnnotations(); // TODO
 
-            annotatable = annotatable == null
-                ? initial.withParameter(parameterType, parameterName, parameterModifiers)
-                    .annotateParameter(parameterAnnotations)
-                : annotatable.withParameter(parameterType, parameterName, parameterModifiers)
-                    .annotateParameter(parameterAnnotations);
+            annotatable =
+                annotatable == null
+                    ? initial
+                        .withParameter(parameterType, parameterName, parameterModifiers)
+                        .annotateParameter(parameterAnnotations)
+                    : annotatable
+                        .withParameter(parameterType, parameterName, parameterModifiers)
+                        .annotateParameter(parameterAnnotations);
           }
 
           receiverTypeDefinition = annotatable.withoutCode();
@@ -111,12 +122,16 @@ public abstract class BridgeMapperFactorySupport implements BridgeMapperFactory 
           receiverTypeDefinition = initial.withoutCode();
         }
 
-        builder = receiverTypeDefinition.annotateMethod(this.getMethodAnnotations(method, information));
+        builder =
+            receiverTypeDefinition.annotateMethod(this.getMethodAnnotations(method, information));
       }
     }
 
-    return builder.make()
-        .load(information.getRepositoryInterface().getClassLoader(), ClassLoadingStrategy.Default.INJECTION)
+    return builder
+        .make()
+        .load(
+            information.getRepositoryInterface().getClassLoader(),
+            ClassLoadingStrategy.Default.INJECTION)
         .getLoaded();
   }
 
@@ -128,7 +143,9 @@ public abstract class BridgeMapperFactorySupport implements BridgeMapperFactory 
 
     List<Method> methods = Arrays.asList(repositoryInterface.getMethods());
     for (Method queryMethod : information.getQueryMethods()) {
-      Assert.isTrue(methods.contains(queryMethod), "QueryMethods must belong to the given repository interface");
+      Assert.isTrue(
+          methods.contains(queryMethod),
+          "QueryMethods must belong to the given repository interface");
     }
 
     Assert.isTrue(this.isValid(information), "The given repository information is invalid");
@@ -138,9 +155,11 @@ public abstract class BridgeMapperFactorySupport implements BridgeMapperFactory 
 
   private String getMapperName(RepositoryInformation information) {
     String mapperPostfix = this.getMapperPostfix();
-    mapperPostfix = StringUtils.hasLength(mapperPostfix) ? mapperPostfix : DEFAULT_BRIDGE_MAPPER_POSTFIX;
+    mapperPostfix =
+        StringUtils.hasLength(mapperPostfix) ? mapperPostfix : DEFAULT_BRIDGE_MAPPER_POSTFIX;
 
-    String mapperName = String.format("%s%s", information.getRepositoryInterface().getCanonicalName(), "Bridge");
+    String mapperName =
+        String.format("%s%s", information.getRepositoryInterface().getCanonicalName(), "Bridge");
     if (ClassUtils.isPresent(mapperName, information.getRepositoryInterface().getClassLoader())) {
       throw new ClassAlreadyExistsException(
           "The class with name [" + mapperName + "] already exists. Try another mapper postfix?");
@@ -159,7 +178,8 @@ public abstract class BridgeMapperFactorySupport implements BridgeMapperFactory 
 
   private Type getMethodReturnType(Method method, RepositoryInformation information) {
     Type returnType = this.resolveMethodReturnType(method, information.getRepositoryInterface());
-    boolean returnValueRequired = returnType.getClass().isPrimitive() && !Void.TYPE.equals(returnType);
+    boolean returnValueRequired =
+        returnType.getClass().isPrimitive() && !Void.TYPE.equals(returnType);
 
     returnType = this.processType(returnType, method, information);
 
@@ -167,7 +187,8 @@ public abstract class BridgeMapperFactorySupport implements BridgeMapperFactory 
       throw new IllegalMethodArgumentException("ReturnType must not be null");
     }
     if (returnValueRequired && Void.TYPE.equals(returnType)) {
-      throw new IllegalMethodArgumentException("A null value cannot be assigned to a primitive type");
+      throw new IllegalMethodArgumentException(
+          "A null value cannot be assigned to a primitive type");
     }
 
     return returnType;
@@ -179,8 +200,11 @@ public abstract class BridgeMapperFactorySupport implements BridgeMapperFactory 
     return this.resolveType(returnType);
   }
 
-  private Type getMethodParameterType(Method method, int parameterIndex, RepositoryInformation information) {
-    Type parameterType = this.resolveMethodParameterType(method, parameterIndex, information.getRepositoryInterface());
+  private Type getMethodParameterType(
+      Method method, int parameterIndex, RepositoryInformation information) {
+    Type parameterType =
+        this.resolveMethodParameterType(
+            method, parameterIndex, information.getRepositoryInterface());
     parameterType = this.processType(parameterType, method, information);
 
     if (parameterType == null) {
@@ -193,8 +217,10 @@ public abstract class BridgeMapperFactorySupport implements BridgeMapperFactory 
     return parameterType;
   }
 
-  private Type resolveMethodParameterType(Method method, int parameterIndex, Class<?> implementationClass) {
-    ResolvableType parameter = ResolvableType.forMethodParameter(method, parameterIndex, implementationClass);
+  private Type resolveMethodParameterType(
+      Method method, int parameterIndex, Class<?> implementationClass) {
+    ResolvableType parameter =
+        ResolvableType.forMethodParameter(method, parameterIndex, implementationClass);
 
     return this.resolveType(parameter);
   }
@@ -236,5 +262,6 @@ public abstract class BridgeMapperFactorySupport implements BridgeMapperFactory 
     return annotations;
   }
 
-  protected abstract Annotation[] processMethodAnnotations(Annotation[] annotations, RepositoryInformation information);
+  protected abstract Annotation[] processMethodAnnotations(
+      Annotation[] annotations, RepositoryInformation information);
 }

@@ -7,7 +7,7 @@ public class PageAwareObjectFactory extends DefaultObjectFactory {
 
   private static final long serialVersionUID = 1592731121984079354L;
 
-  @SuppressWarnings({ "unchecked", "rawtypes" })
+  @SuppressWarnings({"unchecked", "rawtypes"})
   @Override
   public <T> T create(Class<T> type) {
     if (Page.class.isAssignableFrom(type)) {

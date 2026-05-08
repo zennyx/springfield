@@ -1,5 +1,8 @@
 package zenny.toybox.springfield.security.web.support;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,11 +12,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.http.HttpHeaders;
@@ -26,7 +24,6 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
-
 import zenny.toybox.springfield.security.web.ResponseStrategy;
 import zenny.toybox.springfield.util.Assert;
 import zenny.toybox.springfield.util.CollectionUtils;
@@ -35,9 +32,7 @@ public abstract class ResponseStrategySupport implements ResponseStrategy {
 
   private static final MediaType MEDIA_TYPE_APPLICATION = new MediaType("application");
 
-  /**
-   * Logger used by this class. Available to subclasses.
-   */
+  /** Logger used by this class. Available to subclasses. */
   protected final Log logger = LogFactory.getLog(this.getClass());
 
   private final Collection<HttpMessageConverter<?>> messageConverters;
@@ -57,8 +52,12 @@ public abstract class ResponseStrategySupport implements ResponseStrategy {
   }
 
   @Override
-  public final void response(HttpServletRequest request, HttpServletResponse response,
-      @Nullable ResponseContent content, @Nullable Callback fullback) throws IOException, ServletException {
+  public final void response(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      @Nullable ResponseContent content,
+      @Nullable Callback fullback)
+      throws IOException, ServletException {
     try {
       this.doResponse(request, response, content);
     } catch (Exception ex) {
@@ -67,7 +66,8 @@ public abstract class ResponseStrategySupport implements ResponseStrategy {
       }
 
       if (this.logger.isDebugEnabled()) {
-        this.logger.debug("Unable to send a response to the client cause " + ex + ", try the fullback operation");
+        this.logger.debug(
+            "Unable to send a response to the client cause " + ex + ", try the fullback operation");
       }
 
       fullback.call();
@@ -76,9 +76,10 @@ public abstract class ResponseStrategySupport implements ResponseStrategy {
 
   protected Collection<MediaType> getAllSupportedMediaTypes() {
     Set<MediaType> allSupportedMediaTypes = new HashSet<>();
-    this.messageConverters.forEach(converter -> {
-      allSupportedMediaTypes.addAll(converter.getSupportedMediaTypes());
-    });
+    this.messageConverters.forEach(
+        converter -> {
+          allSupportedMediaTypes.addAll(converter.getSupportedMediaTypes());
+        });
 
     List<MediaType> result = new ArrayList<>(allSupportedMediaTypes);
     MimeTypeUtils.sortBySpecificity(result);
@@ -93,12 +94,16 @@ public abstract class ResponseStrategySupport implements ResponseStrategy {
     return blackList;
   }
 
-  protected abstract void doResponse(HttpServletRequest request, HttpServletResponse response,
-      @Nullable ResponseContent content) throws IOException, ServletException;
+  protected abstract void doResponse(
+      HttpServletRequest request, HttpServletResponse response, @Nullable ResponseContent content)
+      throws IOException, ServletException;
 
-  @SuppressWarnings({ "unchecked", "rawtypes" })
-  protected void writeWithMessageConverters(ServletServerHttpRequest inputMessage,
-      ServletServerHttpResponse outputMessage, @Nullable ResponseContent content) throws IOException, ServletException {
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  protected void writeWithMessageConverters(
+      ServletServerHttpRequest inputMessage,
+      ServletServerHttpResponse outputMessage,
+      @Nullable ResponseContent content)
+      throws IOException, ServletException {
 
     if (content == null) {
       return;
@@ -114,21 +119,26 @@ public abstract class ResponseStrategySupport implements ResponseStrategy {
       payloadType = content.getPayloadType().resolve(Object.class);
     }
 
-    Collection<MediaType> requestedMediaTypes = this.getAcceptableMediaTypes(inputMessage.getServletRequest());
+    Collection<MediaType> requestedMediaTypes =
+        this.getAcceptableMediaTypes(inputMessage.getServletRequest());
     Collection<MediaType> producibleMediaTypes = this.getProducibleMediaTypes(payloadType);
 
     if (payload != null && producibleMediaTypes.isEmpty()) {
       throw new HttpMediaTypeNotAcceptableException(
           "Unable to send a response to the client cause no supported HttpMessageConverter found for the given content ["
-              + content + "]");
+              + content
+              + "]");
     }
 
     Set<MediaType> compatibleMediaTypes = new LinkedHashSet<>();
-    requestedMediaTypes.forEach(requestedType -> {
-      producibleMediaTypes.forEach(producibleType -> {
-        compatibleMediaTypes.add(this.getMostSpecificMediaType(requestedType, producibleType));
-      });
-    });
+    requestedMediaTypes.forEach(
+        requestedType -> {
+          producibleMediaTypes.forEach(
+              producibleType -> {
+                compatibleMediaTypes.add(
+                    this.getMostSpecificMediaType(requestedType, producibleType));
+              });
+        });
 
     if (payload != null && compatibleMediaTypes.isEmpty()) {
       throw new HttpMediaTypeNotAcceptableException(
@@ -137,7 +147,8 @@ public abstract class ResponseStrategySupport implements ResponseStrategy {
 
     List<MediaType> mediaTypes = new ArrayList<>(compatibleMediaTypes);
     MimeTypeUtils.sortBySpecificity(mediaTypes);
-    // TODO: MimeTypeUtils.sortBySpecificity does not sort by quality. If needed, add quality sorting:
+    // TODO: MimeTypeUtils.sortBySpecificity does not sort by quality. If needed, add quality
+    // sorting:
     // mediaTypes.sort((m1, m2) -> Double.compare(m2.getQualityValue(), m1.getQualityValue()));
 
     MediaType selectedMediaType = null;
@@ -155,11 +166,18 @@ public abstract class ResponseStrategySupport implements ResponseStrategy {
       selectedMediaType = selectedMediaType.removeQualityValue();
       for (HttpMessageConverter<?> messageConverter : this.messageConverters) {
         if (messageConverter.canWrite(payloadType, selectedMediaType)) {
-          ((HttpMessageConverter) messageConverter).write(payload, selectedMediaType, outputMessage);
+          ((HttpMessageConverter) messageConverter)
+              .write(payload, selectedMediaType, outputMessage);
 
           if (this.logger.isDebugEnabled()) {
-            this.logger
-                .debug("Written [" + payload + "] as \"" + selectedMediaType + "\" using [" + messageConverter + "]");
+            this.logger.debug(
+                "Written ["
+                    + payload
+                    + "] as \""
+                    + selectedMediaType
+                    + "\" using ["
+                    + messageConverter
+                    + "]");
           }
 
           return;
@@ -170,7 +188,8 @@ public abstract class ResponseStrategySupport implements ResponseStrategy {
     throw new HttpMediaTypeNotAcceptableException("Unable to find any acceptable representation");
   }
 
-  private Collection<MediaType> getAcceptableMediaTypes(HttpServletRequest request) throws ServletException {
+  private Collection<MediaType> getAcceptableMediaTypes(HttpServletRequest request)
+      throws ServletException {
     String headerValueArray = request.getHeader(HttpHeaders.ACCEPT);
     if (!StringUtils.hasText(headerValueArray)) {
       return this.filterAcceptableMediaTypes(null);
@@ -187,27 +206,35 @@ public abstract class ResponseStrategySupport implements ResponseStrategy {
     return this.filterAcceptableMediaTypes(mediaTypes);
   }
 
-  protected Collection<MediaType> filterAcceptableMediaTypes(@Nullable Collection<MediaType> acceptableMediaTypes) {
+  protected Collection<MediaType> filterAcceptableMediaTypes(
+      @Nullable Collection<MediaType> acceptableMediaTypes) {
     if (CollectionUtils.isEmpty(acceptableMediaTypes)) {
-      return this.isPositiveResponsing() ? Collections.singleton(MediaType.ALL) : Collections.emptySet();
+      return this.isPositiveResponsing()
+          ? Collections.singleton(MediaType.ALL)
+          : Collections.emptySet();
     }
 
     if (this.isPositiveResponsing()) {
       return acceptableMediaTypes;
     }
 
-    return acceptableMediaTypes.stream().filter(mediaType -> !(MediaType.ALL.getType().equals(mediaType.getType())
-        && MediaType.ALL.getSubtype().equals(mediaType.getSubtype()))).collect(Collectors.toSet());
+    return acceptableMediaTypes.stream()
+        .filter(
+            mediaType ->
+                !(MediaType.ALL.getType().equals(mediaType.getType())
+                    && MediaType.ALL.getSubtype().equals(mediaType.getSubtype())))
+        .collect(Collectors.toSet());
   }
 
   private Collection<MediaType> getProducibleMediaTypes(Class<?> payloadType) {
     if (!this.allSupportedMediaTypes.isEmpty()) {
       Set<MediaType> result = new HashSet<>();
-      this.messageConverters.forEach(converter -> {
-        if (converter.canWrite(payloadType, null)) {
-          result.addAll(converter.getSupportedMediaTypes());
-        }
-      });
+      this.messageConverters.forEach(
+          converter -> {
+            if (converter.canWrite(payloadType, null)) {
+              result.addAll(converter.getSupportedMediaTypes());
+            }
+          });
 
       return this.filterProducibleMediaTypes(result);
     }
@@ -215,12 +242,14 @@ public abstract class ResponseStrategySupport implements ResponseStrategy {
     return Collections.singleton(MediaType.ALL);
   }
 
-  protected Collection<MediaType> filterProducibleMediaTypes(Collection<MediaType> producibleMediaTypes) {
+  protected Collection<MediaType> filterProducibleMediaTypes(
+      Collection<MediaType> producibleMediaTypes) {
     if (producibleMediaTypes.isEmpty()) {
       return Collections.singleton(MediaType.ALL);
     }
 
-    return producibleMediaTypes.stream().filter(mediaType -> !this.mediaTypeBlackList.contains(mediaType))
+    return producibleMediaTypes.stream()
+        .filter(mediaType -> !this.mediaTypeBlackList.contains(mediaType))
         .collect(Collectors.toSet());
   }
 

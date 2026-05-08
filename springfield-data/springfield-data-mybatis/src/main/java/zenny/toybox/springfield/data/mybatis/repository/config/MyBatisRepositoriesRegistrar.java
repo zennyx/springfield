@@ -1,14 +1,12 @@
 package zenny.toybox.springfield.data.mybatis.repository.config;
 
 import java.lang.annotation.Annotation;
-
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.data.repository.config.RepositoryBeanDefinitionRegistrarSupport;
 import org.springframework.data.repository.config.RepositoryConfigurationExtension;
 
 /**
- * {@link ImportBeanDefinitionRegistrar} to enable
- * {@link EnableMyBatisRepositories} annotation.
+ * {@link ImportBeanDefinitionRegistrar} to enable {@link EnableMyBatisRepositories} annotation.
  *
  * @author Zenny Xu
  */

@@ -4,7 +4,6 @@ import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
-
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.core.io.ResourceLoader;
@@ -12,7 +11,6 @@ import org.springframework.data.repository.config.AnnotationRepositoryConfigurat
 import org.springframework.data.repository.config.RepositoryConfigurationExtensionSupport;
 import org.springframework.data.repository.config.RepositoryConfigurationSource;
 import org.springframework.data.repository.config.XmlRepositoryConfigurationSource;
-
 import zenny.toybox.springfield.data.mybatis.repository.MyBatisRepository;
 import zenny.toybox.springfield.data.mybatis.repository.support.MyBatisRepositoryFactoryBean;
 
@@ -92,7 +90,8 @@ public class MyBatisRepositoryConfigExtension extends RepositoryConfigurationExt
    * AnnotationRepositoryConfigurationSource)
    */
   @Override
-  public void postProcess(BeanDefinitionBuilder builder, AnnotationRepositoryConfigurationSource config) {
+  public void postProcess(
+      BeanDefinitionBuilder builder, AnnotationRepositoryConfigurationSource config) {
     // TODO
   }
 
@@ -116,7 +115,8 @@ public class MyBatisRepositoryConfigExtension extends RepositoryConfigurationExt
    * org.springframework.data.repository.config.RepositoryConfigurationSource)
    */
   @Override
-  public void registerBeansForRoot(BeanDefinitionRegistry registry, RepositoryConfigurationSource config) {
+  public void registerBeansForRoot(
+      BeanDefinitionRegistry registry, RepositoryConfigurationSource config) {
     // TODO
   }
 

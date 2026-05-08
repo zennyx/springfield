@@ -1,15 +1,13 @@
 package zenny.toybox.springfield.security.web.support;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -17,7 +15,6 @@ import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.lang.Nullable;
-
 import zenny.toybox.springfield.util.Assert;
 import zenny.toybox.springfield.util.StringUtils;
 
@@ -25,8 +22,7 @@ public class DefaultResponseStrategy extends ResponseStrategySupport {
 
   private final HttpStatus status;
 
-  @Nullable
-  private final HttpHeaders headers;
+  @Nullable private final HttpHeaders headers;
 
   public DefaultResponseStrategy(Collection<HttpMessageConverter<?>> messageConverters) {
     this(messageConverters, HttpStatus.OK, null);
@@ -40,7 +36,9 @@ public class DefaultResponseStrategy extends ResponseStrategySupport {
     this(Collections.singleton(new JacksonJsonHttpMessageConverter()), status, headers);
   }
 
-  public DefaultResponseStrategy(Collection<HttpMessageConverter<?>> messageConverters, HttpStatus status,
+  public DefaultResponseStrategy(
+      Collection<HttpMessageConverter<?>> messageConverters,
+      HttpStatus status,
       @Nullable HttpHeaders headers) {
     super(messageConverters);
 
@@ -52,7 +50,8 @@ public class DefaultResponseStrategy extends ResponseStrategySupport {
   }
 
   @Override
-  protected void doResponse(HttpServletRequest request, HttpServletResponse response, @Nullable ResponseContent content)
+  protected void doResponse(
+      HttpServletRequest request, HttpServletResponse response, @Nullable ResponseContent content)
       throws IOException, ServletException {
     if (content == null) {
       return;
@@ -61,7 +60,8 @@ public class DefaultResponseStrategy extends ResponseStrategySupport {
     ServletServerHttpRequest inputMessage = this.createInputMessage(request);
     ServletServerHttpResponse outputMessage = this.createOutputMessage(response);
 
-    if (response.containsHeader(HttpHeaders.VARY) && this.headers != null
+    if (response.containsHeader(HttpHeaders.VARY)
+        && this.headers != null
         && this.headers.containsHeader(HttpHeaders.VARY)) {
       Collection<String> varyHeadsToAdd = this.getVaryResponseHeadersToAdd(response);
       if (!varyHeadsToAdd.isEmpty()) {
@@ -70,11 +70,14 @@ public class DefaultResponseStrategy extends ResponseStrategySupport {
     }
 
     if (this.headers != null && !this.headers.isEmpty()) {
-      this.headers.headerSet().forEach(entry -> {
-        if (!response.containsHeader(entry.getKey())) {
-          response.setHeader(entry.getKey(), String.join(", ", entry.getValue()));
-        }
-      });
+      this.headers
+          .headerSet()
+          .forEach(
+              entry -> {
+                if (!response.containsHeader(entry.getKey())) {
+                  response.setHeader(entry.getKey(), String.join(", ", entry.getValue()));
+                }
+              });
     }
 
     response.setStatus(this.status.value());

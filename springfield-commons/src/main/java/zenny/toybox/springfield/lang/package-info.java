@@ -1,6 +1,4 @@
-/**
- * Common annotation types.
- */
+/** Common annotation types. */
 @NonNullApi
 @NonNullFields
 package zenny.toybox.springfield.lang;

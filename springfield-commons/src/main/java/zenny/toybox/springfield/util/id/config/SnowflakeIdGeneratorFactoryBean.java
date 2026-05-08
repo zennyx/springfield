@@ -1,7 +1,6 @@
 package zenny.toybox.springfield.util.id.config;
 
 import org.springframework.lang.Nullable;
-
 import zenny.toybox.springfield.util.id.IdGenerator;
 import zenny.toybox.springfield.util.id.config.Configuration.Customizer;
 import zenny.toybox.springfield.util.id.support.SnowflakeIdGenerator;
@@ -17,7 +16,8 @@ public class SnowflakeIdGeneratorFactoryBean extends AbstractIdGeneratorFactoryB
     super();
   }
 
-  public SnowflakeIdGeneratorFactoryBean(@Nullable Configuration config, @Nullable Customizer... customizers) {
+  public SnowflakeIdGeneratorFactoryBean(
+      @Nullable Configuration config, @Nullable Customizer... customizers) {
     super(config, customizers);
   }
 
@@ -32,15 +32,17 @@ public class SnowflakeIdGeneratorFactoryBean extends AbstractIdGeneratorFactoryB
     Configuration config = this.getConfig();
     Long epoch = this.resolveEpochAttribute(config);
     IdentifierLookup lookuper = this.resolveIdentifierAttribute(config, ATTR_NAME_IDENTIFIER);
-    IdentifierLookup subLookuper = this.resolveIdentifierAttribute(config, ATTR_NAME_SUB_IDENTIFIER);
+    IdentifierLookup subLookuper =
+        this.resolveIdentifierAttribute(config, ATTR_NAME_SUB_IDENTIFIER);
 
     if (epoch == null) {
       epoch = System.currentTimeMillis();
 
       if (lookuper == null && subLookuper == null) {
         if (this.logger.isWarnEnabled()) {
-          this.logger.warn("You are using the default configuration to generate the snowflake ID generator, "
-              + "please make sure that this is for testing purposes only, otherwise it is not recommended");
+          this.logger.warn(
+              "You are using the default configuration to generate the snowflake ID generator, "
+                  + "please make sure that this is for testing purposes only, otherwise it is not recommended");
         }
       }
     }
@@ -48,8 +50,7 @@ public class SnowflakeIdGeneratorFactoryBean extends AbstractIdGeneratorFactoryB
     return new SnowflakeIdGenerator(epoch, lookuper, subLookuper);
   }
 
-  @Nullable
-  private Long resolveEpochAttribute(@Nullable Configuration config) {
+  @Nullable private Long resolveEpochAttribute(@Nullable Configuration config) {
     if (config != null) {
       Object epochObject = config.getAttribute(ATTR_NAME_EPOCH);
 
@@ -66,8 +67,8 @@ public class SnowflakeIdGeneratorFactoryBean extends AbstractIdGeneratorFactoryB
     return null;
   }
 
-  @Nullable
-  private IdentifierLookup resolveIdentifierAttribute(@Nullable Configuration config, String attrName) {
+  @Nullable private IdentifierLookup resolveIdentifierAttribute(
+      @Nullable Configuration config, String attrName) {
     if (config == null) {
       return null;
     }

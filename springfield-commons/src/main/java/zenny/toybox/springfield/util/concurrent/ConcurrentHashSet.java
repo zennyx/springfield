@@ -6,32 +6,26 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
 import org.springframework.lang.Nullable;
 
 /**
- * A concurrent hash map backed (actually a {@link ConcurrentHashMap} instance)
- * set supporting full concurrency of retrievals and high expected concurrency
- * for updates.
+ * A concurrent hash map backed (actually a {@link ConcurrentHashMap} instance) set supporting full
+ * concurrency of retrievals and high expected concurrency for updates.
  *
  * @author Zenny Xu
  * @param <E> the type of elements maintained by this set
  */
 public class ConcurrentHashSet<E> extends AbstractSet<E> {
 
-  /**
-   * The backing {@link ConcurrentHashMap}
-   */
+  /** The backing {@link ConcurrentHashMap} */
   private final Map<E, Boolean> map;
 
-  /**
-   * A Set view of the keys contained in the backing map
-   */
+  /** A Set view of the keys contained in the backing map */
   private transient Set<E> keys;
 
   /**
-   * Creates a new, empty set; the backing {@link ConcurrentHashMap} instance has
-   * default initial capacity (16) and load factor (0.75).
+   * Creates a new, empty set; the backing {@link ConcurrentHashMap} instance has default initial
+   * capacity (16) and load factor (0.75).
    */
   public ConcurrentHashSet() {
     this.map = new ConcurrentHashMap<>();
@@ -39,11 +33,11 @@ public class ConcurrentHashSet<E> extends AbstractSet<E> {
   }
 
   /**
-   * Constructs a new, empty set; the backing {@link ConcurrentHashMap} instance
-   * has the specified initial capacity and the specified load factor.
+   * Constructs a new, empty set; the backing {@link ConcurrentHashMap} instance has the specified
+   * initial capacity and the specified load factor.
    *
-   * @param initialCapacity the initial capacity of the hash map sizing to
-   * accommodate this many elements.
+   * @param initialCapacity the initial capacity of the hash map sizing to accommodate this many
+   *     elements.
    * @throws IllegalArgumentException if the initial capacity is less than zero
    */
   public ConcurrentHashSet(int initialCapacity) {

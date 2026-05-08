@@ -24,5 +24,4 @@ public class MyBatisRepositoryFactory extends RepositoryFactorySupport {
     // TODO Auto-generated method stub
     return null;
   }
-
 }

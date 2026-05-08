@@ -5,9 +5,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Objects;
-
 import org.springframework.data.repository.core.RepositoryInformation;
-
 import zenny.toybox.springfield.data.mybatis.repository.MyBatisRepository;
 import zenny.toybox.springfield.data.mybatis.repository.bridge.convert.BridgeConverter;
 import zenny.toybox.springfield.data.mybatis.repository.bridge.convert.TypeConversionService;
@@ -40,10 +38,9 @@ public class SimpleBridgeMapperFactory extends BridgeMapperFactorySupport {
   }
 
   /**
-   * Returns a {@link TypeConversionService} to support converting {@link Type}s
-   * of parameters and returnTypes. Will default to a
-   * {@link DefaultTypeConversionService} instance. This may be useful for example
-   * to allow custom {@link BridgeConverter}s to be registered and then insert
+   * Returns a {@link TypeConversionService} to support converting {@link Type}s of parameters and
+   * returnTypes. Will default to a {@link DefaultTypeConversionService} instance. This may be
+   * useful for example to allow custom {@link BridgeConverter}s to be registered and then insert
    * default ones through this method.
    *
    * @return a {@code TypeConversionService} to convert {@code Type}s
@@ -60,7 +57,8 @@ public class SimpleBridgeMapperFactory extends BridgeMapperFactorySupport {
    */
   @Override
   protected boolean isValid(RepositoryInformation information) {
-    return MyBatisRepository.class.isAssignableFrom(information.getRepositoryInterface()); // TODO need confirm
+    return MyBatisRepository.class.isAssignableFrom(
+        information.getRepositoryInterface()); // TODO need confirm
   }
 
   /*
@@ -103,7 +101,8 @@ public class SimpleBridgeMapperFactory extends BridgeMapperFactorySupport {
    * Annotation[], org.springframework.data.repository.core.RepositoryInformation)
    */
   @Override
-  protected Annotation[] processMethodAnnotations(Annotation[] annotations, RepositoryInformation information) {
+  protected Annotation[] processMethodAnnotations(
+      Annotation[] annotations, RepositoryInformation information) {
     return annotations; // TODO add annotations according to CRUD
   }
 }

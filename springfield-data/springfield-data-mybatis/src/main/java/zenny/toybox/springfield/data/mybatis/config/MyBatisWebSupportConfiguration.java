@@ -3,7 +3,6 @@ package zenny.toybox.springfield.data.mybatis.config;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.apache.ibatis.plugin.Interceptor;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +12,7 @@ import org.springframework.lang.Nullable;
 @Configuration
 public class MyBatisWebSupportConfiguration {
 
-  @Autowired
-  private Collection<Interceptor> plugins;
+  @Autowired private Collection<Interceptor> plugins;
 
   @Autowired
   public MyBatisWebSupportConfiguration(@Nullable SqlSessionFactoryBean sqlSessionFactory) {

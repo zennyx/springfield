@@ -1,15 +1,12 @@
 package zenny.toybox.springfield.validation.validator;
 
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
-
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
-
 import org.springframework.lang.Nullable;
-
 import zenny.toybox.springfield.lang.Lab;
 import zenny.toybox.springfield.util.Assert;
 import zenny.toybox.springfield.validation.Rule;
@@ -26,28 +23,34 @@ public class PhoneNumberValidator implements ConstraintValidator<PhoneNumber, Ch
   private boolean bypass;
 
   static {
-    RULES.put(new Key(Locale.CHINA, Type.LINE), new Rule<CharSequence>() {
+    RULES.put(
+        new Key(Locale.CHINA, Type.LINE),
+        new Rule<CharSequence>() {
 
-      private final Pattern mode = Pattern.compile("^(0[0-9]{2,3}\\\\-)?([2-9][0-9]{6,7})+(\\\\-[0-9]{1,4})?$");
+          private final Pattern mode =
+              Pattern.compile("^(0[0-9]{2,3}\\\\-)?([2-9][0-9]{6,7})+(\\\\-[0-9]{1,4})?$");
 
-      @Override
-      public boolean isValid(CharSequence value, ConstraintValidatorContext context, @Nullable Object... rest) {
-        return this.mode.matcher(value).matches();
-      }
+          @Override
+          public boolean isValid(
+              CharSequence value, ConstraintValidatorContext context, @Nullable Object... rest) {
+            return this.mode.matcher(value).matches();
+          }
+        });
 
-    });
+    RULES.put(
+        new Key(Locale.CHINA, Type.MOBILE),
+        new Rule<CharSequence>() {
 
-    RULES.put(new Key(Locale.CHINA, Type.MOBILE), new Rule<CharSequence>() {
+          private final Pattern mode =
+              Pattern.compile(
+                  "^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$");
 
-      private final Pattern mode = Pattern
-          .compile("^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$");
-
-      @Override
-      public boolean isValid(CharSequence value, ConstraintValidatorContext context, @Nullable Object... rest) {
-        return this.mode.matcher(value).matches();
-      }
-
-    });
+          @Override
+          public boolean isValid(
+              CharSequence value, ConstraintValidatorContext context, @Nullable Object... rest) {
+            return this.mode.matcher(value).matches();
+          }
+        });
   }
 
   public static void addRule(Locale locale, Type type, Rule<CharSequence> rule) {

@@ -4,14 +4,11 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-
 import zenny.toybox.springfield.util.HierarchicalBuilder;
 
 public abstract class Locks {
 
-  /**
-   * Suppresses default constructor, ensuring non-instantiability.
-   */
+  /** Suppresses default constructor, ensuring non-instantiability. */
   private Locks() {
     throw new Error("No instances");
   }
@@ -41,14 +38,14 @@ public abstract class Locks {
   }
 
   @FunctionalInterface
-  public interface LockBuilder extends HierarchicalBuilder<Lock, LockBuilder> {
-  }
+  public interface LockBuilder extends HierarchicalBuilder<Lock, LockBuilder> {}
 
   /**
-   * A factory class for building {@code LockBuilder}s.
-   * Not a good idea, just make do with it before a better solution is found. :(
-   * <p>
-   * Example usage:
+   * A factory class for building {@code LockBuilder}s. Not a good idea, just make do with it before
+   * a better solution is found. :(
+   *
+   * <p>Example usage:
+   *
    * <p>
    *
    * <pre>
@@ -70,12 +67,12 @@ public abstract class Locks {
    *     this.fair = fair;
    *     return this.self();
    *   }
-   *   
+   *
    *   public RedisLockBuilder name(String name) {
    *     this.name = name;
    *     return this.self();
    *   }
-   *   
+   *
    *   &#64;Override
    *   public Lock build() {
    *     if (this.fair) {
@@ -110,7 +107,7 @@ public abstract class Locks {
    *   public SomeServiceImpl(RedisLockBuilderFactory factory) {
    *     this.factory = factory;
    *   }
-   *   
+   *
    *   &#64;Override
    *   public void doSomething() {
    *     Lock lock = this.factory.get().name("SOME:SERVICE:1").build();

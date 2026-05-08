@@ -15,13 +15,22 @@ import static java.lang.annotation.RetentionPolicy.CLASS;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-
 import org.springframework.core.annotation.AliasFor;
 
 @Documented
 @Retention(CLASS)
-@Target({ TYPE, FIELD, METHOD, PARAMETER, CONSTRUCTOR, LOCAL_VARIABLE, ANNOTATION_TYPE, PACKAGE, TYPE_PARAMETER,
-    TYPE_USE })
+@Target({
+  TYPE,
+  FIELD,
+  METHOD,
+  PARAMETER,
+  CONSTRUCTOR,
+  LOCAL_VARIABLE,
+  ANNOTATION_TYPE,
+  PACKAGE,
+  TYPE_PARAMETER,
+  TYPE_USE
+})
 public @interface Risk {
 
   @AliasFor("description")

@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
-
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.plugin.Interceptor;
@@ -19,8 +18,12 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.Nullable;
 
-@Intercepts({ @Signature(type = Executor.class, method = "query", args = { MappedStatement.class, Object.class,
-    RowBounds.class, ResultHandler.class }) })
+@Intercepts({
+  @Signature(
+      type = Executor.class,
+      method = "query",
+      args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class})
+})
 public class PageAwareInterceptor implements Interceptor {
 
   @Override
@@ -59,8 +62,7 @@ public class PageAwareInterceptor implements Interceptor {
       this.arguments = invocation.getArgs();
     }
 
-    @Nullable
-    public Pageable getPageable() {
+    @Nullable public Pageable getPageable() {
       Object queryArgs = this.arguments[1];
       Object rowBounds = this.arguments[2];
 
@@ -94,7 +96,8 @@ public class PageAwareInterceptor implements Interceptor {
 
       paramMap.remove(pageableName);
       Pageable pageable = (Pageable) pageableValue;
-      this.arguments[2] = new RowBounds(Long.valueOf(pageable.getOffset()).intValue(), pageable.getPageSize());
+      this.arguments[2] =
+          new RowBounds(Long.valueOf(pageable.getOffset()).intValue(), pageable.getPageSize());
 
       return pageable;
     }

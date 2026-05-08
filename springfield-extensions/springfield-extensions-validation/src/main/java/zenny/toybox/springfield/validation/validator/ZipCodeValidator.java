@@ -1,15 +1,12 @@
 package zenny.toybox.springfield.validation.validator;
 
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
-
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
-
 import org.springframework.lang.Nullable;
-
 import zenny.toybox.springfield.lang.Lab;
 import zenny.toybox.springfield.util.Assert;
 import zenny.toybox.springfield.validation.Rule;
@@ -24,15 +21,18 @@ public class ZipCodeValidator implements ConstraintValidator<ZipCode, CharSequen
   private boolean bypass;
 
   static {
-    RULES.put(Locale.CHINA, new Rule<CharSequence>() {
+    RULES.put(
+        Locale.CHINA,
+        new Rule<CharSequence>() {
 
-      private final Pattern mode = Pattern.compile("^[1-9]\\\\d{5}$");
+          private final Pattern mode = Pattern.compile("^[1-9]\\\\d{5}$");
 
-      @Override
-      public boolean isValid(CharSequence value, ConstraintValidatorContext context, @Nullable Object... rest) {
-        return this.mode.matcher(value).matches();
-      }
-    });
+          @Override
+          public boolean isValid(
+              CharSequence value, ConstraintValidatorContext context, @Nullable Object... rest) {
+            return this.mode.matcher(value).matches();
+          }
+        });
   }
 
   public static void addRule(Locale locale, Rule<CharSequence> rule) {

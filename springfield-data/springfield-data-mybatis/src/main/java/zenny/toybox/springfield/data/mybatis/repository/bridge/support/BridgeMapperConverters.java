@@ -2,13 +2,11 @@ package zenny.toybox.springfield.data.mybatis.repository.bridge.support;
 
 import java.util.Collection;
 import java.util.List;
-
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.convert.support.ConfigurableConversionService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-
 import zenny.toybox.springfield.data.mybatis.repository.bridge.convert.BridgeConverter;
 import zenny.toybox.springfield.data.mybatis.repository.bridge.convert.ResolvedType;
 import zenny.toybox.springfield.data.mybatis.repository.bridge.convert.TypeConversionService;
@@ -16,8 +14,7 @@ import zenny.toybox.springfield.lang.Internal;
 import zenny.toybox.springfield.util.Assert;
 
 /**
- * Simple domain service to convert query parameters/results into a dedicated
- * type.
+ * Simple domain service to convert query parameters/results into a dedicated type.
  *
  * @author Zenny Xu
  */
@@ -27,8 +24,7 @@ public class BridgeMapperConverters {
   /**
    * Registers converters for type conversions of MyBatis bridge mapper.
    *
-   * @param conversionService a service for type conversion, must not be
-   * {@literal null}
+   * @param conversionService a service for type conversion, must not be {@literal null}
    */
   public static void registerConvertersIn(TypeConversionService conversionService) {
     Assert.notNull(conversionService, "ConversionService must not be null");
@@ -41,8 +37,7 @@ public class BridgeMapperConverters {
   /**
    * Registers converters for value conversions of MyBatis bridge mapper.
    *
-   * @param conversionService a service for value conversion, must not be
-   * {@literal null}
+   * @param conversionService a service for value conversion, must not be {@literal null}
    */
   public static void registerConvertersIn(ConfigurableConversionService conversionService) {
     Assert.notNull(conversionService, "ConversionService must not be null");
@@ -52,11 +47,9 @@ public class BridgeMapperConverters {
     conversionService.addConverter(new SliceToIterableConverter());
   }
 
-  /**
-   * A {@link BridgeConverter} to support converting from {@link Pageable} to
-   * {@link RowBounds}.
-   */
-  private static class PageableToRowBoundsConverter implements BridgeConverter<Pageable, RowBounds> {
+  /** A {@link BridgeConverter} to support converting from {@link Pageable} to {@link RowBounds}. */
+  private static class PageableToRowBoundsConverter
+      implements BridgeConverter<Pageable, RowBounds> {
 
     @Override
     public RowBounds convert(Pageable source) {
@@ -73,11 +66,9 @@ public class BridgeMapperConverters {
     }
   }
 
-  /**
-   * A {@link BridgeConverter} to support converting from {@link Slice} to
-   * {@link Collection}.
-   */
-  private static class SliceToCollectionConverter implements BridgeConverter<Slice<?>, Collection<?>> {
+  /** A {@link BridgeConverter} to support converting from {@link Slice} to {@link Collection}. */
+  private static class SliceToCollectionConverter
+      implements BridgeConverter<Slice<?>, Collection<?>> {
 
     @Override
     public Collection<?> convert(Slice<?> source) {
@@ -99,10 +90,7 @@ public class BridgeMapperConverters {
     }
   }
 
-  /**
-   * A {@link BridgeConverter} to support converting from {@link Slice} to
-   * {@link Iterable}.
-   */
+  /** A {@link BridgeConverter} to support converting from {@link Slice} to {@link Iterable}. */
   private static class SliceToIterableConverter implements BridgeConverter<Slice<?>, Iterable<?>> {
 
     @Override

@@ -3,7 +3,6 @@ package zenny.toybox.springfield.util;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
 import org.springframework.lang.Nullable;
 
 @Deprecated
@@ -62,9 +61,10 @@ public class BijectionHashMap<K, V> extends HashMap<K, V> implements Map<K, V> {
       return;
     }
 
-    m.forEach((k, v) -> {
-      this.put(k, v);
-    });
+    m.forEach(
+        (k, v) -> {
+          this.put(k, v);
+        });
   }
 
   @Override

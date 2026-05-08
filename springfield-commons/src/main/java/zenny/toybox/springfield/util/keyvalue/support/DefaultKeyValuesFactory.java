@@ -4,11 +4,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.lang.Nullable;
-
 import zenny.toybox.springfield.util.Assert;
 import zenny.toybox.springfield.util.CollectionUtils;
 import zenny.toybox.springfield.util.keyvalue.KeyValueHolder;
@@ -29,12 +27,16 @@ public class DefaultKeyValuesFactory implements KeyValuesFactory {
   }
 
   @Override
-  public KeyValues getKeyValues(@Nullable Map<String, KeyValueLoader<?, ?>> loaders, @Nullable KeyValueHolder holder) {
+  public KeyValues getKeyValues(
+      @Nullable Map<String, KeyValueLoader<?, ?>> loaders, @Nullable KeyValueHolder holder) {
     return this.getKeyValues(loaders, holder, null);
   }
 
-  public KeyValues getKeyValues(@Nullable Map<String, KeyValueLoader<?, ?>> loaders, @Nullable KeyValueHolder holder,
-      @Nullable Function<String, BiConsumer<Map<String, KeyValueLoader<?, ?>>, KeyValueHolder>> refresher) {
+  public KeyValues getKeyValues(
+      @Nullable Map<String, KeyValueLoader<?, ?>> loaders,
+      @Nullable KeyValueHolder holder,
+      @Nullable Function<String, BiConsumer<Map<String, KeyValueLoader<?, ?>>, KeyValueHolder>>
+              refresher) {
 
     this.check(loaders, holder);
     this.assamble(loaders, holder);
@@ -47,7 +49,8 @@ public class DefaultKeyValuesFactory implements KeyValuesFactory {
     Assert.notNull(holder, "KeyValueHolder must not be null");
 
     if (loaders != null) {
-      Assert.isTrue(!CollectionUtils.isEmpty(loaders) && !CollectionUtils.hasNullElements(loaders),
+      Assert.isTrue(
+          !CollectionUtils.isEmpty(loaders) && !CollectionUtils.hasNullElements(loaders),
           "KeyValueLoaders must contain entries");
       Assert.isTrue(holder instanceof AbstractKeyValueHolder, "KeyValueHolder must be mutable");
 
@@ -64,7 +67,8 @@ public class DefaultKeyValuesFactory implements KeyValuesFactory {
     loaders.forEach((name, loader) -> kvsHolder.put(name, loader));
   }
 
-  protected Function<String, BiConsumer<Map<String, KeyValueLoader<?, ?>>, KeyValueHolder>> getDefaultRefresher() {
+  protected Function<String, BiConsumer<Map<String, KeyValueLoader<?, ?>>, KeyValueHolder>>
+      getDefaultRefresher() {
 
     return n -> {
       return (l, h) -> {
@@ -82,18 +86,19 @@ public class DefaultKeyValuesFactory implements KeyValuesFactory {
 
   protected static class DefaultKeyValues implements KeyValues {
 
-    /**
-     * Logger used by this class. Available to subclasses.
-     */
+    /** Logger used by this class. Available to subclasses. */
     protected final Log logger = LogFactory.getLog(this.getClass());
 
     private final Map<String, KeyValueLoader<?, ?>> loaders;
 
     private final KeyValueHolder holder;
 
-    private final Function<String, BiConsumer<Map<String, KeyValueLoader<?, ?>>, KeyValueHolder>> refresher;
+    private final Function<String, BiConsumer<Map<String, KeyValueLoader<?, ?>>, KeyValueHolder>>
+        refresher;
 
-    protected DefaultKeyValues(Map<String, KeyValueLoader<?, ?>> loaders, KeyValueHolder holder,
+    protected DefaultKeyValues(
+        Map<String, KeyValueLoader<?, ?>> loaders,
+        KeyValueHolder holder,
         Function<String, BiConsumer<Map<String, KeyValueLoader<?, ?>>, KeyValueHolder>> refresher) {
       this.loaders = loaders;
       this.holder = holder;
@@ -125,7 +130,8 @@ public class DefaultKeyValuesFactory implements KeyValuesFactory {
     }
 
     @SuppressWarnings("unchecked")
-    protected <K, V> Map<K, V> resolveRawValue(Map<?, ?> raw, Class<K> keyType, Class<V> valueType) {
+    protected <K, V> Map<K, V> resolveRawValue(
+        Map<?, ?> raw, Class<K> keyType, Class<V> valueType) {
       return (Map<K, V>) raw;
     }
   }

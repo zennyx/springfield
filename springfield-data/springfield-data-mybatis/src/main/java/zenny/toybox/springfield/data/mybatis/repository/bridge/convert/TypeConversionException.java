@@ -3,8 +3,7 @@ package zenny.toybox.springfield.data.mybatis.repository.bridge.convert;
 import zenny.toybox.springfield.data.mybatis.repository.bridge.BridgeException;
 
 /**
- * Thrown on an unrecoverable problem encountered in the {@literal convert}
- * package or sub-packages.
+ * Thrown on an unrecoverable problem encountered in the {@literal convert} package or sub-packages.
  *
  * @author Zenny Xu
  */

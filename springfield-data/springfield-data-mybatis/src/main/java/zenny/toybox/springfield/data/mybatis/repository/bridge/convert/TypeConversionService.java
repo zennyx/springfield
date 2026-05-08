@@ -1,7 +1,6 @@
 package zenny.toybox.springfield.data.mybatis.repository.bridge.convert;
 
 import java.lang.reflect.Type;
-
 import org.springframework.lang.Nullable;
 
 public interface TypeConversionService {

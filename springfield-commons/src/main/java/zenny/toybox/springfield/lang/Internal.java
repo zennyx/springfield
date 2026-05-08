@@ -11,14 +11,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * Signifies that a public API (public class, annotation or package) is mainly
- * for internal use within the framework.
+ * Signifies that a public API (public class, annotation or package) is mainly for internal use
+ * within the framework.
  *
  * @author Zenny Xu
  */
 @Documented
 @Retention(CLASS)
-@Target({ TYPE, ANNOTATION_TYPE, PACKAGE, TYPE_USE })
+@Target({TYPE, ANNOTATION_TYPE, PACKAGE, TYPE_USE})
 @Risk
-public @interface Internal {
-}
+public @interface Internal {}

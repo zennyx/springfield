@@ -16,5 +16,4 @@ public class MyBatisRepositoryFactoryBean<T extends Repository<S, ID>, S, ID>
     // TODO Auto-generated method stub
     return null;
   }
-
 }

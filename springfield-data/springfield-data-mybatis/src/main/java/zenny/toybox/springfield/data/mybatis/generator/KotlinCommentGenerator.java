@@ -1,7 +1,6 @@
 package zenny.toybox.springfield.data.mybatis.generator;
 
 import java.util.Set;
-
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.kotlin.KotlinFile;
 import org.mybatis.generator.api.dom.kotlin.KotlinFunction;
@@ -14,7 +13,9 @@ public interface KotlinCommentGenerator {
 
   void addModelClassComment(KotlinType modelClass, IntrospectedTable introspectedTable);
 
-  void addGeneralFunctionComment(KotlinFunction kf, IntrospectedTable introspectedTable, Set<String> imports);
+  void addGeneralFunctionComment(
+      KotlinFunction kf, IntrospectedTable introspectedTable, Set<String> imports);
 
-  void addGeneralPropertyComment(KotlinProperty property, IntrospectedTable introspectedTable, Set<String> imports);
+  void addGeneralPropertyComment(
+      KotlinProperty property, IntrospectedTable introspectedTable, Set<String> imports);
 }

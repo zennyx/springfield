@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
-
 import org.springframework.core.NestedRuntimeException;
 import org.springframework.lang.Nullable;
 
@@ -16,11 +15,9 @@ public final class Interval<E extends Comparable<E>> {
 
   private final Class<E> type;
 
-  @Nullable
-  private final Endpoint<E> left;
+  @Nullable private final Endpoint<E> left;
 
-  @Nullable
-  private final Endpoint<E> right;
+  @Nullable private final Endpoint<E> right;
 
   private Interval(Class<E> type) {
     this(type, null, null);
@@ -33,8 +30,8 @@ public final class Interval<E extends Comparable<E>> {
     this.right = this.empty ? null : right;
   }
 
-  private static <E extends Comparable<E>> boolean isEmptyInterval(@Nullable Endpoint<E> left,
-      @Nullable Endpoint<E> right) {
+  private static <E extends Comparable<E>> boolean isEmptyInterval(
+      @Nullable Endpoint<E> left, @Nullable Endpoint<E> right) {
     if (left == null || right == null) {
       return true;
     }
@@ -73,12 +70,18 @@ public final class Interval<E extends Comparable<E>> {
     }
 
     if (this.left.compareTo(other.left) < 0) {
-      intervals
-          .add(new Interval<>(this.type, this.left, Endpoint.copyOf(other.left, other.isLeftClosed() ? false : true)));
+      intervals.add(
+          new Interval<>(
+              this.type,
+              this.left,
+              Endpoint.copyOf(other.left, other.isLeftClosed() ? false : true)));
     }
     if (this.right.compareTo(other.right) > 0) {
       intervals.add(
-          new Interval<>(this.type, Endpoint.copyOf(other.right, other.isRightClosed() ? false : true), this.right));
+          new Interval<>(
+              this.type,
+              Endpoint.copyOf(other.right, other.isRightClosed() ? false : true),
+              this.right));
     }
 
     return new Intervals<>(intervals);
@@ -117,13 +120,22 @@ public final class Interval<E extends Comparable<E>> {
     int leftComparasion = this.left.compareTo(other.left);
     int rightComparasion = this.right.compareTo(other.right);
     Endpoint<E> leftEnd = leftComparasion >= 0 ? this.left : other.left;
-    boolean leftBounded = leftComparasion > 0 ? this.left.bounded
-        : leftComparasion < 0 ? other.left.bounded : this.isLeftClosed() && other.isLeftClosed() ? true : false;
+    boolean leftBounded =
+        leftComparasion > 0
+            ? this.left.bounded
+            : leftComparasion < 0
+                ? other.left.bounded
+                : this.isLeftClosed() && other.isLeftClosed() ? true : false;
     Endpoint<E> rightEnd = rightComparasion >= 0 ? other.right : this.right;
-    boolean rightBounded = rightComparasion > 0 ? other.right.bounded
-        : leftComparasion < 0 ? this.right.bounded : this.isRightClosed() && other.isRightClosed() ? true : false;
+    boolean rightBounded =
+        rightComparasion > 0
+            ? other.right.bounded
+            : leftComparasion < 0
+                ? this.right.bounded
+                : this.isRightClosed() && other.isRightClosed() ? true : false;
 
-    return new Interval<>(this.type, Endpoint.copyOf(leftEnd, leftBounded), Endpoint.copyOf(rightEnd, rightBounded));
+    return new Interval<>(
+        this.type, Endpoint.copyOf(leftEnd, leftBounded), Endpoint.copyOf(rightEnd, rightBounded));
   }
 
   public Intervals<E> intersect(Intervals<E> others) {
@@ -156,14 +168,23 @@ public final class Interval<E extends Comparable<E>> {
     int leftComparasion = this.left.compareTo(other.left);
     int rightComparasion = this.right.compareTo(other.right);
     Endpoint<E> leftEnd = leftComparasion >= 0 ? other.left : this.left;
-    boolean leftBound = leftComparasion > 0 ? other.left.bounded
-        : leftComparasion < 0 ? this.left.bounded : this.isLeftClosed() || other.isLeftClosed() ? true : false;
+    boolean leftBound =
+        leftComparasion > 0
+            ? other.left.bounded
+            : leftComparasion < 0
+                ? this.left.bounded
+                : this.isLeftClosed() || other.isLeftClosed() ? true : false;
     Endpoint<E> rightEnd = rightComparasion >= 0 ? this.right : other.right;
-    boolean rightBound = rightComparasion > 0 ? this.right.bounded
-        : leftComparasion < 0 ? other.right.bounded : this.isRightClosed() || other.isRightClosed() ? true : false;
+    boolean rightBound =
+        rightComparasion > 0
+            ? this.right.bounded
+            : leftComparasion < 0
+                ? other.right.bounded
+                : this.isRightClosed() || other.isRightClosed() ? true : false;
 
-    Interval<E> unioned = new Interval<>(this.type, Endpoint.copyOf(leftEnd, leftBound),
-        Endpoint.copyOf(rightEnd, rightBound));
+    Interval<E> unioned =
+        new Interval<>(
+            this.type, Endpoint.copyOf(leftEnd, leftBound), Endpoint.copyOf(rightEnd, rightBound));
 
     intervals.add(unioned);
     return new Intervals<>(intervals);
@@ -321,8 +342,7 @@ public final class Interval<E extends Comparable<E>> {
     return this.right.bounded == true;
   }
 
-  @Nullable
-  public E getLeft() {
+  @Nullable public E getLeft() {
     if (this.empty || this.left.isInfinity()) {
       return null;
     }
@@ -330,8 +350,7 @@ public final class Interval<E extends Comparable<E>> {
     return this.left.get();
   }
 
-  @Nullable
-  public E getLeft(@Nullable E alias) {
+  @Nullable public E getLeft(@Nullable E alias) {
     if (this.empty) {
       return null;
     }
@@ -339,8 +358,7 @@ public final class Interval<E extends Comparable<E>> {
     return this.left.or(alias);
   }
 
-  @Nullable
-  public E getLeft(@Nullable Supplier<? extends E> supplier) {
+  @Nullable public E getLeft(@Nullable Supplier<? extends E> supplier) {
     if (this.empty) {
       return null;
     }
@@ -348,8 +366,7 @@ public final class Interval<E extends Comparable<E>> {
     return this.left.or(supplier);
   }
 
-  @Nullable
-  public E getRight() {
+  @Nullable public E getRight() {
     if (this.empty || this.right.isInfinity()) {
       return null;
     }
@@ -357,8 +374,7 @@ public final class Interval<E extends Comparable<E>> {
     return this.right.get();
   }
 
-  @Nullable
-  public E getRight(@Nullable E alias) {
+  @Nullable public E getRight(@Nullable E alias) {
     if (this.empty) {
       return null;
     }
@@ -366,8 +382,7 @@ public final class Interval<E extends Comparable<E>> {
     return this.right.or(alias);
   }
 
-  @Nullable
-  public E getRight(@Nullable Supplier<? extends E> supplier) {
+  @Nullable public E getRight(@Nullable Supplier<? extends E> supplier) {
     if (this.empty) {
       return null;
     }
@@ -398,7 +413,8 @@ public final class Interval<E extends Comparable<E>> {
     }
 
     Interval<?> otherInterval = (Interval<?>) other;
-    return this.type.equals(otherInterval.type) && this.empty == otherInterval.empty
+    return this.type.equals(otherInterval.type)
+        && this.empty == otherInterval.empty
         && ObjectUtils.nullSafeEquals(this.left, otherInterval.left)
         && ObjectUtils.nullSafeEquals(this.right, otherInterval.right);
   }
@@ -413,7 +429,12 @@ public final class Interval<E extends Comparable<E>> {
       return builder.toString();
     }
 
-    builder.append(" ").append(this.left.bounded ? "[" : "(").append(this.left).append(", ").append(this.right)
+    builder
+        .append(" ")
+        .append(this.left.bounded ? "[" : "(")
+        .append(this.left)
+        .append(", ")
+        .append(this.right)
         .append(this.right.bounded ? "]" : ")");
     return builder.toString();
   }
@@ -422,7 +443,8 @@ public final class Interval<E extends Comparable<E>> {
     return new IntervalBuilder<>(type);
   }
 
-  private static abstract class Endpoint<E extends Comparable<E>> implements Comparable<Endpoint<E>> {
+  private abstract static class Endpoint<E extends Comparable<E>>
+      implements Comparable<Endpoint<E>> {
 
     private final boolean bounded;
 
@@ -430,7 +452,8 @@ public final class Interval<E extends Comparable<E>> {
       this.bounded = bounded;
     }
 
-    public static <E extends Comparable<E>> Endpoint<E> copyOf(Endpoint<E> endpoint, boolean bounded) {
+    public static <E extends Comparable<E>> Endpoint<E> copyOf(
+        Endpoint<E> endpoint, boolean bounded) {
       if (endpoint instanceof Finity) {
         return Endpoint.finity(((Finity<E>) endpoint).element, bounded);
       }
@@ -443,7 +466,8 @@ public final class Interval<E extends Comparable<E>> {
       return new Finity<>(element, bounded);
     }
 
-    public static <E extends Comparable<E>> Endpoint<E> infinity(Class<E> type, boolean postive, boolean bounded) {
+    public static <E extends Comparable<E>> Endpoint<E> infinity(
+        Class<E> type, boolean postive, boolean bounded) {
       if (postive) {
         return new PositiveInfinity<>(type, bounded);
       }
@@ -459,14 +483,11 @@ public final class Interval<E extends Comparable<E>> {
 
     public abstract boolean isNegativeInfinity();
 
-    @Nullable
-    public abstract E get();
+    @Nullable public abstract E get();
 
-    @Nullable
-    public abstract E or(@Nullable E defaultValue);
+    @Nullable public abstract E or(@Nullable E defaultValue);
 
-    @Nullable
-    public abstract E or(@Nullable Supplier<? extends E> supplier);
+    @Nullable public abstract E or(@Nullable Supplier<? extends E> supplier);
 
     @Override
     public abstract int hashCode();
@@ -549,7 +570,8 @@ public final class Interval<E extends Comparable<E>> {
       }
 
       Finity<?> otherEndPoint = (Finity<?>) other;
-      return this.element.equals(otherEndPoint.element) && this.bounded() == otherEndPoint.bounded();
+      return this.element.equals(otherEndPoint.element)
+          && this.bounded() == otherEndPoint.bounded();
     }
 
     @Override
@@ -572,7 +594,7 @@ public final class Interval<E extends Comparable<E>> {
     }
   }
 
-  private static abstract class Infinity<E extends Comparable<E>> extends Endpoint<E> {
+  private abstract static class Infinity<E extends Comparable<E>> extends Endpoint<E> {
 
     private final Class<E> type;
 
@@ -599,14 +621,12 @@ public final class Interval<E extends Comparable<E>> {
     }
 
     @Override
-    @Nullable
-    public final E or(@Nullable E defaultValue) {
+    @Nullable public final E or(@Nullable E defaultValue) {
       return defaultValue;
     }
 
     @Override
-    @Nullable
-    public final E or(@Nullable Supplier<? extends E> supplier) {
+    @Nullable public final E or(@Nullable Supplier<? extends E> supplier) {
       if (supplier == null) {
         return null;
       }
@@ -755,10 +775,11 @@ public final class Interval<E extends Comparable<E>> {
     }
 
     public Interval<E> build() {
-      return new Interval<>(this.type, this.lepBuilder == null ? null : this.lepBuilder.build(),
+      return new Interval<>(
+          this.type,
+          this.lepBuilder == null ? null : this.lepBuilder.build(),
           this.repBuilder == null ? null : this.repBuilder.build());
     }
-
   }
 
   public static final class EndpointBuilder<E extends Comparable<E>> {
@@ -837,8 +858,8 @@ public final class Interval<E extends Comparable<E>> {
       this.intervals = Collections.unmodifiableSet(flatten(intervals));
     }
 
-    public static <E extends Comparable<E>> Intervals<E> differenceBetween(Intervals<E> intervals,
-        Intervals<E> others) {
+    public static <E extends Comparable<E>> Intervals<E> differenceBetween(
+        Intervals<E> intervals, Intervals<E> others) {
       Assert.isTrue(intervals != null && others != null, "The given intervals must not be null");
 
       if (others.size() == 0) {
@@ -846,8 +867,11 @@ public final class Interval<E extends Comparable<E>> {
       }
 
       Class<E> clazz = others.intervals.iterator().next().type;
-      Interval<E> universe = new Interval<>(clazz, Endpoint.infinity(clazz, false, true),
-          Endpoint.infinity(clazz, true, true)); // [-∞, +∞]
+      Interval<E> universe =
+          new Interval<>(
+              clazz,
+              Endpoint.infinity(clazz, false, true),
+              Endpoint.infinity(clazz, true, true)); // [-∞, +∞]
 
       // Note:
       // (A1 U A2) - (B1 U B2) ≠ (A1 - B1) U (A1 - B2) U (A2 - B1) U (A2 - B2)
@@ -855,7 +879,8 @@ public final class Interval<E extends Comparable<E>> {
       return intersectBetween(intervals, differenceBetween(universe, others));
     }
 
-    public static <E extends Comparable<E>> Intervals<E> differenceBetween(Intervals<E> intervals, Interval<E> other) {
+    public static <E extends Comparable<E>> Intervals<E> differenceBetween(
+        Intervals<E> intervals, Interval<E> other) {
       Assert.isTrue(intervals != null && other != null, "The given interval(s) must not be null");
 
       Set<Interval<E>> collection = new HashSet<>();
@@ -866,7 +891,8 @@ public final class Interval<E extends Comparable<E>> {
       return new Intervals<>(collection);
     }
 
-    public static <E extends Comparable<E>> Intervals<E> differenceBetween(Interval<E> interval, Intervals<E> others) {
+    public static <E extends Comparable<E>> Intervals<E> differenceBetween(
+        Interval<E> interval, Intervals<E> others) {
       // De Morgan's laws: A - (B U C) = （A - B) ∩ (A - C)
       Assert.isTrue(interval != null && others != null, "The given interval(s) must not be null");
 
@@ -882,15 +908,16 @@ public final class Interval<E extends Comparable<E>> {
       return collection;
     }
 
-    public static <E extends Comparable<E>> Intervals<E> symmetricDifferenceBetween(Interval<E> one,
-        Interval<E> another) {
+    public static <E extends Comparable<E>> Intervals<E> symmetricDifferenceBetween(
+        Interval<E> one, Interval<E> another) {
       Assert.isTrue(one != null && another != null, "The given interval must not be null");
 
       // A Δ B = (A − B) U (B − A) or A Δ B = (A U B) − (A ∩ B)
       return unionBetween(one.difference(another), another.difference(one));
     }
 
-    public static <E extends Comparable<E>> Intervals<E> intersectBetween(Intervals<E> intervals, Intervals<E> others) {
+    public static <E extends Comparable<E>> Intervals<E> intersectBetween(
+        Intervals<E> intervals, Intervals<E> others) {
       Assert.isTrue(intervals != null && others != null, "The given intervals must not be null");
 
       Set<Interval<E>> collection = new HashSet<>();
@@ -905,7 +932,8 @@ public final class Interval<E extends Comparable<E>> {
       return new Intervals<>(collection);
     }
 
-    public static <E extends Comparable<E>> Intervals<E> intersectBetween(Intervals<E> intervals, Interval<E> other) {
+    public static <E extends Comparable<E>> Intervals<E> intersectBetween(
+        Intervals<E> intervals, Interval<E> other) {
       Assert.isTrue(intervals != null && other != null, "The given interval(s) must not be null");
 
       Set<Interval<E>> collection = new HashSet<>();
@@ -916,7 +944,8 @@ public final class Interval<E extends Comparable<E>> {
       return new Intervals<>(collection);
     }
 
-    public static <E extends Comparable<E>> Intervals<E> unionBetween(Intervals<E> intervals, Intervals<E> others) {
+    public static <E extends Comparable<E>> Intervals<E> unionBetween(
+        Intervals<E> intervals, Intervals<E> others) {
       Assert.isTrue(intervals != null && others != null, "The given intervals must not be null");
 
       Set<Interval<E>> collection = new HashSet<>();
@@ -926,7 +955,8 @@ public final class Interval<E extends Comparable<E>> {
       return new Intervals<>(collection);
     }
 
-    public static <E extends Comparable<E>> Intervals<E> unionBetween(Intervals<E> intervals, Interval<E> other) {
+    public static <E extends Comparable<E>> Intervals<E> unionBetween(
+        Intervals<E> intervals, Interval<E> other) {
       Assert.isTrue(intervals != null && other != null, "The given interval(s) must not be null");
 
       Set<Interval<E>> collection = new HashSet<>();
@@ -936,43 +966,53 @@ public final class Interval<E extends Comparable<E>> {
       return new Intervals<>(collection);
     }
 
-    public static <E extends Comparable<E>> Set<Interval<E>> flatten(@Nullable Collection<Interval<E>> intervals) {
+    public static <E extends Comparable<E>> Set<Interval<E>> flatten(
+        @Nullable Collection<Interval<E>> intervals) {
       if (intervals == null || intervals.isEmpty()) {
         return Collections.emptySet();
       }
 
-      return intervals.stream().distinct().filter(interval -> {
-        return interval != null;
-      }).sorted((one, another) -> {
-        if (one.isEmpty() && another.isEmpty()) {
-          return -1;
-        }
-        if (one.isEmpty()) {
-          return -1;
-        }
-        if (another.isEmpty()) {
-          return 1;
-        }
-        int comparasion = one.left.compareTo(another.left);
-        if (comparasion != 0) {
-          return comparasion;
-        }
-        return one.right.compareTo(another.right);
-      }).reduce(new HashSet<Interval<E>>(), (collection, interval) -> {
-        Interval<E> temp = interval;
-        for (Interval<E> item : collection) {
-          if (item.hasIntersectionWith(interval)) {
-            temp = item.union(interval).intervals.iterator().next();
-            collection.remove(item);
-            break;
-          }
-        }
-        collection.add(temp);
-        return collection;
-      }, (collection1, collection2) -> {
-        collection1.addAll(collection2);
-        return collection1;
-      });
+      return intervals.stream()
+          .distinct()
+          .filter(
+              interval -> {
+                return interval != null;
+              })
+          .sorted(
+              (one, another) -> {
+                if (one.isEmpty() && another.isEmpty()) {
+                  return -1;
+                }
+                if (one.isEmpty()) {
+                  return -1;
+                }
+                if (another.isEmpty()) {
+                  return 1;
+                }
+                int comparasion = one.left.compareTo(another.left);
+                if (comparasion != 0) {
+                  return comparasion;
+                }
+                return one.right.compareTo(another.right);
+              })
+          .reduce(
+              new HashSet<Interval<E>>(),
+              (collection, interval) -> {
+                Interval<E> temp = interval;
+                for (Interval<E> item : collection) {
+                  if (item.hasIntersectionWith(interval)) {
+                    temp = item.union(interval).intervals.iterator().next();
+                    collection.remove(item);
+                    break;
+                  }
+                }
+                collection.add(temp);
+                return collection;
+              },
+              (collection1, collection2) -> {
+                collection1.addAll(collection2);
+                return collection1;
+              });
     }
 
     public int size() {
