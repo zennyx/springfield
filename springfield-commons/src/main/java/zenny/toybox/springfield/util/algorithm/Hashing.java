@@ -1,7 +1,7 @@
 package zenny.toybox.springfield.util.algorithm;
 
 import java.util.Optional;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import zenny.toybox.springfield.util.Hasher;
 
 public enum Hashing implements Hasher<Object> {
@@ -28,9 +28,9 @@ public enum Hashing implements Hasher<Object> {
     private static final int C2 = 0x1b873593;
 
     /**
-     * This method was rewritten in Java from an intermediate step of the Murmur hash function in
-     * http://code.google.com/p/smhasher/source/browse/trunk/MurmurHash3.cpp, which contained the
-     * following header:
+     * This method was rewritten in Java from an intermediate step of the Murmur hash function in <a
+     * href="http://code.google.com/p/smhasher/source/browse/trunk/MurmurHash3.cpp">here</a>, which
+     * contained the following header:
      *
      * <p>MurmurHash3 was written by Austin Appleby, and is placed in the public domain. The author
      * hereby disclaims copyright to this source code.

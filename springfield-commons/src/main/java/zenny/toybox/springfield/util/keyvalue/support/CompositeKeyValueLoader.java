@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import zenny.toybox.springfield.util.Assert;
 import zenny.toybox.springfield.util.CollectionUtils;
 import zenny.toybox.springfield.util.keyvalue.KeyValueLoader;
@@ -27,8 +27,8 @@ public class CompositeKeyValueLoader<K, V> implements KeyValueLoader<K, V> {
     this.loaders = loaders;
   }
 
-  @Nullable @Override
-  public Map<K, V> load() {
+  @Override
+  public @Nullable Map<K, V> load() {
     Map<K, V> result = new HashMap<>();
     this.loaders.forEach(
         (l) -> {

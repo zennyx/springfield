@@ -1,7 +1,7 @@
 package zenny.toybox.springfield.util.keyvalue;
 
 import java.util.Map;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @FunctionalInterface
 public interface KeyValueLoader<K, V> {

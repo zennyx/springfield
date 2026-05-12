@@ -117,6 +117,10 @@
      |-->
     <spring-data.version>2025.1.5</spring-data.version>
     <!--
+     | Apache series.
+     |-->
+    <apache-commons-collections.version>4.5.0</apache-commons-collections.version>
+    <!--
      | MyBatis series.
      |-->
     <mybatis.version>3.5.19</mybatis.version>
@@ -204,6 +208,14 @@
         <version>${spring-data.version}</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <!--
+       | Apache series.
+       |-->
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-collections4</artifactId>
+        <version>${apache-commons-collections.version}</version>
       </dependency>
       <!--
        | MyBatis series.

@@ -2,7 +2,7 @@ package zenny.toybox.springfield.util.keyvalue.support;
 
 import java.util.Map;
 import java.util.function.Function;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import zenny.toybox.springfield.util.Assert;
 import zenny.toybox.springfield.util.CollectionUtils;
 import zenny.toybox.springfield.util.keyvalue.KeyValueLoader;
@@ -28,7 +28,7 @@ public class EnumBasedKeyValueLoader<K, V, E extends Enum<E>> implements KeyValu
   }
 
   @Override
-  @Nullable public Map<K, V> load() {
+  public @Nullable Map<K, V> load() {
     return CollectionUtils.toMap(this.enumClass, this.keyIteratee, this.valueIteratee);
   }
 }

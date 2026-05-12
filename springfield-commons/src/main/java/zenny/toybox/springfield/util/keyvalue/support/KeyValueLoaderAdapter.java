@@ -2,7 +2,7 @@ package zenny.toybox.springfield.util.keyvalue.support;
 
 import java.util.Map;
 import java.util.function.Supplier;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import zenny.toybox.springfield.util.Assert;
 import zenny.toybox.springfield.util.keyvalue.KeyValueLoader;
 
@@ -16,8 +16,8 @@ public class KeyValueLoaderAdapter<K, V> implements KeyValueLoader<K, V> {
     this.supplier = supplier;
   }
 
-  @Nullable @Override
-  public Map<K, V> load() {
+  @Override
+  public @Nullable Map<K, V> load() {
     return this.supplier.get();
   }
 }

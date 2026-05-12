@@ -12,6 +12,7 @@
 - [ ] github actions
 - [ ] try to replace or remove all depandencies of Google
 - [ ] tabletest(https://github.com/nchaugen/tabletest)
+- [ ] @Nullable & @NullMarked
 
 # Memo
 

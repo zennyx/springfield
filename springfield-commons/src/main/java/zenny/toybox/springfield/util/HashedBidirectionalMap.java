@@ -19,7 +19,7 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import zenny.toybox.springfield.util.algorithm.Hashing;
 
 /**
@@ -30,6 +30,7 @@ import zenny.toybox.springfield.util.algorithm.Hashing;
  * @param <V> the type of mapped values
  * @see HashMap
  */
+@Deprecated
 public class HashedBidirectionalMap<K, V> extends AbstractBidirectionalMap<K, V>
     implements Cloneable, Serializable {
 

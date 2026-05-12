@@ -1,7 +1,5 @@
 /** Common annotation types. */
-@NonNullApi
-@NonNullFields
+@NullMarked
 package zenny.toybox.springfield.lang;
 
-import org.springframework.lang.NonNullApi;
-import org.springframework.lang.NonNullFields;
+import org.jspecify.annotations.NullMarked;

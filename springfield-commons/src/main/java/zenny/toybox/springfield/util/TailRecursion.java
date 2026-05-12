@@ -1,7 +1,7 @@
 package zenny.toybox.springfield.util;
 
 import java.util.stream.Stream;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A helper interface to optimize tail recursion in Java. Since Java has not yet optimized for tail

@@ -3,7 +3,7 @@ package zenny.toybox.springfield.util.keyvalue.support;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import zenny.toybox.springfield.util.Assert;
 import zenny.toybox.springfield.util.HierarchicalBuilder;
 import zenny.toybox.springfield.util.keyvalue.KeyValueLoader;

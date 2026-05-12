@@ -18,6 +18,7 @@ import org.springframework.lang.Nullable;
  * @see Map
  * @see Set
  */
+@Deprecated
 public abstract class AbstractBidirectionalMap<K, V> implements BidirectionalMap<K, V> {
 
   /**

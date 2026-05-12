@@ -2,7 +2,7 @@ package zenny.toybox.springfield.util;
 
 import java.util.Map;
 import java.util.Set;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A bidirectional map is a map that preserves the uniqueness of its values as well as that of its
@@ -13,10 +13,12 @@ import org.springframework.lang.Nullable;
  * @author Zenny Xu
  * @param <K> the type of keys maintained by this map
  * @param <V> the type of values maintained by this map
- * @see https://github.com/google/guava/blob/master/guava/src/com/google/common/collect/BiMap.java
- * @see
- *     https://github.com/apache/commons-collections/blob/master/src/main/java/org/apache/commons/collections4/BidiMap.java
+ * @see <a
+ *     href="https://github.com/google/guava/blob/master/guava/src/com/google/common/collect/BiMap.java">BiMap</a>
+ * @see <a
+ *     href="https://github.com/apache/commons-collections/blob/master/src/main/java/org/apache/commons/collections4/BidiMap.java">BidiMap</a>
  */
+@Deprecated
 public interface BidirectionalMap<K, V> extends Map<K, V> {
 
   /**

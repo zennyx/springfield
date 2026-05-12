@@ -5,7 +5,7 @@ import java.io.StringWriter;
 import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.stream.Collector;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import zenny.toybox.springfield.lang.Internal;
 
 /**
@@ -168,7 +168,7 @@ public final class ThrowableUtils {
    *
    * @param throwable the error to throw
    */
-  @Nullable public static Throwable getRootCause(@Nullable Throwable throwable) {
+  public static Throwable getRootCause(@Nullable Throwable throwable) {
     Throwable[] rootCause = new Throwable[1];
     mapCauses(throwable, ex -> rootCause[0] = ex);
     return rootCause[0];
@@ -253,7 +253,7 @@ public final class ThrowableUtils {
    * @param throwable the error to throw
    * @return a string containing the full, recursive stack trace of {@code throwable}
    */
-  public static String getStackTraceAsString(@Nullable Throwable throwable) {
+  public static @Nullable String getStackTraceAsString(@Nullable Throwable throwable) {
     if (throwable == null) {
       return null;
     }

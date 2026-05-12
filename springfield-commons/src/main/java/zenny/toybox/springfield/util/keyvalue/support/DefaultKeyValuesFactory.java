@@ -6,7 +6,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import zenny.toybox.springfield.util.Assert;
 import zenny.toybox.springfield.util.CollectionUtils;
 import zenny.toybox.springfield.util.keyvalue.KeyValueHolder;
@@ -36,7 +36,7 @@ public class DefaultKeyValuesFactory implements KeyValuesFactory {
       @Nullable Map<String, KeyValueLoader<?, ?>> loaders,
       @Nullable KeyValueHolder holder,
       @Nullable Function<String, BiConsumer<Map<String, KeyValueLoader<?, ?>>, KeyValueHolder>>
-              refresher) {
+          refresher) {
 
     this.check(loaders, holder);
     this.assamble(loaders, holder);

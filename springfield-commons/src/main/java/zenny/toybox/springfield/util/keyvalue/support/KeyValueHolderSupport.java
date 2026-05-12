@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import zenny.toybox.springfield.util.Assert;
 import zenny.toybox.springfield.util.keyvalue.KeyValueLoader;
 
@@ -86,18 +86,18 @@ abstract class KeyValueHolderSupport extends MutableKeyValueHolder {
       return this.get().map(v -> v.containsValue(value)).orElse(false);
     }
 
-    @Nullable @Override
-    public V get(Object key) {
+    @Override
+    public @Nullable V get(Object key) {
       return this.get().map(v -> v.get(key)).orElse(null);
     }
 
-    @Nullable @Override
-    public V put(K key, @Nullable V value) {
+    @Override
+    public @Nullable V put(K key, @Nullable V value) {
       return this.get().map(v -> v.put(key, value)).orElse(null);
     }
 
-    @Nullable @Override
-    public V remove(Object key) {
+    @Override
+    public @Nullable V remove(Object key) {
       return this.get().map(v -> v.remove(key)).orElse(null);
     }
 
@@ -111,18 +111,18 @@ abstract class KeyValueHolderSupport extends MutableKeyValueHolder {
       this.get().ifPresent(v -> v.clear());
     }
 
-    @Nullable @Override
-    public Set<K> keySet() {
+    @Override
+    public @Nullable Set<K> keySet() {
       return this.get().map(v -> v.keySet()).orElse(null);
     }
 
-    @Nullable @Override
-    public Collection<V> values() {
+    @Override
+    public @Nullable Collection<V> values() {
       return this.get().map(v -> v.values()).orElse(null);
     }
 
-    @Nullable @Override
-    public Set<Entry<K, V>> entrySet() {
+    @Override
+    public @Nullable Set<Entry<K, V>> entrySet() {
       return this.get().map(v -> v.entrySet()).orElse(null);
     }
 

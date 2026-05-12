@@ -6,8 +6,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
+import org.jspecify.annotations.Nullable;
 import org.springframework.core.NestedRuntimeException;
-import org.springframework.lang.Nullable;
 
 public final class Interval<E extends Comparable<E>> {
 

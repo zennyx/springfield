@@ -1,11 +1,11 @@
 package zenny.toybox.springfield.util.keyvalue.config;
 
 import java.util.Map;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.lang.Nullable;
 import zenny.toybox.springfield.util.keyvalue.KeyValueHolder;
 import zenny.toybox.springfield.util.keyvalue.KeyValueLoader;
 import zenny.toybox.springfield.util.keyvalue.KeyValues;

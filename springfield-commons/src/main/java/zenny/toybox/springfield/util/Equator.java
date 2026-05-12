@@ -1,7 +1,7 @@
 package zenny.toybox.springfield.util;
 
 import java.util.Objects;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * An equation function, which determines equality between objects of type T.

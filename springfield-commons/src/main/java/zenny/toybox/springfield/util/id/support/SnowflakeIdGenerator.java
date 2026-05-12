@@ -4,7 +4,7 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import zenny.toybox.springfield.util.Assert;
 import zenny.toybox.springfield.util.id.IdGenerator;
 
@@ -19,7 +19,8 @@ import zenny.toybox.springfield.util.id.IdGenerator;
  * through {@link IdentifierLookup}.
  *
  * @author Zenny Xu
- * @see https://github.com/twitter-archive/snowflake/releases/tag/snowflake-2010
+ * @see <a href="https://github.com/twitter-archive/snowflake/releases/tag/snowflake-2010">Snowflake
+ *     Algorithm</a>
  */
 public class SnowflakeIdGenerator implements IdGenerator<Long> {
 

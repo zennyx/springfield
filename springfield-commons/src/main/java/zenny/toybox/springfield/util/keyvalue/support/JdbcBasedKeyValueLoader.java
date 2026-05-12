@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import javax.sql.DataSource;
+import org.jspecify.annotations.Nullable;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.lang.Nullable;
 import zenny.toybox.springfield.util.Assert;
 import zenny.toybox.springfield.util.keyvalue.KeyValueLoader;
 

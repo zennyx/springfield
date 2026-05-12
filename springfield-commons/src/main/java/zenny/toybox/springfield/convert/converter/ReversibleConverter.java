@@ -1,7 +1,7 @@
 package zenny.toybox.springfield.convert.converter;
 
+import org.jspecify.annotations.Nullable;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.lang.Nullable;
 
 /**
  * A converter converts a source object of type {@code S} to a target of type {@code T}, and vice
