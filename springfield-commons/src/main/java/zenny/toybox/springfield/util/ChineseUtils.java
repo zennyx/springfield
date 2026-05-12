@@ -185,8 +185,8 @@ public final class ChineseUtils {
      */
     @Contract("null -> null; !null -> !null")
     public static @Nullable String toUppercase(@Nullable String numerals) {
-      if (numerals == null) {
-        return null;
+      if (!StringUtils.hasLength(numerals)) {
+        return numerals;
       }
 
       StringBuilder sb = new StringBuilder(numerals.length());
@@ -213,8 +213,8 @@ public final class ChineseUtils {
      */
     @Contract("null -> null; !null -> !null")
     public static @Nullable String toLowercase(@Nullable String numerals) {
-      if (numerals == null) {
-        return null;
+      if (!StringUtils.hasLength(numerals)) {
+        return numerals;
       }
 
       StringBuilder sb = new StringBuilder(numerals.length());
@@ -485,10 +485,8 @@ public final class ChineseUtils {
      * </pre>
      *
      * @param numerals the non-negative numeric value to format
-     * @param normalize if {@code true}, omit the leading "一" in "一十" (e.g. 15 → "十五"); if {@code
-     *     false}, preserve it (e.g. 15 → "一十五")
-     * @return the Chinese numeral string representation
-     * @throws IllegalArgumentException if the value is null or negative
+     * @throws IllegalArgumentException if the value is null, negative, or exceeds the maximum
+     *     representable value (10⁴⁵ - 1, i.e. a 45-digit number)
      * @see #parse(String)
      */
     public static String format(BigInteger numerals, boolean normalize) {
@@ -501,6 +499,9 @@ public final class ChineseUtils {
 
       String digits = numerals.toString();
       int len = digits.length();
+      Assert.isTrue(
+          numerals.toString().length() <= 45,
+          "'numerals' exceeds the maximum representable value (10^45 - 1).");
 
       // --- Pass 1 & 2: Replace digits and insert place-value suffixes ---
       // Process from most significant to least significant.
