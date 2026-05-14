@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigInteger;
-import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.tabletest.junit.TableTest;
@@ -98,7 +97,7 @@ class ChineseUtilsTest {
     @TableTest(
         """
       Scenario                    | Input              | Expected
-      Null input                  | null               | null
+      Null input                  |                    |
       Empty string                | ""                 | ""
       Single lowercase digit      | 一                 | 壹
       All lowercase digits        | 一二三四五六七八九 | 壹贰叁肆伍陆柒捌玖
@@ -108,7 +107,7 @@ class ChineseUtilsTest {
       Uppercase input passthrough | 壹                 | 壹
       """)
     @DisplayName("toUppercase.succeeds")
-    void toUppercaseSucceeds(@Nullable String input, @Nullable String expected) {
+    void toUppercaseSucceeds(String input, String expected) {
       // toUppercase maps lowercase chars to their uppercase equivalents via UPPERCASE_CHARS;
       // chars without uppercase mappings (万, 亿, 零) pass through unchanged.
       assertEquals(expected, ChineseUtils.Numerals.toUppercase(input));
@@ -132,7 +131,7 @@ class ChineseUtilsTest {
     @TableTest(
         """
       Scenario                    | Input              | Expected
-      Null input                  | null               | null
+      Null input                  |                    |
       Empty string                | ""                 | ""
       Single uppercase digit      | 壹                 | 一
       All uppercase digits        | 壹贰叁肆伍陆柒捌玖 | 一二三四五六七八九
@@ -142,7 +141,7 @@ class ChineseUtilsTest {
       Lowercase input passthrough | 一                 | 一
       """)
     @DisplayName("toLowercase.succeeds")
-    void toLowercaseSucceeds(@Nullable String input, @Nullable String expected) {
+    void toLowercaseSucceeds(String input, String expected) {
       // toLowercase maps uppercase chars to their lowercase equivalents via UPPERCASE_CHARS;
       // chars without lowercase mappings (万, 亿, 零) pass through unchanged.
       assertEquals(expected, ChineseUtils.Numerals.toLowercase(input));
@@ -240,7 +239,7 @@ class ChineseUtilsTest {
       Invalid characters | abc
       """)
     @DisplayName("parse.fails")
-    void parseFails(@Nullable String input) {
+    void parseFails(String input) {
       assertThrows(IllegalArgumentException.class, () -> ChineseUtils.Numerals.parse(input));
     }
 
@@ -365,7 +364,7 @@ class ChineseUtilsTest {
       Value exceeding max (10^45) | 1000000000000000000000000000000000000000000000
       """)
     @DisplayName("format.fails")
-    void formatFails(@Nullable BigInteger input) {
+    void formatFails(BigInteger input) {
       assertThrows(IllegalArgumentException.class, () -> ChineseUtils.Numerals.format(input));
     }
   }
