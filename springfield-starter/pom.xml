@@ -14,20 +14,19 @@
   <!--
    | The identifier and packaging type of this module.
    |-->
-  <artifactId>springfield-security</artifactId>
+  <artifactId>springfield-starter</artifactId>
   <packaging>pom</packaging>
 
   <!--
    | Human-readable metadata of this module.
    |-->
-  <name>Springfield Security</name>
-  <description>Spring Security extensions for Springfield, providing enhanced authentication and authorization support.</description>
+  <name>Springfield Starter</name>
+  <description>Spring Boot auto-configuration starters for Springfield, providing ready-to-use integrations with various frameworks and services.</description>
 
   <!--
    | Sub-modules aggregated by this project.
    |-->
   <modules>
-    <module>springfield-security-common</module>
-    <module>springfield-security-web</module>
+    <module>springfield-starter-sqs</module>
   </modules>
 </project>

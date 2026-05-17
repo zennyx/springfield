@@ -28,7 +28,7 @@
   <dependencies>
     <dependency>
       <groupId>zenny.toybox</groupId>
-      <artifactId>springfield-commons</artifactId>
+      <artifactId>springfield-common</artifactId>
     </dependency>
 
     <dependency>

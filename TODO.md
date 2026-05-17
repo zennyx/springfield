@@ -1,7 +1,7 @@
 # Todo List
 
 - [ ] privacy
-- [ ] springfield-extensions-validation (resources for messages)
+- [ ] springfield-extension-validation (resources for messages)
 - [ ] springfield-security-commons (resources for messages)
 - [x] adoc-style documents
 - [ ] boot

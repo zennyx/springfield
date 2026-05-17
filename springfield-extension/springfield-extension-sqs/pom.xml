@@ -7,20 +7,20 @@
    |-->
   <parent>
     <groupId>zenny.toybox</groupId>
-    <artifactId>springfield-security</artifactId>
+    <artifactId>springfield-extension</artifactId>
     <version>${revision}</version>
   </parent>
 
   <!--
    | The identifier of this module.
    |-->
-  <artifactId>springfield-security-web</artifactId>
+  <artifactId>springfield-extension-sqs</artifactId>
 
   <!--
    | Human-readable metadata of this module.
    |-->
-  <name>Springfield Security Web</name>
-  <description>Web-layer Spring Security extensions for Springfield, providing servlet-based authentication and authorization support.</description>
+  <name>Springfield Extension Sqs</name>
+  <description>Sqs extensions for Springfield, building on top of Aws Sqs.</description>
 
   <!--
    | Dependencies required by this module.
@@ -32,26 +32,12 @@
     </dependency>
 
     <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-config</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-web</artifactId>
-    </dependency>
-
-    <dependency>
       <groupId>jakarta.annotation</groupId>
       <artifactId>jakarta.annotation-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>jakarta.servlet</groupId>
-      <artifactId>jakarta.servlet-api</artifactId>
-      <scope>provided</scope>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>sqs</artifactId>
     </dependency>
   </dependencies>
 </project>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!--
+   | Specifies the parent project from which this project inherits configuration.
+   |-->
+  <parent>
+    <groupId>zenny.toybox</groupId>
+    <artifactId>springfield-extension</artifactId>
+    <version>${revision}</version>
+  </parent>
+
+  <!--
+   | The identifier of this module.
+   |-->
+  <artifactId>springfield-extension-jackson</artifactId>
+
+  <!--
+   | Human-readable metadata of this module.
+   |-->
+  <name>Springfield Extension Jackson</name>
+  <description>Jackson serialization and deserialization extensions for Springfield.</description>
+
+  <!--
+   | Dependencies required by this module.
+   |-->
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>tools.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+    </dependency>
+  </dependencies>
+</project>

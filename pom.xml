@@ -67,11 +67,12 @@
    | that can be built independently or as part of the reactor build.
    |-->
   <modules>
-    <module>springfield-commons</module>
+    <module>springfield-common</module>
     <module>springfield-data</module>
-    <module>springfield-extensions</module>
+    <module>springfield-extension</module>
     <module>springfield-playground</module>
     <module>springfield-security</module>
+    <module>springfield-starter</module>
     <module>springfield-web</module>
   </modules>
 
@@ -161,7 +162,7 @@
        |-->
       <dependency>
         <groupId>zenny.toybox</groupId>
-        <artifactId>springfield-commons</artifactId>
+        <artifactId>springfield-common</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
@@ -171,12 +172,17 @@
       </dependency>
       <dependency>
         <groupId>zenny.toybox</groupId>
-        <artifactId>springfield-extensions-jackson</artifactId>
+        <artifactId>springfield-extension-jackson</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
         <groupId>zenny.toybox</groupId>
-        <artifactId>springfield-extensions-validation</artifactId>
+        <artifactId>springfield-extension-sqs</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>zenny.toybox</groupId>
+        <artifactId>springfield-extension-validation</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
@@ -192,6 +198,11 @@
       <dependency>
         <groupId>zenny.toybox</groupId>
         <artifactId>springfield-security-web</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>zenny.toybox</groupId>
+        <artifactId>springfield-starter-sqs</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>

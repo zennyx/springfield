@@ -6,9 +6,9 @@ A modular extension pack for Spring Framework, providing enhanced support for da
 
 | Module | Description |
 |--------|-------------|
-| springfield-commons | Core utilities and shared abstractions |
+| springfield-common | Core utilities and shared abstractions |
 | springfield-data | Data access extensions (MyBatis integration, code generation) |
-| springfield-extensions | General-purpose extensions (Validation, Jackson) |
+| springfield-extension | General-purpose extensions (Validation, Jackson) |
 | springfield-security | Spring Security extensions (authentication, authorization) |
 | springfield-web | Web-layer utilities and Spring MVC enhancements |
 | springfield-playground | Experimental features and sandbox |

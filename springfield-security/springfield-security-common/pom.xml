@@ -14,13 +14,13 @@
   <!--
    | The identifier of this module.
    |-->
-  <artifactId>springfield-security-web</artifactId>
+  <artifactId>springfield-security-common</artifactId>
 
   <!--
    | Human-readable metadata of this module.
    |-->
-  <name>Springfield Security Web</name>
-  <description>Web-layer Spring Security extensions for Springfield, providing servlet-based authentication and authorization support.</description>
+  <name>Springfield Security Common</name>
+  <description>Core security utilities and Spring Security extensions shared across Springfield Security modules.</description>
 
   <!--
    | Dependencies required by this module.
@@ -39,19 +39,10 @@
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-config</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-web</artifactId>
-    </dependency>
 
     <dependency>
       <groupId>jakarta.annotation</groupId>
       <artifactId>jakarta.annotation-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>jakarta.servlet</groupId>
-      <artifactId>jakarta.servlet-api</artifactId>
-      <scope>provided</scope>
     </dependency>
   </dependencies>
 </project>

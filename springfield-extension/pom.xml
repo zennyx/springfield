@@ -14,20 +14,21 @@
   <!--
    | The identifier and packaging type of this module.
    |-->
-  <artifactId>springfield-security</artifactId>
+  <artifactId>springfield-extension</artifactId>
   <packaging>pom</packaging>
 
   <!--
    | Human-readable metadata of this module.
    |-->
-  <name>Springfield Security</name>
-  <description>Spring Security extensions for Springfield, providing enhanced authentication and authorization support.</description>
+  <name>Springfield Extension</name>
+  <description>General-purpose extensions for Springfield, aggregating integrations with third-party libraries and specifications.</description>
 
   <!--
    | Sub-modules aggregated by this project.
    |-->
   <modules>
-    <module>springfield-security-common</module>
-    <module>springfield-security-web</module>
+    <module>springfield-extension-jackson</module>
+    <module>springfield-extension-sqs</module>
+    <module>springfield-extension-validation</module>
   </modules>
 </project>
